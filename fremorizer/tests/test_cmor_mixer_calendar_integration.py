@@ -17,7 +17,7 @@ from unittest.mock import patch
 
 import pytest
 
-from fre.cmor.cmor_mixer import cmor_run_subtool
+from fremorizer.cmor_mixer import cmor_run_subtool
 
 
 # ---------------------------------------------------------------------------
@@ -77,9 +77,9 @@ def fake_nc_filenames(tmp_path):
 
 # Shared set of mocks – everything that would touch the filesystem or CMOR
 _MOCKS = [
-    'fre.cmor.cmor_mixer.update_calendar_type',
-    'fre.cmor.cmor_mixer.cmorize_all_variables_in_dir',
-    'fre.cmor.cmor_mixer.glob.glob',
+    'fremorizer.cmor_mixer.update_calendar_type',
+    'fremorizer.cmor_mixer.cmorize_all_variables_in_dir',
+    'fremorizer.cmor_mixer.glob.glob',
 ]
 
 

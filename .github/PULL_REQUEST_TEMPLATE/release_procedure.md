@@ -1,31 +1,21 @@
 ## Release Versioning Procedure
-Note: [fre-cli](https://github.com/NOAA-GFDL/fre-cli) and [fre-workflows](https://github.com/NOAA-GFDL/fre-workflows) are versioned together. When fre-cli deploys a new release, a corresponding release is deployed in fre-workflows.
 
 ## Checklist
-### fre-workflows changes
-* [ ] 1. Update the package release number in the `fre-workflows` repository:
+### fremorizer changes
+* [ ] 1. Verify that git submodules in fremorizer reflect the latest state (or certain commit/tag) of the upstream repositories.
 
-    - Edit `FRE_VERSION` in `flow.cylc`
-
-* [ ] 2. Create corresponding tag in [fre-workflows](https://github.com/NOAA-GFDL/fre-workflows/tags) (See fre-cli changes (4) for how to tag)
-
-### fre-cli changes
-* [ ] 3. Verify that git submodules in the fre-cli reflect the latest state (or certain commit/tag) of the upstream repositories. 
-
-    - If not, consult the manager of the upstream repository and determine whether the update should be included in this FRE release.
+    - If not, consult the manager of the upstream repository and determine whether the update should be included in this release.
     - If so, ask the sub-project maintainer to tag the upstream repository
 
-    Open a PR to commit the submodule updates in `fre-cli`, solicit a review, and merge the PR.
-       
+    Open a PR to commit the submodule updates in `fremorizer`, solicit a review, and merge the PR.
+
     - **Submodules**:
-        - `fre/gfdl_msd_schemas`
-        - `fre/mkmf`
-        - `fre/tests/test_files/cmip6-cmor-tables`
-        - `fre/tests/test_files/cmip7-cmor-tables`
+        - `fremorizer/tests/test_files/cmip6-cmor-tables`
+        - `fremorizer/tests/test_files/cmip7-cmor-tables`
 
-    **Note**: The release schedules of these submodules may vary from that of fre-cli
+    **Note**: The release schedules of these submodules may vary from that of fremorizer
 
-* [ ] 4. Create a tag in the fre-cli repository (testing tag or release tag)
+* [ ] 2. Create a tag in the fremorizer repository (testing tag or release tag)
 
     Locally this can be done with:
 
@@ -42,10 +32,10 @@ Note: [fre-cli](https://github.com/NOAA-GFDL/fre-cli) and [fre-workflows](https:
     - For the *full release tag*, follow the structure: `[year].[major].[minor]`
 
     After the tag is pushed, CI will trigger the creation of a PR changing any reference to the previous tag with the new tag.
-    Verify the tagged release is present [here](https://github.com/NOAA-GFDL/fre-cli/releases>)
+    Verify the tagged release is present [here](https://github.com/ilaflott/fremorizer/releases>)
 
-* [ ] 5. For a full release (only), create a the github release associated with the correct tag and generate the release notes.
+* [ ] 3. For a full release (only), create the github release associated with the correct tag and generate the release notes.
 
     - In the release notes, be sure to link any alpha and beta tags that were tested for the release
 
-* [ ] 6. Navigate to [noaa-gfdl conda channel](https://anaconda.org/NOAA-GFDL/fre-cli) and verify that the last upload date corresponds to the date of this release and that the release number is correct.
+* [ ] 4. Navigate to [noaa-gfdl conda channel](https://anaconda.org/NOAA-GFDL/fremorizer) and verify that the last upload date corresponds to the date of this release and that the release number is correct.

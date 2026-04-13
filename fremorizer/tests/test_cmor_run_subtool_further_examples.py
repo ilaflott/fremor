@@ -1,5 +1,5 @@
 '''
-expanded set of tests for fre cmor run focus on cases beyond test_cmor_run_subtool.py
+expanded set of tests for fremor run focus on cases beyond test_cmor_run_subtool.py
 '''
 
 from datetime import date
@@ -13,11 +13,11 @@ import os
 
 import pytest
 
-from fre.cmor import cmor_run_subtool
+from fremorizer import cmor_run_subtool
 
 
 # global consts for these tests, with no/trivial impact on the results
-ROOTDIR='fre/tests/test_files'
+ROOTDIR='fremorizer/tests/test_files'
 CMORBITE_VARLIST=f'{ROOTDIR}/CMORbite_var_list.json'
 
 # cmip6 variable table(s)
@@ -51,7 +51,7 @@ def _cleanup():
             shutil.rmtree(f'{OUTDIR}')
     assert not Path(f'{OUTDIR}').exists()
 
-MOCK_ARCHIVE_ROOT='fre/tests/test_files/ascii_files/mock_archive'
+MOCK_ARCHIVE_ROOT='fremorizer/tests/test_files/ascii_files/mock_archive'
 ESM4_DECK_PP_DIR='cm6/ESM4/DECK/ESM4_historical_D1/gfdl.ncrc4-intel16-prod-openmp/pp'
 ESM4_DEV_PP_DIR='USER/CMIP7/ESM4/DEV/ESM4.5v01_om5b04_piC/gfdl.ncrc5-intel23-prod-openmp/pp'
 @pytest.mark.parametrize( "testfile_dir,table,opt_var_name,grid_label,start,calendar",
@@ -83,7 +83,7 @@ def test_case_function(testfile_dir,table,opt_var_name,grid_label,start,calendar
     # /archive files so the test uses its own locally-generated statics file
     if grid_label == 'gn':
         monkeypatch.setattr(
-            'fre.cmor.cmor_mixer.find_gold_ocean_statics_file', lambda **kw: None)
+            'fremorizer.cmor_mixer.find_gold_ocean_statics_file', lambda **kw: None)
 
     # define inputs to the cmor run tool
     indir = testfile_dir

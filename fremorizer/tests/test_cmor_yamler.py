@@ -1,5 +1,5 @@
 import pytest
-from fre.cmor.cmor_yamler import cmor_yaml_subtool
+from fremorizer.cmor_yamler import cmor_yaml_subtool
 
 def test_modelyaml_dne_raise_filenotfound():
     with pytest.raises(FileNotFoundError):

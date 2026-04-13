@@ -1,5 +1,5 @@
 '''
-tests for fre.cmor.cmor_run_subtool
+tests for fremorizer.cmor_run_subtool
 '''
 
 from datetime import date
@@ -11,11 +11,11 @@ import shutil
 
 import pytest
 
-from fre.cmor import cmor_run_subtool
+from fremorizer import cmor_run_subtool
 
 
 # where are we? we're running pytest from the base directory of this repo
-ROOTDIR = 'fre/tests/test_files'
+ROOTDIR = 'fremorizer/tests/test_files'
 
 # setup- cmip/cmor variable table(s)
 CMIP6_TABLE_REPO_PATH = \

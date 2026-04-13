@@ -13,10 +13,10 @@ build:
   jobs:
     pre_install:
       # Install minimal dependencies needed for doc build
-      - pip install sphinx renku-sphinx-theme sphinx-rtd-theme click pyyaml jsonschema
+      - pip install sphinx renku-sphinx-theme sphinx-rtd-theme click pyyaml
     pre_build:
       # Generate API documentation from source
-      - sphinx-apidoc --ext-autodoc --output-dir docs fre/ --separate
+      - sphinx-apidoc --ext-autodoc --output-dir docs fremorizer/ --separate
 
 # Configure Sphinx
 sphinx:

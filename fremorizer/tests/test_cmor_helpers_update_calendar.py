@@ -1,11 +1,11 @@
 '''
-tests for fre.cmor.cmor_helpers.update_calendar_type
+tests for fremorizer.cmor_helpers.update_calendar_type
 '''
 import json
 
 import pytest
 
-from fre.cmor.cmor_helpers import update_calendar_type
+from fremorizer.cmor_helpers import update_calendar_type
 
 @pytest.fixture
 def temp_json_file(tmp_path):

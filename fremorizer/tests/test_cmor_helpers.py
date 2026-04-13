@@ -1,5 +1,5 @@
 '''
-tests for fre.cmor helper functions in cmor_helpers
+tests for fremorizer helper functions in cmor_helpers
 '''
 
 import json
@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from fre.cmor.cmor_helpers import ( find_statics_file, print_data_minmax,
+from fremorizer.cmor_helpers import ( find_statics_file, print_data_minmax,
                                     find_gold_ocean_statics_file,
                                     create_lev_bnds, get_iso_datetime_ranges, iso_to_bronx_chunk,
                                     create_tmp_dir, get_json_file_data,
@@ -23,14 +23,14 @@ def test_iso_to_bronx_chunk():
 
 def test_find_statics_file_success():
     ''' what happens when no statics file is found given a bronx directory structure '''
-    target_file = 'fre/tests/test_files/ascii_files/mock_archive/' + \
+    target_file = 'fremorizer/tests/test_files/ascii_files/mock_archive/' + \
                   'USER/CMIP7/ESM4/DEV/ESM4.5v01_om5b04_piC/' + \
                   'gfdl.ncrc5-intel23-prod-openmp/pp/ocean_monthly/ts/monthly/5yr/ocean_monthly.000101-000102.sos.nc'
     if not Path(target_file).exists():
         Path(target_file).touch()
     assert Path(target_file).exists()
 
-    expected_answer_statics_file = 'fre/tests/test_files/ascii_files/mock_archive/' + \
+    expected_answer_statics_file = 'fremorizer/tests/test_files/ascii_files/mock_archive/' + \
                                    'USER/CMIP7/ESM4/DEV/ESM4.5v01_om5b04_piC/' + \
                                    'gfdl.ncrc5-intel23-prod-openmp/pp/ocean_monthly/ocean_monthly.static.nc'
     if not Path(expected_answer_statics_file).exists():
@@ -46,7 +46,7 @@ def test_find_statics_file_success():
 def test_find_statics_file_nothing_found():
     ''' what happens when a statics file is found given a bronx directory structure '''
     statics_file = find_statics_file(
-        bronx_file_path = 'fre/tests/test_files/ascii_files/' + \
+        bronx_file_path = 'fremorizer/tests/test_files/ascii_files/' + \
                           'mock_archive/USER/CMIP7/ESM4/DEV/ESM4.5v01_om5b04_piC/' + \
                           'gfdl.ncrc5-intel23-prod-openmp/pp/land/ts/monthly/5yr/land.000101-000512.lai.nc' )
     assert statics_file is None
@@ -79,7 +79,7 @@ def test_find_gold_ocean_statics_file_archive_missing(tmp_path):
     the function should create the local directory tree but return None
     because there's nothing to copy.
     '''
-    from fre.cmor.cmor_constants import ARCHIVE_GOLD_DATA_DIR, CMIP7_GOLD_OCEAN_FILE_STUB # pylint: disable=import-outside-toplevel
+    from fremorizer.cmor_constants import ARCHIVE_GOLD_DATA_DIR, CMIP7_GOLD_OCEAN_FILE_STUB # pylint: disable=import-outside-toplevel
     gold_file = f'{ARCHIVE_GOLD_DATA_DIR}/{CMIP7_GOLD_OCEAN_FILE_STUB}'
 
     result = find_gold_ocean_statics_file(put_copy_here=str(tmp_path))
@@ -100,8 +100,8 @@ def test_find_gold_ocean_statics_file_mock_copy(tmp_path):
     exercise the full copy path by creating a fake archive gold file in tmp_path
     and monkeypatching ARCHIVE_GOLD_DATA_DIR so the function finds it.
     '''
-    import fre.cmor.cmor_helpers as _helpers_mod # pylint: disable=import-outside-toplevel
-    import fre.cmor.cmor_constants as _const_mod # pylint: disable=import-outside-toplevel
+    import fremorizer.cmor_helpers as _helpers_mod # pylint: disable=import-outside-toplevel
+    import fremorizer.cmor_constants as _const_mod # pylint: disable=import-outside-toplevel
 
     # build a fake archive layout:  <tmp>/gold/datasets/OM5_025/.../ocean_static.nc
     fake_archive_root = tmp_path / 'fake_archive' / 'gold' / 'datasets'

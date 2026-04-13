@@ -2,7 +2,7 @@
 YAML-Driven CMORization Workflow Tools
 ======================================
 
-This module powers the ``fre cmor yaml`` command, steering the CMORization workflow by parsing model-YAML
+This module powers the ``fremor yaml`` command, steering the CMORization workflow by parsing model-YAML
 files that describe target experiments and their configurations. It combines model-level and experiment-level
 configuration, parses required metadata and paths, and orchestrates calls to ``cmor_run_subtool`` for each
 target variable/component.
@@ -20,7 +20,10 @@ import logging
 import os
 from typing import Optional
 
-from fre.yamltools.combine_yamls_script import consolidate_yamls
+try:
+    from fre.yamltools.combine_yamls_script import consolidate_yamls
+except ImportError:
+    consolidate_yamls = None
 from .cmor_mixer import cmor_run_subtool
 from .cmor_helpers import ( check_path_existence, iso_to_bronx_chunk, #conv_mip_to_bronx_freq,
                             get_bronx_freq_from_mip_table )
@@ -88,6 +91,10 @@ def cmor_yaml_subtool( yamlfile: str = None,
     # parsing the target model yaml ---------------------
     # ---------------------------------------------------
     fre_logger.info('calling consolidate yamls to create a combined cmor-yaml dictionary')
+    if consolidate_yamls is None:
+        raise ImportError(
+            "the 'fremor yaml' command requires fre-cli's yamltools module.\n"
+            "install it with: pip install fre-cli")
     cmor_yaml_dict = consolidate_yamls(yamlfile=yamlfile,
                                        experiment=exp_name, platform=platform, target=target,
                                        use="cmor", output=output)['cmor']

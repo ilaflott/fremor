@@ -164,6 +164,8 @@ frecatalog
 frecheck
 frecheckexample
 frecmor
+fremor
+fremorizer
 fregrid
 frelist
 fremake
