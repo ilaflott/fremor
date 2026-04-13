@@ -14,3 +14,8 @@ logging.basicConfig(level = logging.WARNING,
                     format = FORMAT,
                     filename = None,
                     encoding = 'utf-8' )
+
+from .cmor_mixer import cmor_run_subtool
+from .cmor_finder import cmor_find_subtool, make_simple_varlist
+from .cmor_yamler import cmor_yaml_subtool
+from .cmor_config import cmor_config_subtool
