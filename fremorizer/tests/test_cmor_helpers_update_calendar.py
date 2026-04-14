@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from fremorizer.cmor_helpers import update_calendar_type
+from fremorizer.cmor_helpers import normalize_calendar, update_calendar_type
 
 @pytest.fixture
 def temp_json_file(tmp_path):
@@ -44,6 +44,16 @@ def test_update_calendar_type_success(temp_json_file):
         data = json.load(file)
         assert data["calendar"] == new_calendar_type
         assert data["other_field"] == "some_value"
+
+def test_update_calendar_type_alias_normalized(temp_json_file):
+    """
+    Calendar aliases should be normalized when updating the experiment config.
+    """
+    update_calendar_type(temp_json_file, "noleap")
+
+    with open(temp_json_file, "r", encoding="utf-8") as file:
+        data = json.load(file)
+        assert data["calendar"] == "365_day"
 
 def test_update_calendar_type_valerr_raise(temp_json_file):
     """
@@ -111,3 +121,19 @@ def test_update_calendar_type_jsonDNE_raise():
     """
     with pytest.raises(FileNotFoundError):
         update_calendar_type('DOES_NOT_EXIST.json','365_day')
+
+
+def test_normalize_calendar_aliases_and_passthrough():
+    """
+    normalize_calendar should resolve CF aliases and preserve unknown values.
+    """
+    assert normalize_calendar("noleap") == "365_day"
+    assert normalize_calendar("365_day") == "365_day"
+    assert normalize_calendar("all_leap") == "366_day"
+    assert normalize_calendar("366_day") == "366_day"
+    assert normalize_calendar("standard") == "gregorian"
+    assert normalize_calendar("gregorian") == "gregorian"
+    assert normalize_calendar("proleptic_gregorian") == "proleptic_gregorian"
+    assert normalize_calendar("julian") == "julian"
+    assert normalize_calendar("CustomCalendar") == "customcalendar"
+    assert normalize_calendar(None) is None
