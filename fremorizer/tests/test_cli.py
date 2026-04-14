@@ -558,3 +558,103 @@ def test_cli_fremor_init_default_name(tmp_path):
         with open(default_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
         assert config['mip_era'] == 'CMIP6'
+
+
+# ── fremor run: logfile + omission tracking ───────────────────────────────
+
+def test_cli_fremor_run_with_logfile(cli_sos_nc_file, tmp_path):
+    '''
+    fremor -vv -l LOGFILE run ...
+
+    Runs a real CMOR workflow with the -l flag and verifies that the resulting
+    log file contains log lines from both cli.py (the CLI entry point) and
+    cmor_mixer (the CMOR processing module).
+    '''
+    log_path = tmp_path / 'TEST_CMOR_RUN.log'
+    outdir = str(tmp_path / 'outdir')
+
+    result = runner.invoke(fremor, args=[
+        '-vv', '-l', str(log_path),
+        'run', '--run_one',
+        '--indir', str(INDIR),
+        '--varlist', str(VARLIST),
+        '--table_config', str(CMIP6_TABLE_CONFIG),
+        '--exp_config', str(EXP_CONFIG),
+        '--outdir', outdir,
+        '--calendar', 'julian',
+        '--grid_label', 'gr',
+        '--grid_desc', 'FOO_BAR_PLACEHOLD',
+        '--nom_res', '10000 km',
+    ])
+
+    assert result.exit_code == 0, f'run failed: {result.output}'
+    assert log_path.exists(), 'log file was not created'
+
+    log_text = log_path.read_text(encoding='utf-8')
+
+    # cli.py entry-point must have written this line when setting up the file handler
+    assert 'fre_file_handler added to base_fre_logger' in log_text, \
+        'expected cli.py log line not found in log file'
+
+    # cmor_mixer must have emitted at least one line carrying its module filename
+    assert 'cmor_mixer.py' in log_text, \
+        'expected cmor_mixer.py log line not found in log file'
+
+
+def test_cli_fremor_run_with_logfile_omission_case(cli_sos_nc_file, cli_sosv2_nc_file, tmp_path):
+    '''
+    fremor -vv -l LOGFILE run ...
+
+    Uses a varlist where sos->sos succeeds and sosV2->tob fails (tob is a valid
+    CMIP6_Omon variable but the sosV2 file contains sos data, not tob).
+    Verifies the OMISSION LOG appears in the log file with the failed variable info.
+    '''
+    import json as _json
+    import tempfile as _tempfile
+    import os
+
+    log_path = tmp_path / 'TEST_CMOR_RUN_OMISSION.log'
+    outdir = str(tmp_path / 'outdir')
+
+    # create a temporary varlist: sos->sos will succeed, sosV2->tob will fail
+    varlist_data = {'sos': 'sos', 'sosV2': 'tob'}
+    varlist_fd, varlist_path = _tempfile.mkstemp(suffix='.json')
+    with os.fdopen(varlist_fd, 'w') as f:
+        _json.dump(varlist_data, f)
+
+    result = runner.invoke(fremor, args=[
+        '-vv', '-l', str(log_path),
+        'run',
+        '--indir', str(INDIR),
+        '--varlist', varlist_path,
+        '--table_config', str(CMIP6_TABLE_CONFIG),
+        '--exp_config', str(EXP_CONFIG),
+        '--outdir', outdir,
+        '--calendar', 'julian',
+        '--grid_label', 'gr',
+        '--grid_desc', 'FOO_BAR_PLACEHOLD',
+        '--nom_res', '10000 km',
+    ])
+
+    assert result.exit_code == 0, f'run failed: {result.output}'
+    assert log_path.exists(), 'log file was not created'
+
+    log_text = log_path.read_text(encoding='utf-8')
+
+    # the omission log summary must appear
+    assert 'OMISSION LOG' in log_text, \
+        'expected OMISSION LOG not found in log file'
+
+    # the failed variable (sosV2/tob) must be mentioned in the omission
+    assert 'OMITTED local_var=sosV2 / target_var=tob' in log_text, \
+        'expected omission entry for sosV2/tob not found in log file'
+
+    # the expected file path for the omitted variable must appear
+    assert '.sosV2.nc' in log_text, \
+        'expected file path for omitted variable not found in log file'
+
+    # the CMOR module must have emitted log lines
+    assert 'cmor_mixer.py' in log_text, \
+        'expected cmor_mixer.py log line not found in log file'
+
+    Path(varlist_path).unlink(missing_ok=True)
