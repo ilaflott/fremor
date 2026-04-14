@@ -64,4 +64,13 @@ test = [
 
 [tool.rstcheck]
 report_level = "WARNING"
-ignore_directives = ["automodule", "autoclass", "autofunction", "automethod", "autoattribute"]
+ignore_directives = [
+    "automodule",
+    "autoclass",
+    "autofunction",
+    "automethod",
+    "autoattribute",
+    "toctree",
+    "glossary",
+]
+ignore_roles = ["ref"]
