@@ -216,3 +216,25 @@ def test_fetch_tables_curl_with_tag(tmp_path):
     assert tables_dir.exists()
     json_files = list(tables_dir.rglob('*.json'))
     assert len(json_files) > 0
+
+
+def test_fetch_tables_git_with_tag(tmp_path):
+    '''Test fetching tables with a specific git tag using git clone.
+
+    This verifies that the --branch tag parameter works correctly.
+    Uses a known tag from the CMIP6 repository (6.9.33).
+    '''
+    tables_dir = tmp_path / 'tables_git_with_tag'
+    repo_url = MIP_TABLE_REPOS['cmip6']
+
+    # Use a known release tag from the repository
+    # Tags follow pattern like '6.9.33', not 'v6.9.33'
+    _fetch_tables_git(repo_url, str(tables_dir), tag='6.9.33')
+
+    # Verify directory exists and has .git
+    assert tables_dir.exists()
+    assert (tables_dir / '.git').exists(), 'Git directory not found'
+
+    # Verify content was cloned
+    json_files = list(tables_dir.rglob('*.json'))
+    assert len(json_files) > 0, 'No JSON files found in cloned repository'
