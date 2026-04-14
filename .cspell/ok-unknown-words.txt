@@ -326,7 +326,6 @@ ncattr
 ncattrs
 ncatts
 nccheck
-nccmp
 ncdf
 ncdump
 ncfile

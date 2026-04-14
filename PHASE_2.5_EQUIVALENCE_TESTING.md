@@ -297,4 +297,4 @@ After initial equivalence is established:
 - fre-cli repository: https://github.com/noaa-gfdl/fre-cli
 - fre.cmor submodule: `fre/cmor/` in fre-cli
 - fremorizer test suite: `fremorizer/tests/`
-- NetCDF comparison tools: `netCDF4`, `xarray`, `nccmp` (external)
+- NetCDF comparison tools: `netCDF4`, `xarray`

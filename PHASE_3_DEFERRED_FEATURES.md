@@ -13,11 +13,11 @@ Once the foundation is solid and equivalence testing is complete, these features
 
 ## Phase 3 Items
 
-### 1. PR #826: Replace nccmp with netCDF4 in tests
+### 1. ~~PR #826: Replace nccmp with netCDF4 in tests~~ ✅ COMPLETED
 - **Source**: https://github.com/noaa-gfdl/fre-cli/pull/826
 - **Description**: Replace external `nccmp` tool dependency with Python `netCDF4` library for comparing netCDF files in tests
-- **Impact**: Would eliminate external tool dependency, making tests more portable and reliable
-- **Priority**: High - currently 9 tests fail due to missing nccmp tool
+- **Impact**: Eliminated external tool dependency, making tests more portable and reliable
+- **Status**: Implemented — `nccmp` subprocess calls replaced with `netCDF4`/`numpy` assertions in `test_cmor_run_subtool.py`
 
 ### 2. PR #832: Harden branded-variable disambiguations
 - **Source**: https://github.com/noaa-gfdl/fre-cli/pull/832
