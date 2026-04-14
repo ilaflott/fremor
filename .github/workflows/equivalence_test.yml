@@ -1,0 +1,102 @@
+name: equivalence_test
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+# cancel running jobs if there is a newer push
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  compare-with-fre-cli:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Checkout fremorizer
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: fremorizer
+
+      - name: Checkout fre-cli
+        uses: actions/checkout@v4
+        with:
+          repository: noaa-gfdl/fre-cli
+          submodules: recursive
+          path: fre-cli
+
+      - name: Setup Conda with miniforge
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-version: latest
+          auto-activate-base: false
+
+      - name: Remove unwanted conda channels
+        run: |
+          conda config --remove channels defaults || true
+          conda config --remove channels main || true
+          conda config --remove channels r || true
+          conda config --set channel_priority strict
+
+      - name: Create fremorizer environment
+        run: |
+          conda create -n fremorizer-test python=3.12 -y -c conda-forge -c noaa-gfdl
+          conda run -n fremorizer-test conda install -y \
+            conda-forge::cftime \
+            "conda-forge::click>=8.2" \
+            "conda-forge::cmor>=3.14" \
+            "conda-forge::netcdf4>=1.7" \
+            "conda-forge::numpy>=2" \
+            conda-forge::pyyaml \
+            conda-forge::nco
+          conda run -n fremorizer-test pip install ./fremorizer
+
+      - name: Create fre-cli environment
+        run: |
+          conda create -n fre-cli-test python=3.12 -y -c conda-forge -c noaa-gfdl
+          conda run -n fre-cli-test conda install -y \
+            conda-forge::cftime \
+            "conda-forge::click>=8.2" \
+            "conda-forge::cmor>=3.14" \
+            "conda-forge::netcdf4>=1.7" \
+            "conda-forge::numpy>=2" \
+            conda-forge::pyyaml \
+            conda-forge::nco
+          conda run -n fre-cli-test pip install ./fre-cli
+
+      - name: Verify installations
+        run: |
+          echo "--- fremorizer ---"
+          conda run -n fremorizer-test fremor --version
+          echo "--- fre-cli ---"
+          conda run -n fre-cli-test fre --version
+
+      - name: Run equivalence tests
+        run: |
+          # Use fremorizer env (has netCDF4/numpy for comparison) and
+          # point to both CLIs via environment variables.  The comparison
+          # script invokes each tool through subprocess so we wrap them
+          # with conda-run helpers.
+          export FREMORIZER_CMD="conda run -n fremorizer-test fremor"
+          export FRE_CLI_CMD="conda run -n fre-cli-test fre cmor"
+          export TEST_FILES_DIR="${GITHUB_WORKSPACE}/fremorizer/fremorizer/tests/test_files"
+          export EQUIVALENCE_REPORT_PATH="${GITHUB_WORKSPACE}/equivalence_report.md"
+
+          conda run -n fremorizer-test \
+            python -m fremorizer.tests.equivalence.compare_with_fre_cli
+
+      - name: Upload equivalence report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: equivalence-report
+          path: equivalence_report.md
