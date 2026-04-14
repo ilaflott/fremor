@@ -21,26 +21,25 @@ def test_iso_to_bronx_chunk():
                        match='problem with converting to bronx chunk from the cmor chunk. check cmor_yamler.py'):
         iso_to_bronx_chunk('foo')
 
-def test_find_statics_file_success():
+def test_find_statics_file_success(tmp_path):
     ''' what happens when no statics file is found given a bronx directory structure '''
-    target_file = 'fremorizer/tests/test_files/ascii_files/mock_archive/' + \
-                  'USER/CMIP7/ESM4/DEV/ESM4.5v01_om5b04_piC/' + \
-                  'gfdl.ncrc5-intel23-prod-openmp/pp/ocean_monthly/ts/monthly/5yr/ocean_monthly.000101-000102.sos.nc'
-    if not Path(target_file).exists():
-        Path(target_file).touch()
-    assert Path(target_file).exists()
+    mock_root = tmp_path / 'mock_archive'
+    bronx_subpath = ('USER/CMIP7/ESM4/DEV/ESM4.5v01_om5b04_piC/'
+                     'gfdl.ncrc5-intel23-prod-openmp/pp/ocean_monthly')
 
-    expected_answer_statics_file = 'fremorizer/tests/test_files/ascii_files/mock_archive/' + \
-                                   'USER/CMIP7/ESM4/DEV/ESM4.5v01_om5b04_piC/' + \
-                                   'gfdl.ncrc5-intel23-prod-openmp/pp/ocean_monthly/ocean_monthly.static.nc'
-    if not Path(expected_answer_statics_file).exists():
-        Path(expected_answer_statics_file).touch()
-    assert Path(expected_answer_statics_file).exists
+    target_file = mock_root / bronx_subpath / 'ts/monthly/5yr/ocean_monthly.000101-000102.sos.nc'
+    target_file.parent.mkdir(parents=True, exist_ok=True)
+    target_file.touch()
+    assert target_file.exists()
 
-    statics_file = find_statics_file( bronx_file_path = target_file
-                                      )
+    expected_answer_statics_file = mock_root / bronx_subpath / 'ocean_monthly.static.nc'
+    expected_answer_statics_file.parent.mkdir(parents=True, exist_ok=True)
+    expected_answer_statics_file.touch()
+    assert expected_answer_statics_file.exists()
+
+    statics_file = find_statics_file( bronx_file_path = str(target_file) )
     assert Path(statics_file).exists()
-    assert statics_file == expected_answer_statics_file
+    assert statics_file == str(expected_answer_statics_file)
 
 
 def test_find_statics_file_nothing_found():

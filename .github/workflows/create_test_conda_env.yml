@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Checkout Files
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v3

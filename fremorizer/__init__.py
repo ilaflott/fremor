@@ -3,9 +3,8 @@ module init file for fremorizer. sets the version attribute, and sets up a fre_l
 """
 
 import logging
-import os
-version = os.getenv("GIT_DESCRIBE_TAG", "2026.01.alpha1")
-__version__ = version
+
+from ._version import __version__, version
 
 fre_logger = logging.getLogger(__name__)
 
