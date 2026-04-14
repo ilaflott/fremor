@@ -325,17 +325,23 @@ def _prepare_nc_input(test_files_dir: Path):
     Ensure the netCDF input file exists by running ncgen on the CDL source.
     Returns the path to the directory containing the .nc file.
     '''
-    cdl_file = test_files_dir / 'reduced_ascii_files' / \
-        'reduced_ocean_monthly_1x1deg.199301-199302.sos.cdl'
+    cdl_file = (test_files_dir / 'reduced_ascii_files' /
+                'reduced_ocean_monthly_1x1deg.199301-199302.sos.cdl')
     nc_dir = test_files_dir / 'ocean_sos_var_file'
     nc_file = nc_dir / 'reduced_ocean_monthly_1x1deg.199301-199302.sos.nc'
 
     nc_dir.mkdir(parents=True, exist_ok=True)
     if not nc_file.exists():
-        subprocess.run(
-            ['ncgen3', '-k', 'netCDF-4', '-o', str(nc_file), str(cdl_file)],
-            check=True,
-        )
+        try:
+            subprocess.run(
+                ['ncgen3', '-k', 'netCDF-4', '-o', str(nc_file), str(cdl_file)],
+                check=True,
+            )
+        except FileNotFoundError as exc:
+            raise FileNotFoundError(
+                'ncgen3 not found — install the netCDF-C tools '
+                '(e.g. conda install conda-forge::netcdf4)'
+            ) from exc
     return nc_dir
 
 
@@ -476,8 +482,8 @@ def test_find_subtool(work_dir: Path) -> ComparisonResult:
         result.info(f'Both exited with code {fremor_res.returncode}')
 
     # Compare stdout line-by-line (ignoring blank-line differences)
-    out1 = [l.strip() for l in fremor_res.stdout.splitlines() if l.strip()]
-    out2 = [l.strip() for l in frecli_res.stdout.splitlines() if l.strip()]
+    out1 = [line.strip() for line in fremor_res.stdout.splitlines() if line.strip()]
+    out2 = [line.strip() for line in frecli_res.stdout.splitlines() if line.strip()]
     if out1 != out2:
         result.fail('stdout differs between fremorizer and fre-cli find output')
         result.info(f'fremorizer output ({len(out1)} lines): {out1[:10]}...')
