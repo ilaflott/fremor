@@ -62,10 +62,32 @@ fremor yaml      # Process a CMOR YAML configuration file
 fremor find      # Find variables in MIP tables
 fremor varlist   # Create a simple variable list from netCDF files
 fremor config    # Generate a CMOR YAML configuration from a pp directory tree
+fremor init      # Initialize CMOR resources: generate config templates and fetch MIP tables
 ```
 
 For a concise overview of required inputs and sample commands, see the
 [CMOR Quickstart](docs/quickstart.rst).
+
+### Getting Started: Initialize CMOR Resources
+
+Before CMORizing data, you need an experiment configuration template and MIP tables.
+The `fremor init` command helps set up these resources:
+
+```bash
+# Generate a CMIP6 experiment config template and fetch CMIP6 tables
+fremor init -m cmip6 -e exp_config.json -t cmip6-tables
+
+# Generate a CMIP7 experiment config template and fetch CMIP7 tables (fast mode)
+fremor init -m cmip7 -e exp_config.json -t cmip7-tables --fast
+
+# Fetch tables for a specific release tag
+fremor init -m cmip6 -t cmip6-tables --tag 6.9.33
+```
+
+This command:
+- Generates an experiment configuration JSON template with required CMIP metadata fields
+- Fetches official MIP tables from trusted GitHub repositories (CMIP6: pcmdi/cmip6-cmor-tables, CMIP7: WCRP-CMIP/cmip7-cmor-tables)
+- Supports both git clone (default) and tarball download (--fast) methods
 
 ### Verbosity and Logging
 

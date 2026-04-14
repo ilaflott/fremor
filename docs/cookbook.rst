@@ -16,9 +16,35 @@ Overview
 
 The ``fremor`` process typically follows this pattern:
 
-1. **Setup and Configuration** — Identify your experiment parameters, create variable lists, and prepare experiment configuration
-2. **CMORization** — Use ``fremor run`` to process individual directories or ``fremor yaml`` for bulk processing
-3. **Troubleshooting** — Diagnose issues as needed
+1. **Initialize Resources** — Use ``fremor init`` to generate config templates and fetch MIP tables
+2. **Setup and Configuration** — Customize your experiment configuration, create variable lists, and prepare metadata
+3. **CMORization** — Use ``fremor run`` to process individual directories or ``fremor yaml`` for bulk processing
+4. **Troubleshooting** — Diagnose issues as needed
+
+Initialize Resources
+--------------------
+
+Before beginning CMORization, initialize the required resources:
+
+.. code-block:: bash
+
+   # Generate CMIP6 experiment config template and fetch tables
+   fremor init -m cmip6 -e CMOR_cmip6_config.json -t cmip6-tables
+
+   # Generate CMIP7 experiment config template and fetch tables (fast mode)
+   fremor init -m cmip7 -e CMOR_cmip7_config.json -t cmip7-tables --fast
+
+The ``init`` command:
+
+* Creates an experiment configuration JSON template with all required CMIP metadata fields
+* Fetches official MIP tables from trusted GitHub repositories
+* Supports git clone (default) or tarball download (``--fast``) for table retrieval
+* Can fetch specific release tags using ``--tag``
+
+After running ``init``, you'll have:
+
+* An experiment configuration JSON file to customize with your experiment metadata
+* A directory of MIP tables ready to use for CMORization
 
 Setup and Configuration
 -----------------------
