@@ -109,3 +109,6 @@ independent package. The `fremor yaml` subcommand optionally depends on
 
 Apache License 2.0 — see [LICENSE.md](LICENSE.md)
 
+## Conda-forge feedstock
+
+See `CONDA_FORGE_FEEDSTOCK_PLAN.md` for the steps and follow-up tasks to submit and maintain the conda-forge feedstock for `fremorizer`.
