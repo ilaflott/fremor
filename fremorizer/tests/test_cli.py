@@ -1,4 +1,4 @@
-'''CLI Tests for fremor *
+'''CLI Tests for fremor subcommands
 
 Tests the command-line-interface calls for the fremor CLI (fremorizer package).
 Each tool generally gets 3 tests:
