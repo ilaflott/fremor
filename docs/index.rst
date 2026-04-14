@@ -8,7 +8,12 @@ Welcome to ``fremorizer``'s documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   usage
+   commands
+   cookbook
    api
+   contributing
+   glossary
 
 Indices
 =======
