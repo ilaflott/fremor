@@ -89,10 +89,10 @@ def test_case_function(testfile_dir,table,opt_var_name,grid_label,start,calendar
     indir = testfile_dir
     table_file = f'{CMIP6_TABLE_REPO_PATH}/Tables/CMIP6_{table}.json'
 
-    # if we can't find the input test file, do an xfail. most likely, you're not at PPAN.
+    # if we can't find the input test file, skip the test. most likely, you're not at PPAN.
     if not Path(indir).exists():
-        pytest.xfail(f'{opt_var_name}, {Path(table_file).name}, {grid_label} '
-                     'SUCCEEDs on PP/AN at GFDL only! OR testfile_dir does not exist!')
+        pytest.skip(f'{opt_var_name}, {Path(table_file).name}, {grid_label} '
+                    'SUCCEEDs on PP/AN at GFDL only! OR testfile_dir does not exist!')
 
     # execute the test
     try:
