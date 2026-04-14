@@ -158,3 +158,4 @@ tmp/
 # autogen'd by doc build
 docs/fremorizer.*
 docs/modules.rst
+docs/build/

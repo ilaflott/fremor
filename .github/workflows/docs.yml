@@ -1,0 +1,44 @@
+name: docs
+
+on:
+  pull_request:
+    branches:
+
+# cancel running jobs if theres a newer push
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Checkout Files
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install doc dependencies
+        run: |
+          pip install sphinx renku-sphinx-theme sphinx-rtd-theme click pyyaml rstcheck
+
+      - name: Install fremorizer
+        run: |
+          pip install --no-deps .
+
+      - name: Lint RST files
+        run: |
+          rstcheck --recursive docs/
+
+      - name: Build Sphinx docs
+        run: |
+          sphinx-build -W --keep-going -b html docs docs/build/html

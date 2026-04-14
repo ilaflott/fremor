@@ -53,9 +53,15 @@ docs = [
     "sphinx",
     "renku-sphinx-theme",
     "sphinx-rtd-theme",
+    "rstcheck",
 ]
 
 test = [
     "pylint",
     "pytest",
 ]
+
+
+[tool.rstcheck]
+report_level = "WARNING"
+ignore_directives = ["automodule", "autoclass", "autofunction", "automethod", "autoattribute"]

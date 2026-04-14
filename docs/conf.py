@@ -9,7 +9,17 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path('..').resolve()))
 
-from fremorizer import __version__ as pkg_version
+import importlib.util
+
+# Load _version.py directly to avoid triggering the full package init
+# (which imports heavy optional dependencies like cmor, netCDF4, etc.)
+_ver_spec = importlib.util.spec_from_file_location(
+    "fremorizer._version",
+    Path('..').resolve() / 'fremorizer' / '_version.py'
+)
+_ver_mod = importlib.util.module_from_spec(_ver_spec)  # type: ignore[arg-type]
+_ver_spec.loader.exec_module(_ver_mod)  # type: ignore[union-attr]
+pkg_version = _ver_mod.__version__
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
