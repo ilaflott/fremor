@@ -1,0 +1,63 @@
+name: create_test_conda_env
+on:
+  pull_request:
+    branches:
+
+# cancel running jobs if theres a newer push
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  conda-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Checkout Files
+        uses: actions/checkout@v4
+
+      - name: Setup Conda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: fremorizer
+          environment-file: environment.yaml
+          auto-activate-base: false
+          miniforge-version: latest
+
+      - name: Configure Conda
+        run: |
+          echo "removing main and r channels from defaults"
+          conda config --remove channels defaults || true
+          conda config --remove channels main || true
+          conda config --remove channels r || true
+
+          echo "setting strict channel priority"
+          conda config --set channel_priority strict
+
+          echo "printing conda config just in case"
+          conda config --show
+
+      - name: Install fremorizer
+        run: |
+          pip install .
+
+      - name: Run pytest
+        run: |
+          pytest --cov=fremorizer --cov-config=coveragerc fremorizer/tests/ -v
+
+      - name: Upload Coverage to Codecov
+        if: ${{ always() }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+
+      - name: Run pylint
+        if: ${{ always() }}
+        run: |
+          pylint --rcfile pylintrc fremorizer/

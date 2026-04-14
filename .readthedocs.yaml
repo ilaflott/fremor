@@ -1,0 +1,26 @@
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# Required
+version: 2
+
+# Build documentation using lightweight Python environment
+# Heavy dependencies (netCDF4, cmor, xarray, etc.) are mocked in docs/conf.py
+# This significantly speeds up builds and reduces complexity
+build:
+  os: ubuntu-24.04
+  tools:
+    python: "3.11"
+  jobs:
+    pre_install:
+      # Install minimal dependencies needed for doc build
+      - pip install sphinx renku-sphinx-theme sphinx-rtd-theme click pyyaml
+    pre_build:
+      # Generate API documentation from source
+      - sphinx-apidoc --ext-autodoc --output-dir docs fremorizer/ --separate
+
+# Configure Sphinx
+sphinx:
+  configuration: docs/conf.py
+
+
+

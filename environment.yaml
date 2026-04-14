@@ -1,0 +1,15 @@
+name: fremorizer
+channels:
+  - conda-forge
+  - noaa-gfdl
+dependencies:
+  - python >=3.11
+  - conda-forge::cftime
+  - conda-forge::click >=8.2
+  - conda-forge::cmor >=3.14
+  - conda-forge::netcdf4 >=1.7
+  - conda-forge::numpy >=2
+  - conda-forge::pyyaml
+  - conda-forge::pytest
+  - conda-forge::pytest-cov
+  - conda-forge::pylint

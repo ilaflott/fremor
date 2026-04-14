@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fremorizer"
+description = "Model output rewriter (CMORizer) for FRE/FMS based models"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [
+    {name = "MSD Workflow Team", email="oar.gfdl.workflow@noaa.gov"}
+]
+
+keywords = [
+    "gfdl",
+    "workflow",
+    "fre",
+    "fms",
+    "cmor",
+]
+
+dependencies = [
+        'cftime',
+        'click',
+        'cmor',
+        'netCDF4',
+        'numpy',
+        'pyyaml',
+]
+
+classifiers = [
+    "Environment :: Console",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3",
+]
+
+dynamic = [
+    "version",
+]
+
+
+[tool.setuptools.dynamic]
+version = {attr = "fremorizer.__version__"}
+
+
+[project.scripts]
+fremor = 'fremorizer.fremor:fremor'
+
+
+[project.optional-dependencies]
+docs = [
+    "sphinx",
+    "renku-sphinx-theme",
+    "sphinx-rtd-theme",
+]
+
+test = [
+    "pylint",
+    "pytest",
+]

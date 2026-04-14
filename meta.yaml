@@ -1,0 +1,35 @@
+package:
+  name: fremorizer
+  version: 2026.01.alpha1
+
+source:
+  path: .
+
+build:
+      script: "{{ PYTHON }} -m pip install . -vv"
+      number: 0
+      noarch: python
+requirements:
+  host:
+    - python >=3.11
+    - pip
+  run:
+    - python >=3.11
+    - cftime
+    - click
+    - cmor
+    - netcdf4
+    - numpy
+    - pyyaml
+test:
+  imports:
+    - fremorizer
+    - fremorizer.cmor_mixer
+    - fremorizer.cmor_helpers
+    - fremorizer.cmor_finder
+    - fremorizer.cmor_config
+    - fremorizer.cmor_yamler
+about:
+  home: https://github.com/ilaflott/fremorizer
+  license: Apache-2.0
+  summary: Model output rewriter (CMORizer) for FRE/FMS based models
