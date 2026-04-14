@@ -61,24 +61,24 @@ gather_files() {
             cmip_version="other"
             if [[ "${ncfile}" == *"CMIP6"* ]]; then
                 cmip_version="cmip6"
-                ((cmip6_files++))
+                cmip6_files=$((cmip6_files + 1))
             elif [[ "${ncfile}" == *"CMIP7"* ]]; then
                 cmip_version="cmip7"
-                ((cmip7_files++))
+                cmip7_files=$((cmip7_files + 1))
             else
                 # Try to detect from file attributes using ncdump
                 if command -v ncdump &> /dev/null; then
                     if ncdump -h "${ncfile}" 2>/dev/null | grep -q 'mip_era = "CMIP7"'; then
                         cmip_version="cmip7"
-                        ((cmip7_files++))
+                        cmip7_files=$((cmip7_files + 1))
                     elif ncdump -h "${ncfile}" 2>/dev/null | grep -q 'mip_era = "CMIP6"'; then
                         cmip_version="cmip6"
-                        ((cmip6_files++))
+                        cmip6_files=$((cmip6_files + 1))
                     else
-                        ((other_files++))
+                        other_files=$((other_files + 1))
                     fi
                 else
-                    ((other_files++))
+                    other_files=$((other_files + 1))
                 fi
             fi
 
@@ -95,7 +95,7 @@ gather_files() {
             # Add to manifest
             echo "${ncfile} -> ${cmip_version}/${unique_name}" >> "${MANIFEST}"
 
-            ((total_files++))
+            total_files=$((total_files + 1))
 
             echo "  found: ${ncfile}"
             echo "    -> ${cmip_version}/${unique_name}"

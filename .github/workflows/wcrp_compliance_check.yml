@@ -57,46 +57,35 @@ jobs:
             conda-forge::pyyaml \
             conda-forge::pytest
 
-      - name: Install cc-plugin-wcrp
-        run: |
-          pip install cc-plugin-wcrp
-
-      - name: Configure esgvoc controlled vocabularies
-        run: |
-          esgvoc config add cordex-cmip6
-          esgvoc config add cmip7
-          esgvoc config set project:branch=esgvoc
-          esgvoc install
-
-      - name: Verify cc-plugin-wcrp installation
-        run: |
-          echo "Listing available compliance-checker plugins..."
-          compliance-checker -l
-
       - name: Install fremorizer
         run: |
           pip install .
 
+      # ── generate test outputs (moved earlier, most fragile step) ──
       - name: Run tests to generate output files
+        id: run_tests
         run: |
           echo "Running test suite to generate NetCDF outputs..."
+          echo "Using --basetemp=tmp/pytest_basetemp to preserve pytest temp artifacts"
           echo ""
 
           echo "=========================================="
           echo "Running CMIP6 basic tests..."
           echo "=========================================="
-          pytest fremorizer/tests/test_cmor_run_subtool.py -v || true
+          pytest fremorizer/tests/test_cmor_run_subtool.py -v \
+            --basetemp=tmp/pytest_basetemp || true
 
           echo ""
           echo "=========================================="
           echo "Running extended test examples..."
           echo "=========================================="
-          pytest fremorizer/tests/test_cmor_run_subtool_further_examples.py -v || true
+          pytest fremorizer/tests/test_cmor_run_subtool_further_examples.py -v \
+            --basetemp=tmp/pytest_basetemp || true
 
           echo ""
           echo "Test execution complete."
-        continue-on-error: true
 
+      # ── gather and categorize outputs ──
       - name: Gather test outputs into centralized directory
         id: gather_outputs
         run: |
@@ -115,6 +104,44 @@ jobs:
           echo "cmip7_count=${cmip7_files}" >> $GITHUB_OUTPUT
           echo "other_count=${other_files}" >> $GITHUB_OUTPUT
 
+          echo ""
+          echo "Summary: total=${total_files} cmip6=${cmip6_files} cmip7=${cmip7_files} other=${other_files}"
+
+      - name: Verify outputs were gathered
+        if: steps.gather_outputs.outputs.file_count == '0'
+        run: |
+          echo "::warning::No NetCDF files were found after running tests"
+          echo "This may indicate that tests did not run successfully or outputs were not generated"
+          echo ""
+          echo "Checking known test output directories for debugging..."
+          echo "--- fremorizer/tests/test_files/outdir ---"
+          find fremorizer/tests/test_files/outdir -name "*.nc" -type f 2>/dev/null || echo "(empty or missing)"
+          echo "--- fremorizer/tests/test_files/outdir_ppan_only ---"
+          find fremorizer/tests/test_files/outdir_ppan_only -name "*.nc" -type f 2>/dev/null || echo "(empty or missing)"
+          echo "--- tmp/pytest_basetemp ---"
+          find tmp/pytest_basetemp -name "*.nc" -type f 2>/dev/null || echo "(empty or missing)"
+
+      # ── install cc-plugin-wcrp (after tests, since it's not needed until now) ──
+      - name: Install cc-plugin-wcrp
+        if: steps.gather_outputs.outputs.file_count != '0'
+        run: |
+          pip install cc-plugin-wcrp
+
+      - name: Configure esgvoc controlled vocabularies
+        if: steps.gather_outputs.outputs.file_count != '0'
+        run: |
+          esgvoc config add cordex-cmip6
+          esgvoc config add cmip7
+          esgvoc config set project:branch=esgvoc
+          esgvoc install
+
+      - name: Verify cc-plugin-wcrp installation
+        if: steps.gather_outputs.outputs.file_count != '0'
+        run: |
+          echo "Listing available compliance-checker plugins..."
+          compliance-checker -l
+
+      # ── run WCRP compliance checks ──
       - name: Run WCRP compliance checks on CMIP6 outputs
         if: steps.gather_outputs.outputs.cmip6_count != '0'
         run: |
@@ -190,6 +217,7 @@ jobs:
             fi
           done
 
+      # ── reports and artifacts ──
       - name: Generate summary report
         if: steps.gather_outputs.outputs.file_count != '0'
         run: |
@@ -227,9 +255,3 @@ jobs:
           name: wcrp-compliance-reports
           path: tmp/wcrp_compliance_reports/
           retention-days: 30
-
-      - name: Check if any files were tested
-        if: steps.gather_outputs.outputs.file_count == '0'
-        run: |
-          echo "::warning::No NetCDF files were found to check for WCRP compliance"
-          echo "This may indicate that tests did not run successfully or outputs were not generated"
