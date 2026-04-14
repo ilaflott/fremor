@@ -473,3 +473,88 @@ def test_cli_fremor_varlist_cmip7_table_filter(cli_sos_nc_file, cli_sosv2_nc_fil
 
     assert 'sos' in var_list, 'sos should be in the CMIP7-filtered list'
     assert 'sosV2' not in var_list, 'sosV2 should NOT be in the CMIP7-filtered list'
+
+
+# ── fremor init ───────────────────────────────────────────────────────────
+
+def test_cli_fremor_init():
+    ''' fremor init (no args) '''
+    result = runner.invoke(fremor, args=["init"])
+    assert result.exit_code == 2
+
+def test_cli_fremor_init_help():
+    ''' fremor init --help '''
+    result = runner.invoke(fremor, args=["init", "--help"])
+    assert result.exit_code == 0
+
+def test_cli_fremor_init_opt_dne():
+    ''' fremor init optionDNE '''
+    result = runner.invoke(fremor, args=["init", "optionDNE"])
+    assert result.exit_code == 2
+
+
+def test_cli_fremor_init_cmip6_exp_config(tmp_path):
+    '''
+    fremor init -- generate a CMIP6 experiment config template.
+    '''
+    output_path = tmp_path / 'test_cmip6_init_template.json'
+
+    result = runner.invoke(fremor, args=[
+        "init",
+        "--mip_era", "cmip6",
+        "--exp_config", str(output_path)
+    ])
+    assert result.exit_code == 0, f'init failed: {result.output}'
+    assert output_path.exists(), 'output config was not created'
+
+    with open(output_path, 'r', encoding='utf-8') as f:
+        config = json.load(f)
+
+    assert config['mip_era'] == 'CMIP6'
+    assert config['_cmip6_option'] == 'CMIP6'
+    assert 'experiment_id' in config
+    assert 'output_path_template' in config
+
+
+def test_cli_fremor_init_cmip7_exp_config(tmp_path):
+    '''
+    fremor init -- generate a CMIP7 experiment config template.
+    '''
+    output_path = tmp_path / 'test_cmip7_init_template.json'
+
+    result = runner.invoke(fremor, args=[
+        "init",
+        "--mip_era", "cmip7",
+        "--exp_config", str(output_path)
+    ])
+    assert result.exit_code == 0, f'init failed: {result.output}'
+    assert output_path.exists(), 'output config was not created'
+
+    with open(output_path, 'r', encoding='utf-8') as f:
+        config = json.load(f)
+
+    assert config['mip_era'] == 'CMIP7'
+    assert config['_cmip7_option'] == 1
+    assert 'experiment_id' in config
+    assert 'output_path_template' in config
+
+
+def test_cli_fremor_init_default_name(tmp_path):
+    '''
+    fremor init -- when no --exp_config is given and no --tables_dir,
+    a default-named file should be created in the current directory.
+    '''
+    # Use CliRunner's isolated_filesystem to avoid polluting the actual working directory
+    with runner.isolated_filesystem(temp_dir=tmp_path):
+        result = runner.invoke(fremor, args=[
+            "init",
+            "--mip_era", "cmip6"
+        ])
+        assert result.exit_code == 0, f'init failed: {result.output}'
+
+        default_path = Path('CMOR_cmip6_template.json')
+        assert default_path.exists(), 'default output config was not created'
+
+        with open(default_path, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        assert config['mip_era'] == 'CMIP6'

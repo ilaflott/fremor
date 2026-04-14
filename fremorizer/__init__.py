@@ -18,3 +18,4 @@ from .cmor_mixer import cmor_run_subtool
 from .cmor_finder import cmor_find_subtool, make_simple_varlist
 from .cmor_yamler import cmor_yaml_subtool
 from .cmor_config import cmor_config_subtool
+from .cmor_init import cmor_init_subtool

@@ -33,6 +33,7 @@ Getting Started
 
 ``fremor`` provides several subcommands:
 
+* ``fremor init`` — Initialize CMOR resources: generate config templates and fetch MIP tables
 * ``fremor run`` — Core engine for rewriting individual directories of netCDF files according to a MIP table
 * ``fremor yaml`` — Higher-level tool for processing multiple directories / MIP tables using YAML configuration
 * ``fremor find`` — Helper for exploring MIP table configurations for information on a specific variable

@@ -23,6 +23,36 @@ Documentation and References
 Getting Started
 ---------------
 
+Initialize CMOR resources
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before CMORizing data, use ``fremor init`` to set up required resources:
+
+.. code-block:: bash
+
+   # Generate a CMIP6 config template and fetch CMIP6 tables
+   fremor init -m cmip6 -e exp_config.json -t cmip6-tables
+
+   # Generate a CMIP7 config template and fetch CMIP7 tables (fast mode)
+   fremor init -m cmip7 -e exp_config.json -t cmip7-tables --fast
+
+   # Only generate a config template (skip table fetching)
+   fremor init -m cmip6 -e exp_config.json
+
+   # Only fetch tables (skip config template)
+   fremor init -m cmip6 -t cmip6-tables
+
+   # Fetch a specific release tag
+   fremor init -m cmip6 -t cmip6-tables --tag 6.9.33
+
+The ``init`` command:
+
+* Generates experiment configuration JSON templates with required CMIP metadata fields
+* Fetches official MIP tables from trusted GitHub repositories:
+   - CMIP6: `pcmdi/cmip6-cmor-tables <https://github.com/pcmdi/cmip6-cmor-tables>`_
+   - CMIP7: `WCRP-CMIP/cmip7-cmor-tables <https://github.com/WCRP-CMIP/cmip7-cmor-tables>`_
+* Supports both git clone (default) and tarball download (``--fast``) methods
+
 External configuration
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -53,6 +83,23 @@ The entry point to all subcommands is ``fremor``:
 .. code-block:: bash
 
    fremor --help
+
+``init``
+~~~~~~~~
+
+Initialize CMOR resources by generating experiment configuration templates and/or
+fetching MIP tables from trusted sources.
+
+.. code-block:: bash
+
+   # Generate config template and fetch tables
+   fremor init -m cmip6 -e exp_config.json -t cmip6-tables
+
+   # Use fast mode (tarball download instead of git clone)
+   fremor init -m cmip7 -e exp_config.json -t cmip7-tables --fast
+
+   # Fetch a specific release tag
+   fremor init -m cmip6 -t cmip6-tables --tag 6.9.33
 
 ``run``
 ~~~~~~~
