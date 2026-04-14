@@ -61,6 +61,10 @@ test = [
     "pytest",
 ]
 
+qa = [
+    "esgf-qa",
+]
+
 
 [tool.rstcheck]
 report_level = "WARNING"

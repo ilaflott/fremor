@@ -34,10 +34,9 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: fremorizer
-          python-version: ${{ matrix.python-version }}
+          environment-file: environment.yaml
           auto-activate-base: false
           miniforge-version: latest
-          channels: conda-forge,noaa-gfdl
 
       - name: Configure Conda
         run: |
@@ -52,18 +51,6 @@ jobs:
           echo "printing conda config just in case"
           conda config --show
 
-      - name: Install dependencies
-        run: |
-          conda install -y \
-            conda-forge::cftime \
-            "conda-forge::click>=8.2" \
-            "conda-forge::cmor>=3.14" \
-            "conda-forge::netcdf4>=1.7" \
-            "conda-forge::numpy>=2" \
-            conda-forge::pyyaml \
-            conda-forge::pytest \
-            conda-forge::pytest-cov
-
       - name: Install fremorizer
         run: |
           pip install .
@@ -71,10 +58,6 @@ jobs:
       - name: Run pytest to generate test outputs
         run: |
           pytest fremorizer/tests/ -v --tb=short
-
-      - name: Install ESGF-QA
-        run: |
-          pip install esgf-qa
 
       - name: Run ESGF-QA on test outputs
         run: |
