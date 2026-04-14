@@ -24,6 +24,7 @@ requirements:
 test:
   imports:
     - fremorizer
+    - fremorizer.cli
     - fremorizer.cmor_mixer
     - fremorizer.cmor_helpers
     - fremorizer.cmor_finder

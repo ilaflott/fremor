@@ -45,7 +45,7 @@ version = {attr = "fremorizer._version.__version__"}
 
 
 [project.scripts]
-fremor = 'fremorizer.fremor:fremor'
+fremor = 'fremorizer.cli:fremor'
 
 
 [project.optional-dependencies]
