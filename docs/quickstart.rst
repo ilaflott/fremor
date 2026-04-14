@@ -1,0 +1,128 @@
+.. _quickstart:
+
+========================
+CMOR Quickstart (``fremor``)
+========================
+
+This guide adapts the upstream ``fre-cli`` ``fre cmor`` README for the standalone
+``fremorizer`` package. The ``fremor`` CLI rewrites climate model output with
+CMIP-compliant metadata (\"CMORization\") and supports both CMIP6 and CMIP7
+workflows.
+
+Comprehensive API and CLI reference material lives in :ref:`usage` and
+:ref:`commands`. Use this page when you want a concise, end-to-end reminder of
+what configuration is required and how to invoke each subcommand.
+
+Documentation and References
+----------------------------
+
+* `fremorizer docs (latest) <https://fremorizer.readthedocs.io/en/latest/>`_
+* `fre-cli CMOR docs <https://noaa-gfdl.readthedocs.io/projects/fre-cli/en/latest/usage.html#cmorize-postprocessed-output>`_
+* `PCMDI cmor documentation <http://cmor.llnl.gov/>`_
+
+Getting Started
+---------------
+
+External configuration
+~~~~~~~~~~~~~~~~~~~~~~
+
+``fremor`` relies on external CMIP metadata:
+
+* MIP tables (for example the `cmip6-cmor-tables <https://github.com/pcmdi/cmip6-cmor-tables>`_)
+* Controlled vocabularies (for example `CMIP6_CVs <https://github.com/WCRP-CMIP/CMIP6_CVs>`_)
+
+Required user inputs
+~~~~~~~~~~~~~~~~~~~~
+
+* **Variable list** (JSON) that maps local variable names to MIP names. A small
+  example lives in the repository at
+  ``fremorizer/tests/test_files/CMORbite_var_list.json``.
+* **Experiment configuration** (JSON) supplying metadata such as ``calendar``,
+  ``grid``, and the desired output directory structure. See
+  ``fremorizer/tests/test_files/CMOR_input_example.json`` for CMIP6 or
+  ``fremorizer/tests/test_files/CMOR_CMIP7_input_example.json`` for CMIP7.
+* **Optional CMOR YAML** if you want to batch multiple ``run`` calls via
+  ``fremor yaml``. These YAML files are part of the larger FRE workflow and are
+  not shipped here; point ``-y/--yamlfile`` at your project-specific YAMLs.
+
+Subcommands and Examples
+------------------------
+
+The entry point to all subcommands is ``fremor``:
+
+.. code-block:: bash
+
+   fremor --help
+
+``run``
+~~~~~~~
+
+Rewrite NetCDF files in a directory using a specific MIP table and experiment
+configuration.
+
+.. code-block:: bash
+
+   fremor run --run_one --grid_label gr --grid_desc FOO_BAR_PLACEHOLD --nom_res "10000 km" \
+       -d /path/to/input/netcdf/dir \
+       -l fremorizer/tests/test_files/CMORbite_var_list.json \
+       -r fremorizer/tests/test_files/cmip6-cmor-tables/Tables/CMIP6_Omon.json \
+       -p fremorizer/tests/test_files/CMOR_input_example.json \
+       -o /tmp/cmorized_output
+
+``yaml``
+~~~~~~~~
+
+Process multiple directories/tables using FRE-flavored YAML configuration.
+This is most useful inside a full FRE workflow.
+
+.. code-block:: bash
+
+   fremor -v yaml --run_one --dry_run --output combined.yaml \
+       --yamlfile /path/to/cmor.yaml \
+       --experiment c96L65_am5f7b12r1_amip \
+       --platform ncrc5.intel \
+       --target prod-openmp
+
+``find``
+~~~~~~~~
+
+Search MIP tables for variable definitions.
+
+.. code-block:: bash
+
+   fremor -v find --table_config_dir fremorizer/tests/test_files/cmip6-cmor-tables/Tables/ \
+       --opt_var_name sos
+
+``varlist``
+~~~~~~~~~~~
+
+Generate a variable list from a directory of NetCDF files. Optionally filter
+against a MIP table.
+
+.. code-block:: bash
+
+   fremor varlist --dir_targ /path/to/data_dir \
+       --output_variable_list simple_varlist.json \
+       --mip_table fremorizer/tests/test_files/cmip6-cmor-tables/Tables/CMIP6_Omon.json
+
+``config``
+~~~~~~~~~~
+
+Scan a post-processing directory tree and emit the CMOR YAML plus per-component
+variable lists that ``fremor yaml`` consumes.
+
+.. code-block:: bash
+
+   fremor config --pp_dir /path/to/pp \
+       --mip_tables_dir /path/to/cmip7-cmor-tables/tables \
+       --mip_era cmip7 \
+       --exp_config /path/to/CMOR_CMIP7_input_example.json \
+       --output_yaml cmor_config.yaml \
+       --output_dir /path/to/cmor_output \
+       --varlist_dir /path/to/varlists \
+       --freq monthly --chunk 5yr --grid gn \
+       --calendar noleap
+
+In ``--dry_run`` mode, ``fremor yaml`` prints the generated ``fremor run`` calls
+without executing them. Pass ``--no-print_cli_call`` to print the equivalent
+Python ``cmor_run_subtool(...)`` invocation instead of the CLI command.

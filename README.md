@@ -63,6 +63,9 @@ fremor varlist   # Create a simple variable list from netCDF files
 fremor config    # Generate a CMOR YAML configuration from a pp directory tree
 ```
 
+For a concise overview of required inputs and sample commands, see the
+[CMOR Quickstart](docs/quickstart.rst).
+
 ### Verbosity and Logging
 
 ```bash
