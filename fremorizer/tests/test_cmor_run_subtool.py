@@ -255,7 +255,7 @@ def test_fre_cmor_run_subtool_case1_output_compare_metadata(capfd):
     _out, _err = capfd.readouterr()
 
 
-# FYI, but again, helpful for tests
+# case 2: error path (sosV2 filename but sos inside → mismatch)
 FILENAME_DIFF = \
     f'reduced_ocean_monthly_1x1deg.{DATETIMES_INPUTFILE}.sosV2.nc'
 FULL_INPUTFILE_DIFF = \
@@ -308,21 +308,16 @@ def test_setup_fre_cmor_run_subtool_case2(capfd):
     _out, _err = capfd.readouterr()
 
 def test_fre_cmor_run_subtool_case2(capfd):
-    """ fre cmor run, test-use case2 """
+    """
+    fre cmor run, test-use case2: filename variable != file variable should error.
+    The sosV2 file has variable "sos" inside, but the varlist expects "sosV2" as the
+    modeler variable name (in both the filename and inside the file). This mismatch
+    should cause cmor_run_subtool to return a non-zero status.
+    """
 
-    #debug
-    #print(
-    #    f'cmor_run_subtool('
-    #    f'\'{INDIR}\','
-    #    f'\'{VARLIST_DIFF}\','
-    #    f'\'{TABLE_CONFIG}\','
-    #    f'\'{EXP_CONFIG}\','
-    #    f'\'{OUTDIR}\''
-    #    ')'
-    #)
 
     # test call, where meat of the workload gets done
-    cmor_run_subtool(
+    result = cmor_run_subtool(
         indir = INDIR,
         json_var_list = VARLIST_DIFF,
         json_table_config = TABLE_CONFIG,
@@ -334,39 +329,139 @@ def test_fre_cmor_run_subtool_case2(capfd):
         nom_res = NOM_RES,
         calendar_type = CALENDAR_TYPE
     )
-
-    # check we ran on the right input file.
-    assert all( [ Path(FULL_OUTPUTFILE).exists(),
-                  Path(FULL_INPUTFILE_DIFF).exists() ] )
+    assert result != 0, f'expected non-zero return status for filename/variable mismatch, got {result}'
     _out, _err = capfd.readouterr()
 
 
-def test_fre_cmor_run_subtool_case2_output_compare_data(capfd):
-    """ I/O data-only comparison of test case2 """
-    print(f'FULL_OUTPUTFILE={FULL_OUTPUTFILE}')
-    print(f'FULL_INPUTFILE_DIFF={FULL_INPUTFILE_DIFF}')
+# case 3: mapped variable (sea_sfc_salinity → sos)
+VARLIST_MAPPED = f'{ROOTDIR}/varlist_mapped'
+FILENAME_MAPPED = f'reduced_ocean_monthly_1x1deg.{DATETIMES_INPUTFILE}.sea_sfc_salinity'
+FULL_INPUTFILE_MAPPED = f"{INDIR}/{FILENAME_MAPPED}.nc"
+def test_setup_fre_cmor_run_subtool_case3(capfd):
+    ''' Generate the sea_sfc_salinity NetCDF file from CDL and clean up previous output.'''
+    if Path(FULL_OUTPUTFILE).exists():
+        Path(FULL_OUTPUTFILE).unlink()
+    assert not Path(FULL_OUTPUTFILE).exists()
 
-    with netCDF4.Dataset(FULL_INPUTFILE_DIFF) as ds_in, \
+    if Path(OUTDIR+'/CMIP6').exists():
+        shutil.rmtree(OUTDIR+'/CMIP6')
+    assert not Path(OUTDIR+'/CMIP6').exists()
+
+    if Path(TMPDIR).exists():
+        try:
+            shutil.rmtree(TMPDIR)
+        except OSError as exc:
+            print(f'WARNING: TMPDIR={TMPDIR} could not be removed. exc = {exc}')
+
+    if Path(OUTDIR).exists():
+        try:
+            shutil.rmtree(OUTDIR)
+        except OSError as exc:
+            print(f'WARNING: OUTDIR={OUTDIR} could not be removed. exc = {exc}')
+
+    ncgen_input = f"{ROOTDIR}/reduced_ascii_files/{FILENAME_MAPPED}.cdl"
+    ncgen_output = FULL_INPUTFILE_MAPPED
+
+    Path(ncgen_output).parent.mkdir(parents=True, exist_ok=True)
+    if Path(ncgen_output).exists():
+        Path(ncgen_output).unlink()
+    assert Path(ncgen_input).exists()
+
+    ex = [ 'ncgen3', '-k', 'netCDF-4', '-o', ncgen_output, ncgen_input ]
+    sp = subprocess.run(ex, check = True)
+    assert all( [ sp.returncode == 0, Path(ncgen_output).exists() ] )
+    _out, _err = capfd.readouterr()
+
+def test_fre_cmor_run_subtool_case3(capfd):
+    ''' fre cmor run, test-use case3: mapped variable sea_sfc_salinity → sos '''
+
+    cmor_run_subtool(
+        indir = INDIR,
+        json_var_list = VARLIST_MAPPED,
+        json_table_config = TABLE_CONFIG,
+        json_exp_config = EXP_CONFIG,
+        outdir = OUTDIR,
+        run_one_mode = True,
+        grid_label = GRID_LABEL,
+        grid = GRID,
+        nom_res = NOM_RES,
+        calendar_type = CALENDAR_TYPE
+    )
+
+    assert all( [ Path(FULL_OUTPUTFILE).exists(),
+                  Path(FULL_INPUTFILE_MAPPED).exists() ] )
+    _out, _err = capfd.readouterr()
+
+
+def _assert_mapped_data_matches(ds_in, ds_out):
+    '''
+    helper: assert that science variable data, coordinate data, and shapes
+    are preserved between input (sea_sfc_salinity) and CMOR output (sos) datasets.
+    '''
+    assert np.array_equal(ds_in.variables['sea_sfc_salinity'][:], ds_out.variables['sos'][:]), \
+        "sea_sfc_salinity data values differ from sos in CMOR output"
+
+    assert np.allclose(ds_in.variables['lat'][:], ds_out.variables['lat'][:]), \
+        "latitude data differs between input and CMOR output"
+    assert np.allclose(ds_in.variables['lon'][:], ds_out.variables['lon'][:]), \
+        "longitude data differs between input and CMOR output"
+    assert np.allclose(ds_in.variables['time'][:], ds_out.variables['time'][:]), \
+        "time data differs between input and CMOR output"
+
+    assert ds_in.variables['sea_sfc_salinity'][:].shape == ds_out.variables['sos'][:].shape, \
+        "sea_sfc_salinity data shape differs from sos in CMOR output"
+
+
+def _assert_mapped_metadata_matches(ds_in, ds_out):
+    '''
+    helper: assert that CMIP6-required global attributes are present and that
+    key variable-level metadata is preserved between input (sea_sfc_salinity)
+    and CMOR output (sos) datasets.
+    '''
+    for required_attr in CMIP6_REQUIRED_GLOBAL_ATTRS:
+        assert required_attr in ds_out.ncattrs(), \
+            f"CMOR output missing required global attribute '{required_attr}'"
+
+    assert ds_in.variables['sea_sfc_salinity'].standard_name == ds_out.variables['sos'].standard_name, \
+        "standard_name differs between input sea_sfc_salinity and CMOR output sos"
+    assert ds_in.variables['sea_sfc_salinity'].long_name == ds_out.variables['sos'].long_name, \
+        "long_name differs between input sea_sfc_salinity and CMOR output sos"
+
+    assert ds_in.variables['sea_sfc_salinity']._FillValue == ds_out.variables['sos']._FillValue, \
+        "_FillValue differs between input sea_sfc_salinity and CMOR output sos"
+    assert ds_in.variables['sea_sfc_salinity'].missing_value == ds_out.variables['sos'].missing_value, \
+        "missing_value differs between input sea_sfc_salinity and CMOR output sos"
+
+
+def test_fre_cmor_run_subtool_case3_output_compare_data(capfd):
+    '''
+    I/O data-only comparison of test case3 (mapped variable)
+    '''
+    print(f'FULL_OUTPUTFILE={FULL_OUTPUTFILE}')
+    print(f'FULL_INPUTFILE_MAPPED={FULL_INPUTFILE_MAPPED}')
+
+    with netCDF4.Dataset(FULL_INPUTFILE_MAPPED) as ds_in, \
          netCDF4.Dataset(FULL_OUTPUTFILE) as ds_out:
-        # file formats should differ: CMOR converts input to NETCDF4_CLASSIC
         assert ds_in.file_format != ds_out.file_format, \
             f'expected file formats to differ, got input={ds_in.file_format}, output={ds_out.file_format}'
 
-        _assert_data_matches(ds_in, ds_out)
+        _assert_mapped_data_matches(ds_in, ds_out)
     _out, _err = capfd.readouterr()
 
-def test_fre_cmor_run_subtool_case2_output_compare_metadata(capfd):
-    """ I/O metadata-only comparison of test case2 """
-    print(f'FULL_OUTPUTFILE={FULL_OUTPUTFILE}')
-    print(f'FULL_INPUTFILE_DIFF={FULL_INPUTFILE_DIFF}')
 
-    with netCDF4.Dataset(FULL_INPUTFILE_DIFF) as ds_in, \
+def test_fre_cmor_run_subtool_case3_output_compare_metadata(capfd):
+    '''
+    I/O metadata-only comparison of test case3 (mapped variable)
+    '''
+    print(f'FULL_OUTPUTFILE={FULL_OUTPUTFILE}')
+    print(f'FULL_INPUTFILE_MAPPED={FULL_INPUTFILE_MAPPED}')
+
+    with netCDF4.Dataset(FULL_INPUTFILE_MAPPED) as ds_in, \
          netCDF4.Dataset(FULL_OUTPUTFILE) as ds_out:
-        # CMOR processing should add/change global attributes
         assert set(ds_in.ncattrs()) != set(ds_out.ncattrs()), \
             'expected global attributes to differ between input and CMOR output'
 
-        _assert_metadata_matches(ds_in, ds_out)
+        _assert_mapped_metadata_matches(ds_in, ds_out)
     _out, _err = capfd.readouterr()
 
 def test_exp_config_cleanup():

@@ -74,7 +74,7 @@ You will need to split the platform-target string appropriately to extract the i
 Creating Variable Lists
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Variable lists map your local variable names to MIP table variable names. Generate a variable list from a directory of netCDF files:
+Variable lists map your modeler variable names to MIP table variable names. Generate a variable list from a directory of netCDF files:
 
 .. code-block:: bash
 
@@ -85,6 +85,20 @@ Variable lists map your local variable names to MIP table variable names. Genera
 This tool examines filenames to extract variable names. It assumes FRE-style naming conventions
 (e.g., ``component.YYYYMMDD.variable.nc``). Review the generated file and edit as needed to map
 local variable names to target MIP variable names.
+
+When a modeler's variable name differs from the MIP table variable name, the variable list
+maps between them. For example, if your model produces ``sea_sfc_salinity`` but the MIP table
+expects ``sos``:
+
+.. code-block:: json
+
+   {
+       "sea_sfc_salinity": "sos"
+   }
+
+The key (``sea_sfc_salinity``) is the modeler's variable name — it must match both the filename
+and the variable name inside the netCDF file. The value (``sos``) is the MIP table variable name
+used for metadata lookups.
 
 To verify variables exist in MIP tables, search for variable definitions:
 
@@ -145,7 +159,7 @@ For processing individual directories or debugging specific issues, use ``fremor
 Required arguments:
 
 * ``--indir``: Directory containing netCDF files to CMORize
-* ``--varlist``: JSON file mapping local variable names to target variable names
+* ``--varlist``: JSON file mapping modeler variable names to MIP table variable names
 * ``--table_config``: MIP table JSON file (e.g., ``CMIP6_Omon.json``)
 * ``--exp_config``: Experiment configuration JSON with metadata
 * ``--outdir``: Output directory root for CMORized files
