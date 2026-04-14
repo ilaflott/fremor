@@ -1,4 +1,4 @@
-''' fremorizer CLI entry point '''
+''' fremorizer CLI entry point: fremor '''
 
 import logging
 
