@@ -15,8 +15,10 @@ Migrated from NOAA-GFDL/fre-cli fre/tests/test_fre_cmor_cli.py.
 '''
 
 import json
+import os
 from pathlib import Path
 import shutil
+import tempfile
 from unittest.mock import patch
 
 from click.testing import CliRunner
@@ -609,18 +611,14 @@ def test_cli_fremor_run_with_logfile_omission_case(cli_sos_nc_file, cli_sosv2_nc
     CMIP6_Omon variable but the sosV2 file contains sos data, not tob).
     Verifies the OMISSION LOG appears in the log file with the failed variable info.
     '''
-    import json as _json
-    import tempfile as _tempfile
-    import os
-
     log_path = tmp_path / 'TEST_CMOR_RUN_OMISSION.log'
     outdir = str(tmp_path / 'outdir')
 
     # create a temporary varlist: sos->sos will succeed, sosV2->tob will fail
     varlist_data = {'sos': 'sos', 'sosV2': 'tob'}
-    varlist_fd, varlist_path = _tempfile.mkstemp(suffix='.json')
+    varlist_fd, varlist_path = tempfile.mkstemp(suffix='.json')
     with os.fdopen(varlist_fd, 'w') as f:
-        _json.dump(varlist_data, f)
+        json.dump(varlist_data, f)
 
     result = runner.invoke(fremor, args=[
         '-vv', '-l', str(log_path),
