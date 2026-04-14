@@ -8,6 +8,7 @@ Welcome to ``fremorizer``'s documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   quickstart
    usage
    commands
    cookbook
