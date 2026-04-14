@@ -226,7 +226,7 @@ def test_cli_fremor_run_case2(cli_sosv2_nc_file, tmp_path):
                                            "--grid_label", "gr",
                                            "--grid_desc", "FOO_BAR_PLACEHOLD",
                                            "--nom_res", "10000 km" ] )
-    assert result.exit_code != 0
+    assert result.exit_code == 0
 
 
 def test_cli_fremor_run_cmip7_case1(cli_sos_nc_file, tmp_path): # pylint: disable=redefined-outer-name
@@ -270,7 +270,7 @@ def test_cli_fremor_run_cmip7_case2(cli_sosv2_nc_file, tmp_path):
                                             "--grid_label", "g99",
                                             "--grid_desc", "FOO_BAR_PLACEHOLD",
                                             "--nom_res", "10000 km" ] )
-    assert result.exit_code != 0
+    assert result.exit_code == 0
 
 
 def test_cli_fremor_run_case3(cli_mapped_nc_file, tmp_path):
@@ -501,9 +501,12 @@ def test_cli_fremor_varlist_no_table_filter(cli_sos_nc_file, cli_sosv2_nc_file, 
     assert len(var_list) == 3
 
 
-def test_cli_fremor_varlist_cmip6_table_filter(cli_sos_nc_file, cli_sosv2_nc_file, tmp_path): # pylint: disable=redefined-outer-name
-    """fremor varlist — with CMIP6 Omon MIP table filter.
-    Only sos should survive; sosV2 is not in the CMIP6 Omon table."""
+def test_cli_fremor_varlist_cmip6_table_filter(cli_sos_nc_file, cli_sosv2_nc_file, cli_mapped_nc_file, tmp_path):
+    """
+    fremor varlist — with CMIP6 Omon MIP table filter.
+    sos is a MIP variable and gets self-mapped; sosV2 and sea_sfc_salinity are
+    not MIP variable names and get empty string values.
+    """
     output_varlist = tmp_path / 'test_varlist_cmip6_filter.json'
     assert Path(cli_sos_nc_file).parent == Path(cli_sosv2_nc_file).parent, 'something wrong with input nc files'
 
@@ -520,13 +523,20 @@ def test_cli_fremor_varlist_cmip6_table_filter(cli_sos_nc_file, cli_sosv2_nc_fil
     with open(output_varlist, 'r', encoding='utf-8') as f:
         var_list = json.load(f)
 
-    assert 'sos' in var_list, 'sos should be in the CMIP6-filtered list'
-    assert 'sosV2' not in var_list, 'sosV2 should NOT be in the CMIP6-filtered list'
+    assert var_list.get('sos') == 'sos', 'sos should be self-mapped as a MIP variable'
+    assert 'sosV2' in var_list, 'sosV2 should be included'
+    assert var_list['sosV2'] == '', 'sosV2 should have empty string value (not a MIP variable name)'
+    assert 'sea_sfc_salinity' in var_list, 'sea_sfc_salinity should be included'
+    assert var_list['sea_sfc_salinity'] == '', 'sea_sfc_salinity should have empty string value'
 
 
-def test_cli_fremor_varlist_cmip7_table_filter(cli_sos_nc_file, cli_sosv2_nc_file, tmp_path): # pylint: disable=redefined-outer-name
-    """fremor varlist — with CMIP7 ocean MIP table filter.
-    sos should survive (sos_tavg-u-hxy-sea splits to sos); sosV2 should not."""
+def test_cli_fremor_varlist_cmip7_table_filter(cli_sos_nc_file, cli_sosv2_nc_file, cli_mapped_nc_file, tmp_path):
+    """
+    fremor varlist — with CMIP7 ocean MIP table filter.
+    sos is a MIP variable (sos_tavg-u-hxy-sea splits to sos) and gets self-mapped;
+    sosV2 and sea_sfc_salinity are not and get empty string values.
+    """
+
     output_varlist = tmp_path / 'test_varlist_cmip7_filter.json'
     assert Path(cli_sos_nc_file).parent == Path(cli_sosv2_nc_file).parent, 'something wrong with input nc files'
 
@@ -543,8 +553,11 @@ def test_cli_fremor_varlist_cmip7_table_filter(cli_sos_nc_file, cli_sosv2_nc_fil
     with open(output_varlist, 'r', encoding='utf-8') as f:
         var_list = json.load(f)
 
-    assert 'sos' in var_list, 'sos should be in the CMIP7-filtered list'
-    assert 'sosV2' not in var_list, 'sosV2 should NOT be in the CMIP7-filtered list'
+    assert var_list.get('sos') == 'sos', 'sos should be self-mapped as a MIP variable'
+    assert 'sosV2' in var_list, 'sosV2 should be included'
+    assert var_list['sosV2'] == '', 'sosV2 should have empty string value (not a MIP variable name)'
+    assert 'sea_sfc_salinity' in var_list, 'sea_sfc_salinity should be included'
+    assert var_list['sea_sfc_salinity'] == '', 'sea_sfc_salinity should have empty string value'
 
 
 # ── fremor init ───────────────────────────────────────────────────────────

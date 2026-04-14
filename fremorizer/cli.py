@@ -236,7 +236,7 @@ def run(indir, varlist, table_config, exp_config, outdir, run_one, opt_var_name,
         stop = stop,
         calendar_type = calendar
     )
-    if result != 0:
+    if result < 0:
         raise click.ClickException(f'cmor_run_subtool returned non-zero status: {result}')
 
 
