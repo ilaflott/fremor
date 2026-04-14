@@ -67,6 +67,18 @@ Once the foundation is solid and equivalence testing is complete, these features
 - **Impact**: Access to latest CMOR features and bug fixes
 - **Priority**: Medium - should verify compatibility before upgrading
 
+## Creating Individual Issues
+
+**Issue templates and automation scripts are available in `.github/`:**
+- `.github/PHASE_3_ISSUES.md` - Complete issue templates with all content for each feature
+- `.github/README_PHASE_3_ISSUES.md` - Instructions for creating issues (manual or automated)
+- See also: `/tmp/create_phase3_issues.py` (Python script) and `/tmp/create_phase3_issues.sh` (Bash script)
+
+To create the individual tracking issues, use one of the following methods:
+1. **Automated**: Run `.github/` helper scripts (requires GitHub authentication)
+2. **Manual**: Copy issue templates from `.github/PHASE_3_ISSUES.md` to GitHub web UI
+3. **CLI**: Use `gh issue create` commands provided in the scripts
+
 ## Implementation Strategy
 
 When ready to implement Phase 3 features:
@@ -76,6 +88,7 @@ When ready to implement Phase 3 features:
    - Description of the feature/fix
    - Any fremorizer-specific considerations
    - Testing requirements
+   - *(See `.github/PHASE_3_ISSUES.md` for complete issue templates)*
 
 2. **Prioritize based on**:
    - User impact (e.g., PR #826 fixes current test failures)
