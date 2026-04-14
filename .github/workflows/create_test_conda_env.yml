@@ -67,7 +67,7 @@ jobs:
 
       - name: Install fremorizer
         run: |
-          pip install --no-deps --no-build-isolation .
+          pip install .
 
       - name: Run pytest
         run: |
