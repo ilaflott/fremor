@@ -1001,6 +1001,17 @@ def cmor_run_subtool(indir: str = None,
     fre_logger.info('loading json_table_config = \n%s', json_table_config)
 
     mip_var_cfgs = get_json_file_data(json_table_config)
+    table_mip_era = mip_var_cfgs.get('Header', {}).get('mip_era')
+    if isinstance(table_mip_era, str):
+        table_mip_era = table_mip_era.upper()
+    elif Path(json_table_config).stem.split('_', maxsplit=1)[0].upper() in ['CMIP6', 'CMIP7']:
+        table_mip_era = Path(json_table_config).stem.split('_', maxsplit=1)[0].upper()
+    if table_mip_era is not None and table_mip_era != exp_cfg_mip_era:
+        raise ValueError(
+            'mip_era mismatch between experiment config and MIP table.\n'
+            f'  experiment mip_era: {exp_cfg_mip_era}\n'
+            f'  table format detected in {json_table_config}: {table_mip_era}\n'
+            '  supply a MIP table that matches the experiment mip_era.')
     mip_fullvar_list = mip_var_cfgs["variable_entry"].keys()
     fre_logger.debug('the following variables were read from the table: %s', mip_fullvar_list)
 

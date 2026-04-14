@@ -41,6 +41,7 @@ NOM_RES = '10000 km' #placeholder value
 INDIR = f'{ROOTDIR}/ocean_sos_var_file'
 VARLIST = f'{ROOTDIR}/varlist'
 EXP_CONFIG = f'{ROOTDIR}/CMOR_input_example.json'
+CMIP7_EXP_CONFIG = f'{ROOTDIR}/CMOR_CMIP7_input_example.json'
 OUTDIR = f'{ROOTDIR}/outdir'
 TMPDIR = f'{OUTDIR}/tmp'
 
@@ -109,6 +110,58 @@ def _assert_metadata_matches(ds_in, ds_out):
         "sos _FillValue differs between input and CMOR output"
     assert ds_in.variables['sos'].missing_value == ds_out.variables['sos'].missing_value, \
         "sos missing_value differs between input and CMOR output"
+
+
+def _write_fake_table(tmp_path, filename, mip_era):
+    '''
+    helper: create a minimal MIP table JSON with a mip_era header for mismatch tests
+    '''
+    table_path = tmp_path / filename
+    table_path.write_text(json.dumps({
+        'Header': {'mip_era': mip_era},
+        'variable_entry': {'tas': {'dimensions': ['time']}}
+    }))
+    return table_path
+
+
+def test_cmip6_exp_with_cmip7_table_raises(tmp_path):
+    '''
+    ValueError with clear message when CMIP6 experiment uses a CMIP7-format table.
+    '''
+    table_path = _write_fake_table(tmp_path, 'CMIP7_fake.json', 'CMIP7')
+    indir = tmp_path / 'indir'
+    outdir = tmp_path / 'outdir'
+    indir.mkdir()
+    outdir.mkdir()
+
+    with pytest.raises(ValueError, match='mip_era mismatch'):
+        cmor_run_subtool(
+            indir=str(indir),
+            json_var_list=VARLIST,
+            json_table_config=str(table_path),
+            json_exp_config=EXP_CONFIG,
+            outdir=str(outdir),
+        )
+
+
+def test_cmip7_exp_with_cmip6_table_raises(tmp_path):
+    '''
+    ValueError with clear message when CMIP7 experiment uses a CMIP6-format table.
+    '''
+    table_path = _write_fake_table(tmp_path, 'CMIP6_fake.json', 'CMIP6')
+    indir = tmp_path / 'indir'
+    outdir = tmp_path / 'outdir'
+    indir.mkdir()
+    outdir.mkdir()
+
+    with pytest.raises(ValueError, match='mip_era mismatch'):
+        cmor_run_subtool(
+            indir=str(indir),
+            json_var_list=VARLIST,
+            json_table_config=str(table_path),
+            json_exp_config=CMIP7_EXP_CONFIG,
+            outdir=str(outdir),
+        )
 
 
 def test_setup_fre_cmor_run_subtool(capfd):
