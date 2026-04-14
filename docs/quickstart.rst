@@ -1,8 +1,8 @@
 .. _quickstart:
 
-========================
+==============================
 CMOR Quickstart (``fremor``)
-========================
+==============================
 
 This guide adapts the upstream ``fre-cli`` ``fre cmor`` README for the standalone
 ``fremorizer`` package. The ``fremor`` CLI rewrites climate model output with
