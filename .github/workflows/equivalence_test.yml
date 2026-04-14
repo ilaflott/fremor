@@ -24,15 +24,19 @@ jobs:
       - name: Checkout fremorizer
         uses: actions/checkout@v4
         with:
-          submodules: recursive
           path: fremorizer
 
-      - name: Checkout fre-cli
+      - name: Checkout cmip6-cmor-tables
         uses: actions/checkout@v4
         with:
-          repository: noaa-gfdl/fre-cli
-          submodules: recursive
-          path: fre-cli
+          repository: pcmdi/cmip6-cmor-tables
+          path: fremorizer/fremorizer/tests/test_files/cmip6-cmor-tables
+
+      - name: Checkout cmip7-cmor-tables
+        uses: actions/checkout@v4
+        with:
+          repository: WCRP-CMIP/cmip7-cmor-tables
+          path: fremorizer/fremorizer/tests/test_files/cmip7-cmor-tables
 
       - name: Setup Conda with miniforge
         uses: conda-incubator/setup-miniconda@v3
@@ -70,8 +74,8 @@ jobs:
             "conda-forge::netcdf4>=1.7" \
             "conda-forge::numpy>=2" \
             conda-forge::pyyaml \
-            conda-forge::nco
-          conda run -n fre-cli-test pip install ./fre-cli
+            conda-forge::nco \
+            noaa-gfdl::fre-cli
 
       - name: Verify installations
         run: |
