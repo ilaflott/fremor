@@ -1,0 +1,50 @@
+# Example CMOR Configuration YAML
+# ================================
+# This file demonstrates the structure required for a valid CMOR configuration.
+# All paths support environment variable expansion (e.g., $HOME, ${VAR_NAME})
+
+cmor:
+  # MIP era (required): Must be 'CMIP6' or 'CMIP7'
+  mip_era: 'CMIP6'
+
+  # Directories (required): All three directory paths must be specified
+  directories:
+    pp_dir: '/path/to/postprocessed/data'      # Input PP directory
+    table_dir: '/path/to/cmor/tables'          # CMOR table directory
+    outdir: '/path/to/output/directory'        # Output directory for CMORized files
+
+  # Experiment configuration (required): Path to experiment JSON file
+  exp_json: '/path/to/CMOR_input_example.json'
+
+  # Optional time range constraints
+  start: '1990'        # Start year (YYYY format)
+  stop: '2000'         # Stop year (YYYY format)
+  calendar_type: 'noleap'  # CF-compliant calendar type
+
+  # Table targets (required): At least one table target must be specified
+  table_targets:
+    - table_name: 'Omon'           # MIP table name (e.g., Omon, Amon, Lmon)
+      freq: 'monthly'              # Frequency (optional for CMIP6 if derivable from table)
+
+      # Optional gridding information (set to null if not applicable)
+      gridding:
+        grid_label: 'gr'           # Grid label (e.g., 'gr', 'gn')
+        grid_desc: 'regridded to 1x1 degree from native grid'
+        nom_res: '100 km'          # Nominal resolution
+
+      # Target components (required): At least one component must be specified
+      target_components:
+        - component_name: 'ocean_monthly_1x1deg'  # Component identifier
+          chunk: 'P5Y'                           # ISO 8601 duration (e.g., P5Y = 5 years)
+          data_series_type: 'ts'                 # Data series type (e.g., 'ts')
+          variable_list: '/path/to/varlist.json' # Path to variable list JSON
+
+    # Additional table targets can be added
+    - table_name: 'Amon'
+      freq: 'monthly'
+      gridding: null  # No regridding for this table
+      target_components:
+        - component_name: 'atmos_monthly'
+          chunk: 'P1Y'
+          data_series_type: 'ts'
+          variable_list: '/path/to/atmos_varlist.json'

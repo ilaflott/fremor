@@ -115,6 +115,7 @@ fremor run \
 - cftime
 - click
 - cmor
+- jsonschema
 - netCDF4
 - numpy
 - pyyaml
@@ -159,8 +160,27 @@ To view compliance results from a workflow run:
 
 `fremorizer` is a near-exact copy of the `fre.cmor` submodule from
 [NOAA-GFDL/fre-cli](https://github.com/NOAA-GFDL/fre-cli), extracted as an
-independent package. The `fremor yaml` subcommand optionally depends on
-`fre-cli`'s `yamltools` module for YAML consolidation.
+independent package.
+
+### YAML Processing
+
+As of version 1.1.0, `fremorizer` includes native YAML processing with schema
+validation, eliminating the hard dependency on `fre-cli`. The `fremor yaml`
+command now:
+
+- Uses native YAML loading and validation by default
+- Validates YAML configurations against a JSON schema
+- Automatically falls back to `fre-cli`'s `yamltools.consolidate_yamls` if available
+  (for advanced features like multi-file consolidation and platform/target overrides)
+
+To use the advanced features provided by `fre-cli`, install it separately:
+```bash
+pip install fre-cli
+```
+
+**Note:** The native YAML loader provides a simplified version suitable for most
+use cases. For complex multi-file YAML consolidation with platform/target/experiment
+overrides, the `fre-cli` package is still recommended.
 
 ## License
 

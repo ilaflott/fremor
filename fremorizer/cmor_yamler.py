@@ -24,6 +24,7 @@ try:
     from fre.yamltools.combine_yamls_script import consolidate_yamls
 except ImportError:
     consolidate_yamls = None
+from .cmor_yaml_consolidator import load_and_validate_yaml
 from .cmor_mixer import cmor_run_subtool
 from .cmor_helpers import ( check_path_existence, iso_to_bronx_chunk, #conv_mip_to_bronx_freq,
                             get_bronx_freq_from_mip_table )
@@ -90,16 +91,24 @@ def cmor_yaml_subtool( yamlfile: str = None,
     # ---------------------------------------------------
     # parsing the target model yaml ---------------------
     # ---------------------------------------------------
-    fre_logger.info('calling consolidate yamls to create a combined cmor-yaml dictionary')
-    if consolidate_yamls is None:
-        raise ImportError(
-            "the 'fremor yaml' command requires fre-cli's yamltools module.\n"
-            "install it with: pip install fre-cli")
-    cmor_yaml_dict = consolidate_yamls(yamlfile=yamlfile,
-                                       experiment=exp_name, platform=platform, target=target,
-                                       use="cmor", output=output)['cmor']
-    fre_logger.debug('consolidate_yamls produced the following dictionary of cmor-settings from yamls: \n%s',
-                     pprint.pformat(cmor_yaml_dict) )
+    # Use native YAML consolidation by default, with optional fre-cli fallback
+    # for advanced features (multi-file consolidation, platform/target overrides)
+    if consolidate_yamls is not None:
+        fre_logger.info('using fre-cli consolidate_yamls for YAML processing')
+        cmor_yaml_dict = consolidate_yamls(yamlfile=yamlfile,
+                                           experiment=exp_name, platform=platform, target=target,
+                                           use="cmor", output=output)['cmor']
+        fre_logger.debug('consolidate_yamls produced the following dictionary of cmor-settings from yamls: \n%s',
+                         pprint.pformat(cmor_yaml_dict) )
+    else:
+        fre_logger.info('using native YAML loader (fre-cli not available)')
+        fre_logger.info('loading and validating YAML configuration')
+        full_config = load_and_validate_yaml(yamlfile=yamlfile,
+                                             experiment=exp_name, platform=platform, target=target,
+                                             use="cmor", output=output)
+        cmor_yaml_dict = full_config['cmor']
+        fre_logger.debug('native YAML loader produced the following dictionary of cmor-settings: \n%s',
+                         pprint.pformat(cmor_yaml_dict) )
 
     mip_era = cmor_yaml_dict['mip_era'].upper()
     fre_logger.info('mip_era = %s', mip_era)
