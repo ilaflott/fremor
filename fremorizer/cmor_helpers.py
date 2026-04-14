@@ -1,5 +1,5 @@
 """
-fre.cmor helper functions
+fremor helper functions
 =========================
 
 This module provides helper functions for the CMORization workflow in the FRE (Flexible Runtime Environment)
