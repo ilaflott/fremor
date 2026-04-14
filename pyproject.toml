@@ -41,7 +41,7 @@ dynamic = [
 
 
 [tool.setuptools.dynamic]
-version = {attr = "fremorizer.__version__"}
+version = {attr = "fremorizer._version.__version__"}
 
 
 [project.scripts]
