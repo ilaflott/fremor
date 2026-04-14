@@ -184,12 +184,19 @@ def make_simple_varlist( dir_targ: str,
     # Build a deduplicated dict of variable names extracted from all filenames across
     # all datetimes. Assigning to a dict naturally deduplicates while preserving
     # first-seen insertion order (Python 3.7+).
+    # If a MIP table is provided, variables that match a MIP variable name get
+    # self-mapped (key==value). Variables NOT in the MIP table get an empty string
+    # as value, signaling they need manual mapping by the user.
     var_list: Dict[str, str] = {}
     for targetfile in all_nc_files:
         var_name=os.path.basename(targetfile).split('.')[-2]
-        if mip_vars is not None and var_name not in mip_vars:
-            continue
-        var_list[var_name] = var_name
+        if mip_vars is not None:
+            if var_name in mip_vars:
+                var_list[var_name] = var_name
+            else:
+                var_list[var_name] = ''
+        else:
+            var_list[var_name] = var_name
 
     if not var_list:
         fre_logger.warning('WARNING: no variables in target mip table found, or no matching pattern,'
