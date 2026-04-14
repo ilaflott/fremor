@@ -67,11 +67,11 @@ jobs:
 
       - name: Install fremorizer
         run: |
-          pip install .
+          pip install --no-deps --no-build-isolation .
 
       - name: Run pytest
         run: |
-          pytest --cov=fremorizer --cov-config=coveragerc fremorizer/tests/ -v
+          pytest --cov=fremorizer --cov-config=coveragerc --cov-report=xml fremorizer/tests/ -v
 
       - name: Upload Coverage to Codecov
         if: ${{ always() }}
