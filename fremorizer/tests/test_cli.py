@@ -27,7 +27,6 @@ from .conftest import (
     ROOTDIR, INDIR, VARLIST, VARLIST_DIFF,
     EXP_CONFIG, EXP_CONFIG_CMIP7,
     CMIP6_TABLE_CONFIG, CMIP7_TABLE_CONFIG,
-    YYYYMMDD,
 )
 
 runner = CliRunner()
