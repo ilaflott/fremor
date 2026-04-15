@@ -45,7 +45,7 @@ requirements, and a local copy of the repository installed with ``pip`` using th
 
 
 Testing Your Local Changes
----------------------------
+--------------------------
 
 There are several ways to test your efforts locally during your development cycle. A few examples and
 ``fremorizer``-specific recommendations are described here, but contributors are welcome to be creative
@@ -70,7 +70,7 @@ failure conditions should ideally be tested.
 
 
 Running Without ``click``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Every ``fremor COMMAND *ARGV`` approximately maps to a single function call (a ``*_subtool`` function
 in the corresponding module). To remove ``click`` and the CLI aspect from testing, assuming the code
@@ -126,7 +126,7 @@ adding a new third-party package.
 
 
 How ``fremorizer`` is Updated
-------------------------------
+-----------------------------
 
 ``fremorizer`` is published and hosted as a Conda package on the
 `NOAA-GFDL conda channel <https://anaconda.org/NOAA-GFDL>`_. On pushes to the ``main`` branch, the
@@ -154,7 +154,7 @@ a merge.
 
 
 ``logging`` Practice to Avoid
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Avoid calling ``logging.basicConfig`` to re-configure logging behavior **outside** of
 ``fremorizer/__init__.py``. This creates another ``logging.handler`` without resolving the ambiguity
@@ -163,7 +163,7 @@ oddly silent logging behavior that is very tricky to debug.
 
 
 Avoid ``os.chdir`` if You Can
-------------------------------
+-----------------------------
 
 Directory changing in Python is not transient by default — if the interpreter changes directories, then
 the result of ``os.getcwd()`` later in the program may change to an unexpected value, leading to

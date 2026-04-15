@@ -1,8 +1,8 @@
 .. fremorizer documentation master file
 
-==========================================
-Welcome to ``fremorizer``'s documentation!
-==========================================
+==============
+``fremorizer``
+==============
 
 .. toctree::
    :maxdepth: 2

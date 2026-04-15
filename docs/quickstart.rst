@@ -1,12 +1,12 @@
 .. _quickstart:
 
-==============================
+============================
 CMOR Quickstart (``fremor``)
-==============================
+============================
 
-This guide adapts the upstream ``fre-cli`` ``fre cmor`` README for the standalone
-``fremorizer`` package. The ``fremor`` CLI rewrites climate model output with
-CMIP-compliant metadata (\"CMORization\") and supports both CMIP6 and CMIP7
+This guide adapts the ``README`` for ``fre.cmor`` in ``NOAA-GFDL/fre-cli`` for the
+standalone ``fremorizer`` package. The ``fremor`` CLI rewrites climate model output
+with CMIP-compliant metadata (\"CMORization\") and supports both CMIP6 and CMIP7
 workflows.
 
 Comprehensive API and CLI reference material lives in :ref:`usage` and
@@ -24,7 +24,7 @@ Getting Started
 ---------------
 
 Initialize CMOR resources
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Before CMORizing data, use ``fremor init`` to set up required resources:
 

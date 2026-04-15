@@ -1,6 +1,7 @@
 """
-fremorizer constants
-==================
+``fremor`` Constants: Centralized Module-Wide Config
+====================================================
+
 
 Centralized constants for the ``fremor`` package.  Every hard-coded
 value that was previously scattered across ``cmor_mixer``, ``cmor_helpers``,

@@ -1,4 +1,11 @@
-''' fremorizer CLI entry point: fremor '''
+"""
+fremor CLI entry point: ``fremor``
+==================================
+
+All ``fremor <command>`` call routines start here.
+
+each ``fremor <command>`` has it's own, similarly named python function.
+"""
 
 import logging
 

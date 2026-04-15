@@ -1,6 +1,6 @@
 """
-FRE / CMOR Metadata Mixing and Rewriting (CMORization)
-======================================================
+``fremor run``: CMORization for FRE output
+==========================================
 
 This module provides routines which rewrite post-processed FRE/FMS model output in a community-driven, standardized way.
 This module relies heavily on PCMDI's CMOR module and it's python API. It is the core implementation for

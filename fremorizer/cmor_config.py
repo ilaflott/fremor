@@ -1,5 +1,5 @@
 """
-CMOR YAML Configuration Generator
+``fremor config``: YAML Generator
 =================================
 
 This module powers the ``fremor config`` command, generating a CMOR YAML configuration

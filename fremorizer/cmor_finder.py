@@ -1,6 +1,6 @@
 """
-fremor find
-=============
+``fremor find`` and ``fremor varlist``
+======================================
 
 This module provides tools to find and print information about variables in CMIP6 JSON configuration files.
 It is primarily used for inspecting variable entries and generating variable lists for use in FRE CMORization

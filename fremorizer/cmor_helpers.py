@@ -1,6 +1,6 @@
 """
-fremor helper functions
-=========================
+``fremor``: helper/utility python functions
+===========================================
 
 This module provides helper functions for the CMORization workflow in the FRE (Flexible Runtime Environment)
 CLI, specifically for use in the cmor_mixer submodule. The utilities here support a variety of common

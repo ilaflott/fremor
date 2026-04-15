@@ -58,7 +58,7 @@ Before beginning CMORization, gather the following information:
 * **Output directory** — Where CMORized output should be written
 
 Identifying Parameters from FRE Output
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have existing FRE output, you can extract the required parameters from the directory structure. The post-processing directory is typically located at::
 
@@ -72,7 +72,7 @@ From this path, you can identify:
 You will need to split the platform-target string appropriately to extract the individual ``platform`` and ``target`` values for use with ``fremor`` commands.
 
 Creating Variable Lists
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Variable lists map your local variable names to MIP table variable names. Generate a variable list from a directory of netCDF files:
 
@@ -105,7 +105,7 @@ Or search for all variables in a varlist:
 This displays which MIP table contains the variable and its metadata requirements.
 
 Preparing Experiment Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The experiment configuration JSON file contains required metadata for CMORization (e.g., ``CMOR_input_example.json``).
 This file should include:
@@ -123,7 +123,7 @@ Running Your CMORization
 ------------------------
 
 CMORizing One Table/Variable List in a Directory
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``fremor run`` command is the fundamental building block for CMORization. It processes netCDF files from a single input directory according to a specified MIP table and variable list.
 
@@ -157,12 +157,12 @@ Optional but recommended:
 * ``--nom_res``: Nominal resolution (must match controlled vocabulary)
 * ``--opt_var_name``: Process only files matching this variable name
 * ``--run_one``: Process only one file (for testing)
-* ``--start``: Start year (YYYY format)
-* ``--stop``: Stop year (YYYY format)
+* ``--start``: Start year (``YYYY`` format)
+* ``--stop``: Stop year (``YYYY`` format)
 * ``--calendar``: Calendar type (e.g., ``julian``, ``noleap``, ``360_day``)
 
 Bulk CMORization Over Many Tables and Directories
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``fremor yaml`` command provides a higher-level interface for CMORizing multiple components and MIP tables.
 It parses YAML configuration, then generates and executes a set of ``fremor run`` commands based on that
@@ -217,7 +217,7 @@ Once validated, remove ``--run_one`` for full processing:
        -t TARGET
 
 Auto-generating CMOR YAML from Post-processing Output
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have a post-processing directory tree and MIP tables, ``fremor config`` can auto-generate the CMOR
 YAML configuration for you:
@@ -238,18 +238,22 @@ tables, writes per-component variable list files, and emits a structured YAML th
 later consume.
 
 Common Issues and Solutions
-----------------------------
+---------------------------
 
 ``fremor yaml`` Fails at YAML Combination Step
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. note::
+
+   This section and general YAML behavior is under-review and being refactored
 
 ``fremor yaml`` fails with key errors or anchor errors during the YAML combination step.
 
 .. note::
 
-   The ``fremor yaml`` subcommand optionally relies on ``fre-cli``'s ``yamltools`` module for
+   The ``fremor yaml`` subcommand optionally relies on ``fre-cli``\'s ``yamltools`` module for
    YAML consolidation. If ``fre-cli`` is not installed, you can use
-   ``fremorizer``'s native YAML loader with a single pre-consolidated YAML file.
+   ``fremorizer``\'s native YAML loader with a single pre-consolidated YAML file.
 
 To debug this issue:
 
@@ -259,7 +263,7 @@ To debug this issue:
 * Verify the CMOR YAML path is relative to the model YAML location
 
 No Files Found in Input Directory
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``fremor run`` reports no files matching the variable list.
 
@@ -271,7 +275,7 @@ Solutions:
 * Use ``--opt_var_name`` to target a specific variable for testing
 
 Grid Metadata Issues
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 Errors about missing or invalid grid labels or nominal resolution.
 
@@ -283,7 +287,7 @@ Solutions:
 * Review the experiment configuration JSON for grid-related fields
 
 Calendar or Date Range Issues
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Files are skipped or errors related to calendar types.
 
@@ -295,7 +299,7 @@ Solutions:
 * Check that the calendar type in your data matches the MIP requirements
 
 Example: Ocean Monthly Data CMORization
-----------------------------------------
+---------------------------------------
 
 This example demonstrates CMORizing ocean monthly output for multiple components.
 

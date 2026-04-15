@@ -1,6 +1,6 @@
 """
-YAML-Driven CMORization Workflow Tools
-======================================
+``fremor yaml``: YAML-Driven CMORization Workhorse
+==================================================
 
 This module powers the ``fremor yaml`` command, steering the CMORization workflow by parsing model-YAML
 files that describe target experiments and their configurations. It combines model-level and experiment-level

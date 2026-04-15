@@ -1,12 +1,13 @@
 """
-CMOR Init Subtool
-=================
+``fremor init``: CMOR config initialization
+===========================================
 
 This module powers the ``fremor init`` command, providing two key capabilities:
 
-1. **Experiment config generation** – writes an empty (template) JSON experiment
-   configuration file for either CMIP6 or CMIP7. The user fills in the
-   placeholder values before running ``fremor run`` or ``fremor yaml``.
+1. **Experiment config template generation** – writes an empty (template)
+   JSON experiment configuration file for either CMIP6 or CMIP7. The user
+   fills in the placeholder values before running ``fremor run`` or
+   ``fremor yaml``.
 
 2. **MIP table retrieval** – fetches the official MIP tables from trusted
    GitHub repositories. By default tables are fetched via ``git clone``

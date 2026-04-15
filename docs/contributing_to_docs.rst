@@ -4,7 +4,7 @@ A decent cheat-sheet for reStructuredText can be found
 
 
 With a PR to ilaflott/fremorizer (recommended)
------------------------------------------------
+----------------------------------------------
 
 This approach is the easiest and most automated option for open-source contributors. It is completely
 appropriate for casual editing of the docs and previewing the changes.
@@ -28,7 +28,7 @@ This approach is good for deep debugging of the documentation build.
 
 
 Lightweight Approach (recommended for docs-only)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you only need to build documentation and don't need the full ``fremorizer`` environment,
 you can use a minimal setup. This approach uses ``autodoc_mock_imports`` in ``docs/conf.py``
@@ -86,7 +86,7 @@ the locally built HTML and links should work as expected.
 
 
 RST Linting
-~~~~~~~~~~~~
+~~~~~~~~~~~
 
 Before submitting documentation changes, run ``rstcheck`` to catch syntax issues:
 
