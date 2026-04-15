@@ -249,8 +249,7 @@ def rewrite_netcdf_file_var( mip_var_cfgs: dict = None,
             fre_logger.warning( '%s',
                                 f'exc = {exc}\n' + \
                                  'an ocean statics file is needed, but it could not be found.\n' + \
-                                 '   moving on and doing my best, but I am probably going to break' )
-            )
+                                 '   moving on and doing my best, but I am probably going to break' )            
             raise FileNotFoundError('statics file not found.') from exc
 
 
