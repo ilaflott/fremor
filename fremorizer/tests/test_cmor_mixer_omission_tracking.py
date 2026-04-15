@@ -10,8 +10,6 @@ emitted at the end of processing, including the expected file paths.
 import logging
 from unittest.mock import patch
 
-import pytest
-
 from fremorizer.cmor_mixer import cmorize_all_variables_in_dir
 
 
@@ -19,16 +17,16 @@ from fremorizer.cmor_mixer import cmorize_all_variables_in_dir
 # helpers
 # ---------------------------------------------------------------------------
 
-DUMMY_ARGS = dict(
-    indir='/fake/indir',
-    iso_datetime_range_arr=['00010101-00041231'],
-    name_of_set='component',
-    json_exp_config='/fake/exp.json',
-    outdir='/fake/outdir',
-    mip_var_cfgs={'variable_entry': {}},
-    json_table_config='/fake/table.json',
-    run_one_mode=False,
-)
+DUMMY_ARGS = {
+    "indir": '/fake/indir',
+    "iso_datetime_range_arr": ['00010101-00041231'],
+    "name_of_set": 'component',
+    "json_exp_config": '/fake/exp.json',
+    "outdir": '/fake/outdir',
+    "mip_var_cfgs": {'variable_entry': {}},
+    "json_table_config": '/fake/table.json',
+    "run_one_mode": False,
+}
 
 
 # ---------------------------------------------------------------------------
@@ -92,7 +90,7 @@ def test_no_omission_log_when_all_succeed(mock_cmorize, caplog):
 @patch('fremorizer.cmor_mixer.cmorize_target_var_files')
 def test_omission_tracking_mixed_success_failure(mock_cmorize, caplog):
     """Only failed variables appear in the omission log with their file paths."""
-    def side_effect(indir, target_var, local_var, *args, **kwargs):
+    def side_effect( local_var ):
         if local_var == 'bad_var':
             raise ValueError('bad variable error')
 

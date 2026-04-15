@@ -107,7 +107,7 @@ def _assert_metadata_matches(ds_in, ds_out):
 
     # _FillValue and missing_value must be preserved
     assert ds_in.variables['sos']._FillValue == ds_out.variables['sos']._FillValue, \
-        "sos _FillValue differs between input and CMOR output"
+        "sos _FillValue differs between input and CMOR output" # pylint: disable=protected-access
     assert ds_in.variables['sos'].missing_value == ds_out.variables['sos'].missing_value, \
         "sos missing_value differs between input and CMOR output"
 

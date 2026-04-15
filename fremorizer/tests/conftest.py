@@ -57,7 +57,7 @@ def cli_sos_nc_file():
 
 
 @pytest.fixture(scope='session')
-def cli_sosv2_nc_file(cli_sos_nc_file):
+def cli_sosv2_nc_file(cli_sos_nc_file): # pylint: disable=redefined-outer-name
     """Create a copy of the sos file as sosV2 (session-scoped)."""
     nc_path = INDIR / SOSV2_NC_FILENAME
     if nc_path.exists():
