@@ -30,40 +30,26 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Setup Conda
+      - name: Set up Miniforge environment from environment.yaml (Python ${{ matrix.python-version }})
         uses: conda-incubator/setup-miniconda@v3
         with:
-          activate-environment: fremorizer
-          python-version: ${{ matrix.python-version }}
-          auto-activate-base: false
           miniforge-version: latest
           channels: conda-forge,noaa-gfdl
+          python-version: ${{ matrix.python-version }}
+          conda-remove-defaults: true
+          environment-file: environment.yaml
+          activate-environment: fremorizer
 
-      - name: Configure Conda
+      - name: Show installed packages
         run: |
-          echo "removing main and r channels from defaults"
-          conda config --remove channels defaults || true
-          conda config --remove channels main || true
-          conda config --remove channels r || true
+          echo "conda info is:"
+          conda info
 
-          echo "setting strict channel priority"
-          conda config --set channel_priority strict
+          echo "printing installed packages"
+          conda list
 
           echo "printing conda config just in case"
           conda config --show
-
-      - name: Install dependencies
-        run: |
-          conda install -y \
-            conda-forge::cftime \
-            "conda-forge::click>=8.2" \
-            "conda-forge::cmor>=3.14" \
-            "conda-forge::netcdf4>=1.7" \
-            "conda-forge::numpy>=2" \
-            conda-forge::pyyaml \
-            conda-forge::pytest \
-            conda-forge::pytest-cov \
-            conda-forge::pylint
 
       - name: Install fremorizer
         run: |
