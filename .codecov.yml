@@ -6,13 +6,11 @@ coverage:
     project:
       default:
         target: auto
-        threshold: 1%
         if_ci_failed: error
 
     patch:
       default:
-        target: 60%          # Minimum coverage for new code
-        threshold: 1%        # Allow 1% decrease
+        target: 80%          # Minimum coverage for new code
         if_ci_failed: error
 
 comment:
