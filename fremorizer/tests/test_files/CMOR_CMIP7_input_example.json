@@ -14,7 +14,7 @@
     "_cmip7_option": 1,
     "parent_mip_era": "CMIP7",
     "mip_era": "CMIP7",
-    "parent_activity_id", "CMIP",
+    "parent_activity_id": "CMIP",
     "activity_id": "CMIP",
     "#_SOURCE_SECTION": "***** anything to do with identifying this experiment, it's relationships to other experiments, the producers, and their institution *****",
     "institution": "",
