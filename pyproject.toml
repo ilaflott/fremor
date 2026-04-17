@@ -21,11 +21,11 @@ keywords = [
 ]
 
 dependencies = [
-        'click',
-        'cmor',
-        'netCDF4',
-        'numpy',
-        'pyyaml',
+    "click",
+    "cmor",
+    "netCDF4",
+    "numpy",
+    "pyyaml",
 ]
 
 classifiers = [

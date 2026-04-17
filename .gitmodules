@@ -4,3 +4,4 @@
 [submodule "fremorizer/tests/test_files/cmip7-cmor-tables"]
 	path = fremorizer/tests/test_files/cmip7-cmor-tables
 	url = https://github.com/WCRP-CMIP/cmip7-cmor-tables.git
+	branch = DR-1.2.2.3-v1.0.5

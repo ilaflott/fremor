@@ -271,8 +271,8 @@ def varlist(dir_targ, output_variable_list, mip_table):
               help="Temporal frequency string, e.g. 'monthly', 'daily'. Default 'monthly'.")
 @click.option("--chunk", type=str, default="5yr",
               help="Time chunk string, e.g. '5yr', '10yr'. Default '5yr'.")
-@click.option("--grid", type=str, default="g99",
-              help="Grid label anchor name, e.g. 'g99', 'gn'. Default 'g99'.")
+@click.option("--grid", type=str, default="g999",
+              help="Grid label anchor name, e.g. 'g999', 'gn'. Default 'g999'.")
 @click.option("--overwrite", is_flag=True, default=False,
               help="Overwrite existing variable list files.")
 @click.option("--calendar", type=str, default="noleap",

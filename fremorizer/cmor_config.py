@@ -61,7 +61,7 @@ def cmor_config_subtool(
         varlist_dir: str,
         freq: str = 'monthly',
         chunk: str = '5yr',
-        grid: str = 'g99',
+        grid: str = 'g999',
         overwrite: bool = False,
         calendar_type: str = 'noleap'
 ):
@@ -90,7 +90,7 @@ def cmor_config_subtool(
     :type freq: str
     :param chunk: Time chunk string, e.g. '5yr', '10yr'. Default '5yr'.
     :type chunk: str
-    :param grid: Grid label anchor name, e.g. 'g99', 'gn'. Default 'g99'.
+    :param grid: Grid label anchor name, e.g. 'g999', 'gn'. Default 'g999'.
     :type grid: str
     :param overwrite: If True, overwrite existing variable list files. Default False.
     :type overwrite: bool
