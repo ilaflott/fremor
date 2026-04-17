@@ -61,6 +61,7 @@ test = [
 ]
 
 qa = [
+    "esgf-qa",
     "cc-plugin-wcrp",
 ]
 

@@ -10,6 +10,7 @@
 [![pylint](https://img.shields.io/badge/pylint-%E2%89%A59.6-brightgreen)](https://github.com/NOAA-GFDL/epmt/actions/workflows/build_and_test_epmt.yml)
 [![codecov](https://codecov.io/gh/ilaflott/fremorizer/branch/main/graph/badge.svg)](https://codecov.io/gh/ilaflott/fremorizer)
 
+[![esgf_qa_check](https://github.com/ilaflott/fremorizer/actions/workflows/esgf_qa_check.yml/badge.svg?branch=main)](https://github.com/ilaflott/fremorizer/actions/workflows/esgf_qa_check.yml)
 
 Simply put, `fremorizer` CMORizes FRE output with `CMOR`. 
 
@@ -174,6 +175,24 @@ pylint --rcfile pylintrc fremorizer/
 
 ## Quality Assurance
 
+The repository includes automated quality assurance (QA) checks to validate that CMORized outputs meet CMIP6 standards:
+
+### ESGF-QA Validation
+
+The `esgf_qa_check` workflow runs [ESGF-QA](https://github.com/ESGF/esgf-qa) on test outputs to verify CF compliance and CMIP6 metadata standards. This separate pipeline:
+
+- Runs automatically on pushes and pull requests
+- Executes unit tests to generate CMORized output files
+- Validates outputs using ESGF-QA with CF compliance checks
+- Uploads QA results as workflow artifacts (retained for 30 days)
+
+To view QA results from a workflow run:
+1. Navigate to the Actions tab in GitHub
+2. Select the `esgf_qa_check` workflow run
+3. Download the `esgf-qa-results` artifact
+4. View results using the ESGF-QA viewer or web interface
+
+## Relationship to fre-cli
 ### WCRP Compliance Checking
 
 [![wcrp_compliance_check](https://github.com/ilaflott/fremorizer/actions/workflows/wcrp_compliance_check.yml/badge.svg?branch=main)](https://github.com/ilaflott/fremorizer/actions/workflows/wcrp_compliance_check.yml)

@@ -1,0 +1,98 @@
+name: esgf_qa_check
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+
+# cancel running jobs if theres a newer push
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  esgf-qa-validation:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+      fail-fast: false
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - name: Checkout Files
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Conda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: fremorizer
+          environment-file: environment.yaml
+          auto-activate-base: false
+          miniforge-version: latest
+
+      - name: Configure Conda
+        run: |
+          echo "removing main and r channels from defaults"
+          conda config --remove channels defaults || true
+          conda config --remove channels main || true
+          conda config --remove channels r || true
+
+          echo "setting strict channel priority"
+          conda config --set channel_priority strict
+
+          echo "printing conda config just in case"
+          conda config --show
+
+      - name: Install fremorizer
+        run: |
+          pip install .
+
+      - name: Run pytest to generate test outputs
+        run: |
+          pytest fremorizer/tests/ -v --tb=short
+
+      - name: Run ESGF-QA on test outputs
+        run: |
+          # Find the test output directory
+          TEST_OUTPUT_DIR="fremorizer/tests/test_files/outdir"
+
+          # Create directory for QA results
+          QA_RESULTS_DIR="esgf_qa_results"
+          mkdir -p ${QA_RESULTS_DIR}
+
+          # Check if test outputs exist
+          if [ -d "${TEST_OUTPUT_DIR}" ] && [ -n "$(find ${TEST_OUTPUT_DIR} -name '*.nc' -print -quit)" ]; then
+            echo "Running ESGF-QA on test outputs in ${TEST_OUTPUT_DIR}"
+
+            # Run ESGF-QA with CF compliance checks
+            esgqa -t cf:latest -o ${QA_RESULTS_DIR} -i "fremorizer-test-outputs" ${TEST_OUTPUT_DIR} || true
+
+            echo "ESGF-QA check completed"
+            echo "Results stored in ${QA_RESULTS_DIR}"
+
+            # Display summary of results
+            if [ -f "${QA_RESULTS_DIR}/qa_result_"*.cluster.json ]; then
+              echo "QA results summary:"
+              ls -lh ${QA_RESULTS_DIR}/qa_result_*.cluster.json
+            fi
+          else
+            echo "No test output files found in ${TEST_OUTPUT_DIR}"
+            echo "Skipping ESGF-QA validation"
+          fi
+
+      - name: Upload ESGF-QA results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: esgf-qa-results-py${{ matrix.python-version }}
+          path: esgf_qa_results/
+          retention-days: 30
+          if-no-files-found: warn
