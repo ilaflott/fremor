@@ -48,9 +48,19 @@ CALENDAR_TYPE = 'julian'
 # determined by cmor_run_subtool
 YYYYMMDD = date.today().strftime('%Y%m%d')
 
+# CMIP7 output path follows output_path_template:
+# <activity_id><source_id><experiment_id><member_id><variable_id><branding_suffix><grid_label>
+CMOR_CREATES_DIR = \
+    f'CMIP/DUMMY-MODEL/historical/r3i1p1f3/sos/tavg-u-hxy-sea/{GRID_LABEL}'
+FULL_OUTPUTDIR = \
+    f"{OUTDIR}/{CMOR_CREATES_DIR}"
+FULL_OUTPUTFILE = \
+    f"{FULL_OUTPUTDIR}/sos_tavg-u-hxy-sea_mon_glb_{GRID_LABEL}_DUMMY-MODEL_historical_r3i1p1f3_{DATETIMES_INPUTFILE}.nc"
+
 # CMIP7-required global attributes that must be present in CMOR output
+# note: CMIP7 uses 'table_info' instead of 'table_id'
 CMIP7_REQUIRED_GLOBAL_ATTRS = [
-    'variable_id', 'mip_era', 'table_id',
+    'variable_id', 'mip_era', 'table_info',
     'experiment_id', 'institution_id', 'source_id'
 ]
 
@@ -136,7 +146,6 @@ def test_setup_fre_cmor_run_subtool_cmip7(capfd):
     assert all( [ sp.returncode == 0, Path(ncgen_output).exists() ] )
     _out, _err = capfd.readouterr()
 
-@pytest.mark.skip(reason='CMIP7 test not yet enabled')
 def test_fre_cmor_run_subtool_cmip7_case1(capfd):
     ''' fre cmor run, CMIP7 test-use case '''
 
@@ -153,7 +162,8 @@ def test_fre_cmor_run_subtool_cmip7_case1(capfd):
         calendar_type = CALENDAR_TYPE
     )
 
-    assert Path(FULL_INPUTFILE).exists()
+    assert all( [ Path(FULL_OUTPUTFILE).exists(),
+                  Path(FULL_INPUTFILE).exists() ] )
     _out, _err = capfd.readouterr()
 
 @pytest.mark.skip(reason='CMIP7 test not yet enabled')
