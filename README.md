@@ -1,4 +1,7 @@
 # `fremorizer`
+`fremorizer` CMORizes FRE output with `CMOR`. It is a `conda` package and it's documentation can be found on
+[`readthedocs`](https://fremorizer.readthedocs.io/en/latest/).
+
 [![Anaconda-Server Badge](https://anaconda.org/ilaflott/fremorizer/badges/version.svg)](https://anaconda.org/ilaflott/fremorizer)
 [![Anaconda-Server Badge](https://anaconda.org/ilaflott/fremorizer/badges/latest_release_date.svg)](https://anaconda.org/ilaflott/fremorizer)
 [![Anaconda-Server Badge](https://anaconda.org/ilaflott/fremorizer/badges/latest_release_relative_date.svg)](https://anaconda.org/ilaflott/fremorizer)
@@ -11,13 +14,6 @@
 [![codecov](https://codecov.io/gh/ilaflott/fremorizer/branch/main/graph/badge.svg)](https://codecov.io/gh/ilaflott/fremorizer)
 
 
-Simply put, `fremorizer` CMORizes FRE output with `CMOR`. 
-
-`fremorizer` is a `conda` package, it's documentation can be found on
-[`readthedocs`](https://fremorizer.readthedocs.io/en/latest/).
-
-
-
 ## Background and Purpose
 `fremorizer` is a model output rewriter (CMORizer) for FRE/FMS based models and output. It was originally the `fre.cmor`
 submodule of [`NOAA-GFDL/fre-cli`](https://github.com/NOAA-GFDL/fre-cli). `fremorizer` (or `fremor` for short) is geared
@@ -27,6 +23,18 @@ context of CMIP7 using the [`CMOR`](https://cmor.llnl.gov/) library.
 
 
 ## Installation / Access
+
+
+### Requirements
+
+- `python>=3.11`
+- `click>=8.2`
+- `cmor>=3.14.2`
+- `netCDF4>=1.7`
+- `numpy>=2`
+- `pyyaml`
+
+For development and testing, `pylint`, `pytest`, and `pytest-cov` are all highly recommended as helpful additions.
 
 
 ### via PPAN / modules (COMING SOON/TODO)
@@ -41,7 +49,6 @@ module load fremorizer/X.Y.Z
 
 
 ### via `conda`
-
 If you have a path to a `fremorizer` environment you can activate it like so:
 ```bash
 conda activate some/path/to/fremorizer_env
@@ -68,18 +75,25 @@ conda install ilaflott::fremorizer
 ```
 
 
-### From source/checkout into a virtual environment (`conda` or `venv`) with `pip`
+### `pip` install source/checkout into a virtual environment (`conda`/`venv`)
 If you're trying to develop `fremorizer` capabilities, or edit the code to your liking in either a big or small way,
-**this is for you**.
-
-Add `-e` to the `pip` step for an editable install. `--recursive` pulls in CMIP CMOR tables for unit tests and
-convenient local development:
+**this is for you**. This checks out the code, creates and activates an environment, installs into the environment,
+and runs all unit-tests and `pylint` checks:
 ```bash
 # omit --recursive if you don't want tables as submodules
 git clone --recursive https://github.com/ilaflott/fremorizer.git
 cd fremorizer
+
+# create an environment and install the local checkout
 conda env create -f environment.yaml
-pip install . 
+conda actiavte fremorizer
+pip install -e . 
+
+# Run tests
+pytest fremorizer/tests/
+
+# Run linter
+pylint --rcfile pylintrc fremorizer/
 ```
 
 
@@ -129,80 +143,11 @@ is equivalently available via `import` in scripts as a proper `python` module
 For an overview of required inputs and sample commands, see the [CMOR Quickstart](docs/quickstart.rst).
 
 
-### Initialize CMOR Resources
-Before CMORizing data, you need an experiment configuration template and MIP tables.
-The `fremor init` command helps set up these resources:
 
-```bash
-# Generate a CMIP6 experiment config template and fetch CMIP6 tables
-fremor init -m cmip6 -e exp_config.json -t cmip6-tables
-
-# Generate a CMIP7 experiment config template and fetch CMIP7 tables (fast mode)
-fremor init -m cmip7 -e exp_config.json -t cmip7-tables --fast
-
-# Fetch tables for a specific release tag
-fremor init -m cmip6 -t cmip6-tables --tag 6.9.33
-```
-
-The `fremor init` command:
-- Generates an experiment configuration JSON template with required CMIP metadata fields
-- Fetches official MIP tables from trusted GitHub repositories `pcmdi/cmip6-cmor-tables` and
-`WCRP-CMIP/cmip7-cmor-tables`)
-- Supports both `git clone` (default) and `curl` (`--fast`) methods for downloading official configurations
+## CI/CD Workflows and QA
 
 
-### Example: CMORize ocean data
-```bash
-fremor run \
-    -d /path/to/input/netcdf/dir \
-    -l /path/to/varlist.json \
-    -r /path/to/CMIP6_Omon.json \
-    -p /path/to/exp_config.json \
-    -o /path/to/output/dir
-```
-
-
-
-## Requirements
-
-- `python>=3.11`
-- `click>=8.2`
-- `cmor>=3.14.2`
-- `netCDF4>=1.7`
-- `numpy>=2`
-- `pyyaml`
-
-For development and testing, `pylint`, `pytest`, and `pytest-cov` are all highly recommended as helpful additions.
-
-
-
-## Development
-
-```bash
-# Checkout code
-git clone --recursive https://github.com/ilaflott/fremorizer.git
-cd fremorizer
-
-# Create a conda environment
-conda env create -f environment.yaml
-conda activate fremorizer
-
-# Install in editable mode
-pip install -e .
-
-# Run tests
-pytest fremorizer/tests/
-
-# Run linter
-pylint --rcfile pylintrc fremorizer/
-```
-
-
-
-## Quality Assurance
-
-
-### WCRP Compliance Checking
+### WCRP Compliance Checking (under development)
 
 [![wcrp_compliance_check](https://github.com/ilaflott/fremorizer/actions/workflows/wcrp_compliance_check.yml/badge.svg?branch=main)](https://github.com/ilaflott/fremorizer/actions/workflows/wcrp_compliance_check.yml)
 
@@ -222,7 +167,7 @@ To view compliance results from a workflow/CI run:
 3. Download the `wcrp-compliance-reports` artifact
 
 
-### pipeline badges
+### `conda` environment tests
 
 | Python 3.11 | Python 3.12 | Python 3.13 | Python 3.14 |
 |-------------|-------------|-------------|-------------|
@@ -232,11 +177,6 @@ To view compliance results from a workflow/CI run:
 
 ## License
 Apache License 2.0 — see [LICENSE.md](LICENSE.md)
-
-
-
-## Conda-forge feedstock
-See `CONDA_FORGE_FEEDSTOCK_PLAN.md` for the steps and follow-up tasks to submit and maintain the conda-forge feedstock for `fremorizer`.
 
 
 
