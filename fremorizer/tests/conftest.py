@@ -3,6 +3,7 @@ Shared fixtures for fremorizer/tests CLI integration tests.
 '''
 
 from datetime import date
+import json
 from pathlib import Path
 import shutil
 import subprocess
@@ -28,6 +29,138 @@ SOS_NC_FILENAME = 'reduced_ocean_monthly_1x1deg.199301-199302.sos.nc'
 SOSV2_NC_FILENAME = 'reduced_ocean_monthly_1x1deg.199301-199302.sosV2.nc'
 
 YYYYMMDD = date.today().strftime('%Y%m%d')
+
+
+# ── raw experiment-config contents (kept in-code for fixture use) ───────────
+_CMIP6_EXP_CONFIG_DATA = {
+    "#note": " **** The following are set correctly for CMIP6 and should not normally need editing",
+    "source_type": "AOGCM ISM AER",
+    "experiment_id": "piControl-withism",
+    "activity_id": "ISMIP6",
+    "sub_experiment_id": "none",
+    "realization_index": "3",
+    "initialization_index": "1",
+    "physics_index": "1",
+    "forcing_index": "1",
+    "run_variant": "3rd realization",
+    "parent_experiment_id": "no parent",
+    "parent_activity_id": "no parent",
+    "parent_source_id": "no parent",
+    "parent_variant_label": "no parent",
+    "parent_time_units": "no parent",
+    "branch_method": "no parent",
+    "branch_time_in_child": 59400.0,
+    "branch_time_in_parent": 0.0,
+    "institution_id": "PCMDI",
+    "source_id": "PCMDI-test-1-0",
+    "calendar": "julian",
+    "grid": "FOO_BAR_PLACEHOLD",
+    "grid_label": "gr",
+    "nominal_resolution": "10000 km",
+    "license": "CMIP6 model data produced by Lawrence Livermore PCMDI is licensed under a Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). Consult https://pcmdi.llnl.gov/CMIP6/TermsOfUse for terms of use governing CMIP6 output, including citation requirements and proper acknowledgment. Further information about this data, including some limitations, can be found via the further_info_url (recorded as a global attribute in this file) and at https:///pcmdi.llnl.gov/. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law.",
+    "#output": "Root directory for output (can be either a relative or full path)",
+    "outpath": "CMIP6",
+    "contact ": "Python Coder (coder@a.b.c.com)",
+    "history": "Output from archivcl_A1.nce/giccm_03_std_2xCO2_2256.",
+    "comment": "",
+    "references": "Model described by Koder and Tolkien (J. Geophys. Res., 2001, 576-591).  Also see http://www.GICC.su/giccm/doc/index.html.  The ssp245 simulation is described in Dorkey et al. '(Clim. Dyn., 2003, 323-357.)'",
+    "sub_experiment": "none",
+    "institution": "",
+    "source": "PCMDI-test 1.0 (1989)",
+    "_controlled_vocabulary_file": "CMIP6_CV.json",
+    "_AXIS_ENTRY_FILE": "CMIP6_coordinate.json",
+    "_FORMULA_VAR_FILE": "CMIP6_formula_terms.json",
+    "_cmip6_option": "CMIP6",
+    "mip_era": "CMIP6",
+    "parent_mip_era": "no parent",
+    "tracking_prefix": "hdl:21.14100",
+    "_history_template": "%s ;rewrote data to be consistent with <activity_id> for variable <variable_id> found in table <table_id>.",
+    "#output_path_template": "Template for output path directory using tables keys or global attributes, these should follow the relevant data reference syntax",
+    "output_path_template": "<mip_era><activity_id><institution_id><source_id><experiment_id><_member_id><table><variable_id><grid_label><version>",
+    "output_file_template": "<variable_id><table><source_id><experiment_id><_member_id><grid_label>"
+}
+
+_CMIP7_EXP_CONFIG_DATA = {
+    "#_TESTING_ONLY": " ***** This is for unit-test functionality of NOAA-GDFL's fremorizer module for CMIP7, they do not reflect values used in actual production *****",
+    "contact ": "MIP participant mipmember@foobar.c.om",
+    "comment": "additional important information not fitting into other fields can be placed here",
+    "license_id": "CC-BY-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "license": "<license_id>; CMIP7 data produced by <institution_id> is licensed under a <license_type> License (<license_url>). Consult https://wcrp-cmip.github.io/cmip7-guidance/docs/CMIP7/Guidance_for_users/#2-terms-of-use-and-citations-requirements for terms of use governing CMIP7 output, including citation requirements and proper acknowledgment. The data producers and data providers make no warranty, either express or implied, including, but not limited to, warranties of merchantability and fitness for a particular purpose. All liabilities arising from the supply of the information (including any liability arising in negligence) are excluded to the fullest extent permitted by law.",
+    "#_TRACKING": "***** anything to do with citing this data, accreditation, licensing, and references go here *****",
+    "references": "Model described by Koder and Tolkien (J. Geophys. Res., 2001, 576-591).  Also see http://www.GICC.su/giccm/doc/index.html.  The ssp245 simulation is described in Dorkey et al. '(Clim. Dyn., 2003, 323-357.)'",
+    "drs_specs": "MIP-DRS7",
+    "archive_id": "WCRP",
+    "tracking_prefix": "hdl:21.14107",
+    "#_MIP_DETAILS": "***** anything to do with identifying the specific MIP activity this configuration file is for *****",
+    "_cmip7_option": 1,
+    "mip_era": "CMIP7",
+    "parent_mip_era": "CMIP7",
+    "activity_id": "CMIP",
+    "parent_activity_id": "CMIP",
+    "#_SOURCE_SECTION": "***** anything to do with identifying this experiment, it's relationships to other experiments, the producers, and their institution *****",
+    "institution": "",
+    "institution_id": "CCCma",
+    "source": "DUMMY-MODEL: aerosol: Dummy Aerosol; atmosphere: Dummy Atmosphere; atmospheric_chemistry: Dummy Atmospheric Chemistry; land_surface: Dummy Land Surface; ocean: Dummy Ocean; ocean_biogeochemistry: Dummy Ocean Biogeochemistry; sea_ice: Dummy Sea Ice",
+    "parent_source_id": "DUMMY-MODEL",
+    "source_id": "DUMMY-MODEL",
+    "source_type": "AOGCM ISM AER",
+    "parent_experiment_id": "piControl",
+    "experiment_id": "historical",
+    "sub_experiment": "none",
+    "sub_experiment_id": "none",
+    "#_INDICES": "***** changed from ints to strings for CMIP7 *****",
+    "realization_index": "r3",
+    "initialization_index": "i1",
+    "physics_index": "p1",
+    "forcing_index": "f3",
+    "run_variant": "3rd realization",
+    "parent_variant_label": "r3i1p1f3",
+    "#_TEMPORAL_INFO": "***** anything to do with describing temporal aspects of the experiment *****",
+    "parent_time_units": "days since 1850-01-01",
+    "branch_method": "no parent",
+    "branch_time_in_child": 59400.0,
+    "branch_time_in_parent": 0.0,
+    "calendar": "julian",
+    "#_SPATIAL_INFO": "***** anything to do with describing physical aspects of the experiment *****",
+    "grid": "FOO_BAR_PLACEHOLD",
+    "grid_label": "g999",
+    "frequency": "mon",
+    "region": "glb",
+    "nominal_resolution": "10000 km",
+    "#_HISTORY_METADATA": "history attribute string and template, to create history field for output file",
+    "history": "Output from archivcl_A1.nce/giccm_03_std_2xCO2_2256.",
+    "_history_template": "%s ;rewrote data to be consistent with <activity_id> for variable <variable_id> found in table <table_id>.",
+    "#_OUTPUT_PATHS": "***** pathing/templates for output files *****",
+    "#_output_template_NOTE": "***** PCMDI/cmor 4e7f1f3d731077b7f65c188edefac924cc3e2779 Test/test_cmor_CMIP7.py L47 *****",
+    "#_output": "***** Root directory for output (can be either a relative or full path) *****",
+    "outpath": ".",
+    "#_output_path_template": "***** Template for output path directory using tables keys or global attributes, these should follow the relevant data reference syntax *****",
+    "output_path_template": "<activity_id><source_id><experiment_id><member_id><variable_id><branding_suffix><grid_label>",
+    "#_output_file_template": "***** Template for output filename using tables keys or global attributes, these should follow the relevant data reference syntax *****",
+    "output_file_template": "<variable_id><branding_suffix><frequency><region><grid_label><source_id><experiment_id><variant_label>",
+    "#_INPUT_CONFIG_PATHS": "***** pathing/templates for input configuration files holding controlled vocabularies *****",
+    "_controlled_vocabulary_file": "../tables-cvs/cmor-cvs.json",
+    "_AXIS_ENTRY_FILE": "CMIP7_coordinate.json",
+    "_FORMULA_VAR_FILE": "CMIP7_formula_terms.json"
+}
+
+
+# ── experiment-config fixtures ──────────────────────────────────────────────
+@pytest.fixture
+def cmip6_exp_config(tmp_path):
+    """Write the CMIP6 experiment config JSON to a temp file and return its path."""
+    path = tmp_path / 'CMOR_input_example.json'
+    path.write_text(json.dumps(_CMIP6_EXP_CONFIG_DATA, indent=4))
+    return str(path)
+
+
+@pytest.fixture
+def cmip7_exp_config(tmp_path):
+    """Write the CMIP7 experiment config JSON to a temp file and return its path."""
+    path = tmp_path / 'CMOR_CMIP7_input_example.json'
+    path.write_text(json.dumps(_CMIP7_EXP_CONFIG_DATA, indent=4))
+    return str(path)
 
 
 # ── ncgen helper ────────────────────────────────────────────────────────────
