@@ -103,7 +103,6 @@ def _assert_metadata_matches(ds_in, ds_out):
 # ---------------------------------------------------------------------------
 # CMIP7 table repo setup
 # ---------------------------------------------------------------------------
-@pytest.mark.skip(reason='CMIP7 test not yet enabled')
 def test_setup_cmip7_cmor_table_repo():
     '''
     setup routine, make sure the recursively cloned CMIP7 tables exist
