@@ -217,7 +217,11 @@ def test_case_cmip6(  # pylint: disable=too-many-arguments,too-many-positional-a
         ),
     ],
 )
-@pytest.mark.skip(reason='CMIP7 further_examples not yet enabled')
+@pytest.mark.xfail(
+    reason='CMIP7 cmor.write fails for mock archive variables — CMIP7 support in development',
+    strict=True,
+    raises=AssertionError,
+)
 def test_case_cmip7(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     testfile_dir, table, opt_var_name, grid_label, start, calendar,
     tmp_path, monkeypatch,
