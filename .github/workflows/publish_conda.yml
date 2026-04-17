@@ -18,12 +18,14 @@ jobs:
     steps:
       - name: Checkout Files
         uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
 
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v3
         with:
           auto-activate-base: true
-          channels: conda-forge,noaa-gfdl
+          channels: conda-forge,noaa-gfdl,ilaflott
 
       - name: Configure Conda
         run: |
@@ -44,5 +46,5 @@ jobs:
       - name: Build fremorizer Conda Package
         run: |
           echo "conda building fremorizer package"
-          export ANACONDA_API_TOKEN=${{ secrets.ANACONDA_TOKEN }}
+          export ANACONDA_API_TOKEN=${{ secrets.TEMP_ANACONDA_API_TOKEN }}
           conda build .
