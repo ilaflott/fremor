@@ -205,7 +205,6 @@ FULL_INPUTFILE_DIFF = \
 VARLIST_DIFF = \
     f'{ROOTDIR}/varlist_local_target_vars_differ'
 
-@pytest.mark.skip(reason='CMIP7 test not yet enabled')
 def test_setup_fre_cmor_run_subtool_cmip7_case2(capfd):
     ''' make a copy of the input file to the slightly different name.
     checks for outputfile from prev pytest runs, removes it if it's present.
