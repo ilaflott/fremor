@@ -272,7 +272,6 @@ def test_fre_cmor_run_subtool_cmip7_no_exp_config():
             outdir = OUTDIR
         )
 
-@pytest.mark.skip(reason='CMIP7 test not yet enabled')
 def test_fre_cmor_run_subtool_cmip7_empty_varlist():
     '''
     fre cmor run, exception, variable list is empty (CMIP7 version)
