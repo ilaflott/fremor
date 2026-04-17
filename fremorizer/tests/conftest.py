@@ -147,6 +147,23 @@ _CMIP7_EXP_CONFIG_DATA = {
 
 
 # ── experiment-config fixtures ──────────────────────────────────────────────
+@pytest.fixture(autouse=True, scope='session')
+def _write_exp_configs():
+    """Write both experiment-config JSONs to ROOTDIR at the start of every session.
+
+    The JSON data lives in this module (_CMIP6_EXP_CONFIG_DATA /
+    _CMIP7_EXP_CONFIG_DATA) so the on-disk files are no longer tracked by git.
+    This session-scoped autouse fixture materialises fresh copies before any
+    test that needs them runs, and cleans them up afterwards.
+    """
+    EXP_CONFIG.write_text(json.dumps(_CMIP6_EXP_CONFIG_DATA, indent=4))
+    EXP_CONFIG_CMIP7.write_text(json.dumps(_CMIP7_EXP_CONFIG_DATA, indent=4))
+    yield
+    # restore pristine copies so later sessions (or re-runs) start clean
+    EXP_CONFIG.write_text(json.dumps(_CMIP6_EXP_CONFIG_DATA, indent=4))
+    EXP_CONFIG_CMIP7.write_text(json.dumps(_CMIP7_EXP_CONFIG_DATA, indent=4))
+
+
 @pytest.fixture
 def cmip6_exp_config(tmp_path):
     """Write the CMIP6 experiment config JSON to a temp file and return its path."""

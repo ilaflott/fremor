@@ -369,24 +369,17 @@ def test_fre_cmor_run_subtool_case2_output_compare_metadata(capfd):
         _assert_metadata_matches(ds_in, ds_out)
     _out, _err = capfd.readouterr()
 
-def test_git_cleanup():
+def test_exp_config_cleanup():
     '''
-    Performs a git restore on EXP_CONFIG to avoid false positives from
-    git's record of changed files. It's supposed to change as part of the test.
+    Restores the CMIP6 experiment config to its pristine state after tests
+    that mutate it in-place (e.g. grid / calendar updates).
+
+    The config is no longer tracked by git — it is materialised by a
+    session-scoped conftest fixture — so we rewrite it from the canonical
+    fixture data instead of running ``git restore``.
     '''
-    is_ci = os.environ.get("GITHUB_WORKSPACE") is not None
-    if not is_ci:
-        git_cmd = f"git restore {EXP_CONFIG}"
-        restore = subprocess.run(git_cmd,
-                                 shell=True,
-                                 check=False)
-        check_cmd = f"git status | grep {EXP_CONFIG}"
-        check = subprocess.run(check_cmd,
-                               shell = True,
-                               check = False)
-        #first command completed, second found no file in git status
-        assert all([restore.returncode == 0,
-                    check.returncode == 1])
+    from fremorizer.tests.conftest import _CMIP6_EXP_CONFIG_DATA  # pylint: disable=import-outside-toplevel
+    Path(EXP_CONFIG).write_text(json.dumps(_CMIP6_EXP_CONFIG_DATA, indent=4))
 
 def test_cmor_run_subtool_raise_value_error():
     '''
