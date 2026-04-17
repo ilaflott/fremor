@@ -258,7 +258,6 @@ def test_cmor_run_subtool_cmip7_raise_value_error():
                           json_exp_config = None,
                           outdir = None )
 
-@pytest.mark.skip(reason='CMIP7 test not yet enabled')
 def test_fre_cmor_run_subtool_cmip7_no_exp_config():
     '''
     fre cmor run, exception, json_exp_config DNE (CMIP7 version)
