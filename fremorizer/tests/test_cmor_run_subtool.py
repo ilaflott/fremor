@@ -4,7 +4,6 @@ tests for fremorizer.cmor_run_subtool
 
 from datetime import date
 import json
-import os
 from pathlib import Path
 import subprocess
 import shutil
@@ -379,7 +378,9 @@ def test_exp_config_cleanup():
     session-scoped conftest fixture — so we rewrite it from the canonical
     fixture data instead of running ``git restore``.
     '''
-    Path(EXP_CONFIG).write_text(json.dumps(_CMIP6_EXP_CONFIG_DATA, indent=4))
+    Path(EXP_CONFIG).write_text(
+        json.dumps(_CMIP6_EXP_CONFIG_DATA, indent=4), encoding='utf-8'
+    )
 
 def test_cmor_run_subtool_raise_value_error():
     '''

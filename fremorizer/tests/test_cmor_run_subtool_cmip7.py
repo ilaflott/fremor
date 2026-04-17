@@ -6,8 +6,6 @@ targets the CMIP7 experiment-configuration JSON and CMIP7-format CMOR tables.
 '''
 
 from datetime import date
-import json
-import os
 from pathlib import Path
 import subprocess
 import shutil
@@ -312,13 +310,12 @@ def test_fre_cmor_run_subtool_cmip7_empty_varlist():
     '''
     fre cmor run, exception, variable list is empty (CMIP7 version)
     '''
-    VARLIST_EMPTY = \
-        f'{ROOTDIR}/empty_varlist'
+    varlist_empty = f'{ROOTDIR}/empty_varlist'
 
     with pytest.raises(ValueError):
         cmor_run_subtool(
             indir = INDIR,
-            json_var_list = VARLIST_EMPTY,
+            json_var_list = varlist_empty,
             json_table_config = TABLE_CONFIG,
             json_exp_config = CMIP7_EXP_CONFIG,
             outdir = OUTDIR

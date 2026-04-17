@@ -32,6 +32,7 @@ YYYYMMDD = date.today().strftime('%Y%m%d')
 
 
 # ── raw experiment-config contents (kept in-code for fixture use) ───────────
+# pylint: disable=line-too-long
 _CMIP6_EXP_CONFIG_DATA = {
     "#note": " **** The following are set correctly for CMIP6 and should not normally need editing",
     "source_type": "AOGCM ISM AER",
@@ -144,6 +145,7 @@ _CMIP7_EXP_CONFIG_DATA = {
     "_AXIS_ENTRY_FILE": "CMIP7_coordinate.json",
     "_FORMULA_VAR_FILE": "CMIP7_formula_terms.json"
 }
+# pylint: enable=line-too-long
 
 
 # ── experiment-config fixtures ──────────────────────────────────────────────
