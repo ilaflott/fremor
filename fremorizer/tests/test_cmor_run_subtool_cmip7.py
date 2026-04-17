@@ -288,7 +288,6 @@ def test_fre_cmor_run_subtool_cmip7_empty_varlist():
             outdir = OUTDIR
         )
 
-@pytest.mark.skip(reason='CMIP7 test not yet enabled')
 def test_fre_cmor_run_subtool_cmip7_opt_var_name_not_in_table():
     ''' fre cmor run, exception, opt_var_name not in CMIP7 table '''
 
@@ -299,5 +298,5 @@ def test_fre_cmor_run_subtool_cmip7_opt_var_name_not_in_table():
             json_table_config = TABLE_CONFIG,
             json_exp_config = CMIP7_EXP_CONFIG,
             outdir = OUTDIR,
-            opt_var_name="difmxybo"
+            opt_var_name="zzzz_nonexistent_var"
         )
