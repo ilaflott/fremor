@@ -200,27 +200,22 @@ def test_case_cmip6(  # pylint: disable=too-many-arguments,too-many-positional-a
         pytest.param(
             f'{MOCK_ARCHIVE_ROOT}/{ESM4_DEV_PP_DIR}'
             '/ocean_monthly_z_1x1deg/ts/monthly/5yr/',
-            'CMIP7_ocean', 'so', 'gr', '0001', 'noleap',
-            id='ocean_so_gr',
+            'CMIP7_ocean', 'so', 'g999', '0001', 'noleap',
+            id='ocean_so_g999',
         ),
         pytest.param(
             f'{MOCK_ARCHIVE_ROOT}/{ESM4_DEV_PP_DIR}'
             '/ocean_monthly/ts/monthly/5yr/',
-            'CMIP7_ocean', 'sos', 'gn', '0001', 'noleap',
-            id='ocean_sos_gn',
+            'CMIP7_ocean', 'sos', 'g999', '0001', 'noleap',
+            id='ocean_sos_g999',
         ),
         pytest.param(
             f'{MOCK_ARCHIVE_ROOT}/{ESM4_DEV_PP_DIR}'
             '/land/ts/monthly/5yr/',
-            'CMIP7_land', 'lai', 'gr1', '0001', 'noleap',
-            id='land_lai_gr1',
+            'CMIP7_land', 'lai', 'g999', '0001', 'noleap',
+            id='land_lai_g999',
         ),
     ],
-)
-@pytest.mark.xfail(
-    reason='CMIP7 cmor.write fails for mock archive variables: CMIP7 support in development',
-    strict=True,
-    raises=AssertionError,
 )
 def test_case_cmip7(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     testfile_dir, table, opt_var_name, grid_label, start, calendar,
@@ -253,12 +248,15 @@ def test_case_cmip7(  # pylint: disable=too-many-arguments,too-many-positional-a
         calendar_type=calendar,
     )
 
-    cmor_output_dir = (
+    # CMIP7 output_path_template:
+    #   <activity_id>/<source_id>/<experiment_id>/<member_id>/
+    #   <variable_id>/<branding_suffix>/<grid_label>
+    # Use recursive glob to find output regardless of branding suffix.
+    cmor_output_glob = (
         f'{outdir}/{CMOR_CREATES_DIR_BASE_CMIP7}'
-        f'/{opt_var_name}'
+        f'/{opt_var_name}/**/*{opt_var_name}*{grid_label}*.nc'
     )
-    cmor_output_glob = f'{cmor_output_dir}/*{opt_var_name}*{grid_label}*.nc'
-    cmor_output_files = glob.glob(cmor_output_glob)
+    cmor_output_files = glob.glob(cmor_output_glob, recursive=True)
     assert len(cmor_output_files) >= 1, (
         f'no CMOR output found matching {cmor_output_glob}'
     )
