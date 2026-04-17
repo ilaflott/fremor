@@ -218,7 +218,7 @@ def test_case_cmip6(  # pylint: disable=too-many-arguments,too-many-positional-a
     ],
 )
 @pytest.mark.xfail(
-    reason='CMIP7 cmor.write fails for mock archive variables — CMIP7 support in development',
+    reason='CMIP7 cmor.write fails for mock archive variables: CMIP7 support in development',
     strict=True,
     raises=AssertionError,
 )
