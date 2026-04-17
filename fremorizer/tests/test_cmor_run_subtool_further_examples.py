@@ -176,21 +176,15 @@ def test_case_function(testfile_dir,table,opt_var_name,grid_label,start,calendar
     if CLEANUP_AFTER_EVERY_TEST:
         _cleanup()
 
-def test_git_cleanup():
+def test_exp_config_cleanup():
     '''
-    Performs a git restore on EXP_CONFIG to avoid false positives from
-    git's record of changed files. It's supposed to change as part of the test.
+    Restores the CMIP6 experiment config to its pristine state after tests
+    that mutate it in-place (e.g. grid / calendar updates).
+
+    The config is no longer tracked by git — it is materialised by a
+    session-scoped conftest fixture — so we rewrite it from the canonical
+    fixture data instead of running ``git restore``.
     '''
-    is_ci = os.environ.get("GITHUB_WORKSPACE") is not None
-    if not is_ci:
-        git_cmd = f"git restore {EXP_CONFIG_DEFAULT}"
-        restore = subprocess.run(git_cmd,
-                                 shell=True,
-                                 check=False)
-        check_cmd = f"git status | grep {EXP_CONFIG_DEFAULT}"
-        check = subprocess.run(check_cmd,
-                               shell = True,
-                               check = False)
-        #first command completed, second found no file in git status
-        assert all( [ restore.returncode == 0,
-                      check.returncode == 1 ] )
+    import json  # pylint: disable=import-outside-toplevel
+    from fremorizer.tests.conftest import _CMIP6_EXP_CONFIG_DATA  # pylint: disable=import-outside-toplevel
+    Path(EXP_CONFIG_DEFAULT).write_text(json.dumps(_CMIP6_EXP_CONFIG_DATA, indent=4))
