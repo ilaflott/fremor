@@ -247,7 +247,6 @@ def test_fre_cmor_run_subtool_cmip7_case2_output_compare_metadata(capfd):
 # ---------------------------------------------------------------------------
 # CMIP7 error handling tests
 # ---------------------------------------------------------------------------
-@pytest.mark.skip(reason='CMIP7 test not yet enabled')
 def test_cmor_run_subtool_cmip7_raise_value_error():
     '''
     test that ValueError raised when required args are absent (CMIP7 version)
