@@ -78,7 +78,6 @@ def _ncgen_for_case(testfile_dir, opt_var_name):
 
 
 # ── CMIP7 parametrized tests ──────────────────────────────────────────────
-@pytest.mark.skip(reason='under development')
 @pytest.mark.parametrize(
     'testfile_dir,table,opt_var_name,grid_label,start,calendar',
     [
@@ -130,7 +129,6 @@ def test_case_cmip7_ocean_so(  # pylint: disable=too-many-arguments,too-many-pos
     assert Path(cmor_output_files[0]).exists()
 
 
-@pytest.mark.skip(reason='under development')
 @pytest.mark.parametrize(
     'testfile_dir,table,opt_var_name,grid_label,start,calendar',
     [
@@ -178,7 +176,6 @@ def test_case_cmip7_ocean_sos(  # pylint: disable=too-many-arguments,too-many-po
     assert Path(cmor_output_files[0]).exists()
 
 
-@pytest.mark.skip(reason='under development')
 @pytest.mark.parametrize(
     'testfile_dir,table,opt_var_name,grid_label,start,calendar',
     [
