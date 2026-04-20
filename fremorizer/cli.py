@@ -20,16 +20,16 @@ from .cmor_init import cmor_init_subtool
 
 fre_logger = logging.getLogger(__name__)
 
-OPT_VAR_NAME_HELP="optional, specify a variable name to specifically process only filenames " + \
-                  "matching that variable name. I.e., this string help target local_vars, not " + \
-                  "target_vars."
-VARLIST_HELP="path pointing to a json file containing directory of key/value pairs. " + \
-             "the keys are the \'local\' names used in the filename, and the values " + \
-             "pointed to by those keys are strings representing the name of the variable " + \
-             "contained in targeted files. the key and value are often the same, " + \
-             "but it is not required."
-RUN_ONE_HELP="process only one file, then exit. mostly for debugging and isolating issues."
-DRY_RUN_HELP="don't call the cmor_mixer subtool, just printout what would be called and move on until natural exit"
+OPT_VAR_NAME_HELP='optional, specify a variable name to specifically process only filenames ' + \
+                  'matching that variable name. I.e., this string help target local_vars, not ' + \
+                  'target_vars.'
+VARLIST_HELP='path pointing to a json file containing directory of key/value pairs. ' + \
+             'the keys are the \'local\' names used in the filename, and the values ' + \
+             'pointed to by those keys are strings representing the name of the variable ' + \
+             'contained in targeted files. the key and value are often the same, ' + \
+             'but it is not required.'
+RUN_ONE_HELP='process only one file, then exit. mostly for debugging and isolating issues.'
+DRY_RUN_HELP='don\'t call the cmor_mixer subtool, just printout what would be called and move on until natural exit'
 START_YEAR_HELP = 'string representing the minimum calendar year CMOR should start processing for. ' + \
                   'currently, only YYYY format is supported.'
 STOP_YEAR_HELP = 'string representing the maximum calendar year CMOR should stop processing for. ' + \
@@ -37,28 +37,28 @@ STOP_YEAR_HELP = 'string representing the maximum calendar year CMOR should stop
 
 
 @click.version_option(
-    package_name = "fremorizer",
+    package_name = 'fremorizer',
     version = version
 )
 @click.group(
     help = click.style(
-        "'fremor' is the main CLI for fremorizer. it houses the cmor subcommands.",
+        'fremor is the main CLI for fremorizer. it houses the cmor subcommands.',
         fg = 'cyan')
 )
 @click.option( '-v', '--verbose', default = 0, required = False, count = True, type = int,
-               help = "Increment logging verbosity from default (logging.WARNING) to logging.INFO. " + \
-                      "use -vv for logging.DEBUG. will be overridden by -q/--quiet" )
+               help = 'Increment logging verbosity from default (logging.WARNING) to logging.INFO. ' + \
+                      'use -vv for logging.DEBUG. will be overridden by -q/--quiet' )
 @click.option( '-q', '--quiet', default = False, required = False, is_flag = True, type = bool,
-               help = "Set logging verbosity from default (logging.WARNING) to logging.ERROR, printing " + \
-                      "less output to screen. overrides -v[v]/--verbose" )
+               help = 'Set logging verbosity from default (logging.WARNING) to logging.ERROR, printing ' + \
+                      'less output to screen. overrides -v[v]/--verbose' )
 @click.option( '-l', '--log_file', default = None, required = False, type = str,
                help = 'Path to log file for all fremor calls, the output to screen will still print with the ' + \
                       'path specified. If the log file already exists, it is appended to.' )
 def fremor(verbose = 0, quiet = False, log_file = None):
-    '''
+    """
     entry point function to subgroup functions, setting global verbosity/logging formats that all
     other routines will utilize
-    '''
+    """
     log_level = logging.WARNING # default
     if verbose == 1:
         log_level = logging.INFO # -v, more verbose than default
@@ -91,20 +91,20 @@ def fremor(verbose = 0, quiet = False, log_file = None):
 
 
 @fremor.command()
-@click.option("-y", "--yamlfile", type = str,
+@click.option('-y', '--yamlfile', type = str,
               help = 'YAML file to be used for parsing',
               required = True )
-@click.option("-e", "--experiment", type = str,
-              help = "Experiment name",
+@click.option('-e', '--experiment', type = str,
+              help = 'Experiment name',
               required = True )
-@click.option("-p", "--platform", type = str,
-              help = "Platform name",
+@click.option('-p', '--platform', type = str,
+              help = 'Platform name',
               required = True )
-@click.option("-t", "--target", type = str,
-              help = "Target name",
+@click.option('-t', '--target', type = str,
+              help = 'Target name',
               required = True )
-@click.option("-o", "--output", type = str, default = None,
-              help = "Output file if desired", required = False)
+@click.option('-o', '--output', type = str, default = None,
+              help = 'Output file if desired', required = False)
 @click.option('--run_one', is_flag = True, default = False,
               help=RUN_ONE_HELP,
               required = False)
@@ -142,22 +142,22 @@ def yaml(yamlfile, experiment, target, platform, output, run_one, dry_run, start
 
 
 @fremor.command()
-@click.option("-l", "--varlist", type = str,
+@click.option('-l', '--varlist', type = str,
               help=VARLIST_HELP,
               required=False)
-@click.option("-r", "--table_config_dir", type = str,
-              help="directory holding MIP tables to search for variables in var list",
+@click.option('-r', '--table_config_dir', type = str,
+              help='directory holding MIP tables to search for variables in var list',
               required=True)
-@click.option('-v', "--opt_var_name", type = str,
+@click.option('-v', '--opt_var_name', type = str,
               help=OPT_VAR_NAME_HELP,
               required=False)
 def find(varlist, table_config_dir, opt_var_name): #uncovered
-    '''
+    """
     loop over json table files in config_dir and show which tables contain variables in var list/
     the tool will also print what that table entry is expecting of that variable as well. if given
     an opt_var_name in addition to varlist, only that variable name will be printed out.
     accepts 3 arguments, two of the three required.
-    '''
+    """
     cmor_find_subtool(
         json_var_list = varlist,
         json_table_config_dir = table_config_dir,
@@ -166,44 +166,44 @@ def find(varlist, table_config_dir, opt_var_name): #uncovered
 
 
 @fremor.command()
-@click.option("-d", "--indir", type = str,
-              help="directory containing netCDF files. keys specified in json_var_list are local " + \
-                   "variable names used for targeting specific files in this directory",
+@click.option('-d', '--indir', type = str,
+              help='directory containing netCDF files. keys specified in json_var_list are local ' + \
+                   'variable names used for targeting specific files in this directory',
               required=True)
-@click.option("-l", "--varlist", type = str,
+@click.option('-l', '--varlist', type = str,
               help=VARLIST_HELP,
               required=True)
-@click.option("-r", "--table_config", type = str,
-              help="json file containing CMIP-compliant per-variable/metadata for specific " + \
-                   "MIP table. The MIP table can generally be identified by the specific " + \
-                   "filename (e.g. \'Omon\')",
+@click.option('-r', '--table_config', type = str,
+              help='json file containing CMIP-compliant per-variable/metadata for specific ' + \
+                   'MIP table. The MIP table can generally be identified by the specific ' + \
+                   'filename (e.g. \'Omon\')',
               required=True)
-@click.option("-p", "--exp_config", type = str,
-              help="json file containing metadata dictionary for CMORization. this metadata is " + \
-                   "effectively appended to the final output file's header",
+@click.option('-p', '--exp_config', type = str,
+              help='json file containing metadata dictionary for CMORization. this metadata is ' + \
+                   'effectively appended to the final output file\'s header',
               required=True)
-@click.option("-o", "--outdir", type = str,
-              help="directory root that will contain the full output and output directory " + \
-                   "structure generated by the cmor module upon request.",
+@click.option('-o', '--outdir', type = str,
+              help='directory root that will contain the full output and output directory ' + \
+                   'structure generated by the cmor module upon request.',
               required=True)
 @click.option('--run_one', is_flag = True, default = False,
               help=RUN_ONE_HELP,
               required = False)
-@click.option('-v', "--opt_var_name", type = str, default = None,
+@click.option('-v', '--opt_var_name', type = str, default = None,
               help=OPT_VAR_NAME_HELP,
               required=False)
 @click.option('-g', '--grid_label', type = str, default = None,
-              help = 'label representing grid type of input data, e.g. "gn" for native or "gr" for regridded, ' + \
-                     'replaces the "grid_label" field in the CMOR experiment configuration file. The label must ' + \
+              help = 'label representing grid type of input data, e.g. gn for native or gr for regridded, ' + \
+                     'replaces the grid_label field in the CMOR experiment configuration file. The label must ' + \
                      'be one of the entries in the MIP controlled-vocab file.',
               required = False)
 @click.option('--grid_desc', type = str, default = None,
-              help = 'description of grid indicated by grid label, replaces the "grid" field in the CMOR ' + \
+              help = 'description of grid indicated by grid label, replaces the grid field in the CMOR ' + \
                      'experiment configuration file.',
               required = False)
 @click.option('--nom_res', type = str, default = None,
-              help = 'nominal resolution indicated by grid and/or grid label, replaces the "nominal_resolution", ' + \
-                     'replaces the "grid" field in the CMOR experiment configuration file. The entered string ' + \
+              help = 'nominal resolution indicated by grid and/or grid label, replaces the nominal_resolution, ' + \
+                     'replaces the grid field in the CMOR experiment configuration file. The entered string ' + \
                      'must be one of the entries in the MIP controlled-vocab file.',
               required = False)
 @click.option('--start', type=str, default=None,
@@ -239,10 +239,10 @@ def run(indir, varlist, table_config, exp_config, outdir, run_one, opt_var_name,
 
 
 @fremor.command('varlist')
-@click.option("-d", "--dir_targ", type=str, required=True, help="Target directory")
-@click.option("-o", "--output_variable_list", type=str, required=True, help="Output variable list file")
-@click.option("-t", "--mip_table", type=str, required=False, default=None,
-              help="Target MIP table for making variable list")
+@click.option('-d', '--dir_targ', type=str, required=True, help='Target directory')
+@click.option('-o', '--output_variable_list', type=str, required=True, help='Output variable list file')
+@click.option('-t', '--mip_table', type=str, required=False, default=None,
+              help='Target MIP table for making variable list')
 def varlist_(dir_targ, output_variable_list, mip_table):
     """
     Create a simple variable list from netCDF files in the target directory.
@@ -253,30 +253,30 @@ def varlist_(dir_targ, output_variable_list, mip_table):
 
 
 @fremor.command()
-@click.option("-p", "--pp_dir", type=str, required=True,
-              help="Root post-processing directory containing per-component subdirectories.")
-@click.option("-t", "--mip_tables_dir", type=str, required=True,
-              help="Directory containing MIP table JSON files.")
-@click.option("-m", "--mip_era", type=str, required=True,
-              help="MIP era identifier, e.g. 'cmip6' or 'cmip7'.")
-@click.option("-e", "--exp_config", type=str, required=True,
-              help="Path to JSON experiment/input configuration file expected by CMOR.")
-@click.option("-o", "--output_yaml", type=str, required=True,
-              help="Path for the output CMOR YAML configuration file.")
-@click.option("-d", "--output_dir", type=str, required=True,
-              help="Root output directory for CMORized data.")
-@click.option("-l", "--varlist_dir", type=str, required=True,
-              help="Directory in which per-component variable list JSON files are written.")
-@click.option("--freq", type=str, default="monthly",
-              help="Temporal frequency string, e.g. 'monthly', 'daily'. Default 'monthly'.")
-@click.option("--chunk", type=str, default="5yr",
-              help="Time chunk string, e.g. '5yr', '10yr'. Default '5yr'.")
-@click.option("--grid", type=str, default="g999",
-              help="Grid label anchor name, e.g. 'g999', 'gn'. Default 'g999'.")
-@click.option("--overwrite", is_flag=True, default=False,
-              help="Overwrite existing variable list files.")
-@click.option("--calendar", type=str, default="noleap",
-              help="Calendar type, e.g. 'noleap', '360_day'. Default 'noleap'.")
+@click.option('-p', '--pp_dir', type=str, required=True,
+              help='Root post-processing directory containing per-component subdirectories.')
+@click.option('-t', '--mip_tables_dir', type=str, required=True,
+              help='Directory containing MIP table JSON files.')
+@click.option('-m', '--mip_era', type=str, required=True,
+              help='MIP era identifier, e.g. cmip6 or cmip7.')
+@click.option('-e', '--exp_config', type=str, required=True,
+              help='Path to JSON experiment/input configuration file expected by CMOR.')
+@click.option('-o', '--output_yaml', type=str, required=True,
+              help='Path for the output CMOR YAML configuration file.')
+@click.option('-d', '--output_dir', type=str, required=True,
+              help='Root output directory for CMORized data.')
+@click.option('-l', '--varlist_dir', type=str, required=True,
+              help='Directory in which per-component variable list JSON files are written.')
+@click.option('--freq', type=str, default='monthly',
+              help='Temporal frequency string, e.g. monthly, daily. Default monthly.')
+@click.option('--chunk', type=str, default='5yr',
+              help='Time chunk string, e.g. 5yr, 10yr. Default 5yr.')
+@click.option('--grid', type=str, default='g999',
+              help='Grid label anchor name, e.g. g999, gn. Default g999.')
+@click.option('--overwrite', is_flag=True, default=False,
+              help='Overwrite existing variable list files.')
+@click.option('--calendar', type=str, default='noleap',
+              help='Calendar type, e.g. noleap, 360_day. Default noleap.')
 def config(pp_dir, mip_tables_dir, mip_era, exp_config, output_yaml,
            output_dir, varlist_dir, freq, chunk, grid, overwrite, calendar):
     """
@@ -301,20 +301,20 @@ def config(pp_dir, mip_tables_dir, mip_era, exp_config, output_yaml,
 
 
 @fremor.command()
-@click.option("-m", "--mip_era", type=click.Choice(['cmip6', 'cmip7'], case_sensitive=False),
+@click.option('-m', '--mip_era', type=click.Choice(['cmip6', 'cmip7'], case_sensitive=False),
               required=True,
-              help="MIP era for the template: 'cmip6' or 'cmip7'.")
-@click.option("-e", "--exp_config", type=str, default=None,
-              help="Output path for the template experiment-config JSON file. "
-                   "When omitted and --tables_dir is also omitted, a default "
-                   "filename is used.")
-@click.option("-t", "--tables_dir", type=str, default=None,
-              help="Directory into which MIP tables will be fetched from "
-                   "trusted sources. Omit to skip table retrieval.")
-@click.option("--tag", type=str, default=None,
-              help="Specific git tag or release for the MIP tables repository.")
-@click.option("--fast", is_flag=True, default=False,
-              help="Use curl to download a tarball instead of git clone.")
+              help='MIP era for the template: cmip6 or cmip7.')
+@click.option('-e', '--exp_config', type=str, default=None,
+              help='Output path for the template experiment-config JSON file. '
+                   'When omitted and --tables_dir is also omitted, a default '
+                   'filename is used.')
+@click.option('-t', '--tables_dir', type=str, default=None,
+              help='Directory into which MIP tables will be fetched from '
+                   'trusted sources. Omit to skip table retrieval.')
+@click.option('--tag', type=str, default=None,
+              help='Specific git tag or release for the MIP tables repository.')
+@click.option('--fast', is_flag=True, default=False,
+              help='Use curl to download a tarball instead of git clone.')
 def init(mip_era, exp_config, tables_dir, tag, fast):
     """
     Initialise CMOR resources: write an empty experiment-config JSON template

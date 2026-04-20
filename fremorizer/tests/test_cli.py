@@ -1,4 +1,5 @@
-'''CLI Tests for fremor subcommands
+"""
+CLI Tests for fremor subcommands
 
 Tests the command-line-interface calls for the fremor CLI (fremorizer package).
 Each tool generally gets 3 tests:
@@ -12,7 +13,7 @@ We also have a set of more complicated tests for testing the full set of
 command-line args for fremor yaml and fremor run.
 
 Migrated from NOAA-GFDL/fre-cli fre/tests/test_fre_cmor_cli.py.
-'''
+"""
 
 import json
 import os
@@ -51,20 +52,20 @@ def test_setup_test_files(cli_sos_nc_file, cli_sosv2_nc_file): # pylint: disable
 # ── fremor (top-level group) ──────────────────────────────────────────────
 
 def test_cli_fremor():
-    ''' fremor (no subcommand) '''
+    """ fremor (no subcommand) """
     result = runner.invoke(fremor, args=[])
     assert result.exit_code == 2
 
 def test_cli_fremor_help():
-    ''' fremor --help '''
-    result = runner.invoke(fremor, args=["--help"])
+    """ fremor --help """
+    result = runner.invoke(fremor, args=['--help'])
     assert result.exit_code == 0
 
 def test_cli_fremor_help_and_debuglog(tmp_path):
-    ''' fremor -vv -l LOG yaml --help (logs created by group callback) '''
+    """ fremor -vv -l LOG yaml --help (logs created by group callback) """
     log_file = tmp_path / 'TEST_FOO_LOG.log'
 
-    result = runner.invoke(fremor, args=["-vv", "-l", str(log_file), "yaml", "--help"])
+    result = runner.invoke(fremor, args=['-vv', '-l', str(log_file), 'yaml', '--help'])
     assert result.exit_code == 0
     assert log_file.exists()
 
@@ -73,10 +74,10 @@ def test_cli_fremor_help_and_debuglog(tmp_path):
     assert LOG_DEBUG_LINE in line_list[1]
 
 def test_cli_fremor_help_and_infolog(tmp_path):
-    ''' fremor -v -l LOG yaml --help '''
+    """ fremor -v -l LOG yaml --help """
     log_file = tmp_path / 'TEST_FOO_LOG.log'
 
-    result = runner.invoke(fremor, args=["-v", "-l", str(log_file), "yaml", "--help"])
+    result = runner.invoke(fremor, args=['-v', '-l', str(log_file), 'yaml', '--help'])
     assert result.exit_code == 0
     assert log_file.exists()
 
@@ -84,10 +85,10 @@ def test_cli_fremor_help_and_infolog(tmp_path):
     assert LOG_INFO_LINE in line_list[0]
 
 def test_cli_fremor_help_and_quietlog(tmp_path):
-    ''' fremor -q -l LOG yaml --help '''
+    """ fremor -q -l LOG yaml --help """
     log_file = tmp_path / 'TEST_FOO_LOG.log'
 
-    result = runner.invoke(fremor, args=["-q", "-l", str(log_file), "yaml", "--help"])
+    result = runner.invoke(fremor, args=['-q', '-l', str(log_file), 'yaml', '--help'])
     assert result.exit_code == 0
     assert log_file.exists()
 
@@ -95,31 +96,31 @@ def test_cli_fremor_help_and_quietlog(tmp_path):
     assert line_list == []
 
 def test_cli_fremor_opt_dne():
-    ''' fremor optionDNE '''
-    result = runner.invoke(fremor, args=["optionDNE"])
+    """ fremor optionDNE """
+    result = runner.invoke(fremor, args=['optionDNE'])
     assert result.exit_code == 2
 
 
 # ── fremor yaml ───────────────────────────────────────────────────────────
 
 def test_cli_fremor_yaml():
-    ''' fremor yaml (no args) '''
-    result = runner.invoke(fremor, args=["yaml"])
+    """ fremor yaml (no args) """
+    result = runner.invoke(fremor, args=['yaml'])
     assert result.exit_code == 2
 
 def test_cli_fremor_yaml_help():
-    ''' fremor yaml --help '''
-    result = runner.invoke(fremor, args=["yaml", "--help"])
+    """ fremor yaml --help """
+    result = runner.invoke(fremor, args=['yaml', '--help'])
     assert result.exit_code == 0
 
 def test_cli_fremor_yaml_opt_dne():
-    ''' fremor yaml optionDNE '''
-    result = runner.invoke(fremor, args=["yaml", "optionDNE"])
+    """ fremor yaml optionDNE """
+    result = runner.invoke(fremor, args=['yaml', 'optionDNE'])
     assert result.exit_code == 2
 
 @patch('fremorizer.cli.cmor_yaml_subtool')
 def test_cli_fremor_yaml_case1(mock_subtool, tmp_path):
-    ''' fremor yaml --dry_run -y YAMLFILE ... --output FOO_cmor.yaml '''
+    """ fremor yaml --dry_run -y YAMLFILE ... --output FOO_cmor.yaml """
     # use a temporary yaml placeholder file as the model yaml input
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder', encoding='utf-8')
@@ -127,19 +128,19 @@ def test_cli_fremor_yaml_case1(mock_subtool, tmp_path):
 
     mock_subtool.return_value = None
 
-    result = runner.invoke(fremor, args=["-v", "-v", "yaml", "--dry_run",
-                                         "-y", str(dummy_yaml),
-                                         "-e", "test_experiment",
-                                         "-p", "test_platform",
-                                         "-t", "test_target",
-                                         "--output", str(output_yaml) ])
+    result = runner.invoke(fremor, args=['-v', '-v', 'yaml', '--dry_run',
+                                         '-y', str(dummy_yaml),
+                                         '-e', 'test_experiment',
+                                         '-p', 'test_platform',
+                                         '-t', 'test_target',
+                                         '--output', str(output_yaml) ])
 
     assert result.exit_code == 0
     mock_subtool.assert_called_once_with(
         yamlfile=str(dummy_yaml),
-        exp_name="test_experiment",
-        target="test_target",
-        platform="test_platform",
+        exp_name='test_experiment',
+        target='test_target',
+        platform='test_platform',
         output=str(output_yaml),
         run_one_mode=False,
         dry_run_mode=True,
@@ -152,36 +153,36 @@ def test_cli_fremor_yaml_case1(mock_subtool, tmp_path):
 # ── fremor run ────────────────────────────────────────────────────────────
 
 def test_cli_fremor_run():
-    ''' fremor run (no args) '''
-    result = runner.invoke(fremor, args=["run"])
+    """ fremor run (no args) """
+    result = runner.invoke(fremor, args=['run'])
     assert result.exit_code == 2
 
 def test_cli_fremor_run_help():
-    ''' fremor run --help '''
-    result = runner.invoke(fremor, args=["run", "--help"])
+    """ fremor run --help """
+    result = runner.invoke(fremor, args=['run', '--help'])
     assert result.exit_code == 0
 
 def test_cli_fremor_run_opt_dne():
-    ''' fremor run optionDNE '''
-    result = runner.invoke(fremor, args=["run", "optionDNE"])
+    """ fremor run optionDNE """
+    result = runner.invoke(fremor, args=['run', 'optionDNE'])
     assert result.exit_code == 2
 
 
 def test_cli_fremor_run_case1(cli_sos_nc_file, tmp_path):
-    '''fremor run, test-use case: sos → sos (CMIP6)'''
+    """fremor run, test-use case: sos → sos (CMIP6)"""
     outdir = str(tmp_path / 'outdir')
 
-    result = runner.invoke(fremor, args = [ "-v", "-v",
-                                            "run", "--run_one",
-                                            "--indir", str(INDIR),
-                                            "--varlist", str(VARLIST),
-                                            "--table_config", str(CMIP6_TABLE_CONFIG),
-                                            "--exp_config", str(EXP_CONFIG),
-                                            "--outdir", outdir,
-                                            "--calendar", "julian",
-                                            "--grid_label", "gr",
-                                            "--grid_desc", "FOO_BAR_PLACEHOLD",
-                                            "--nom_res", "10000 km" ] )
+    result = runner.invoke(fremor, args = [ '-v', '-v',
+                                            'run', '--run_one',
+                                            '--indir', str(INDIR),
+                                            '--varlist', str(VARLIST),
+                                            '--table_config', str(CMIP6_TABLE_CONFIG),
+                                            '--exp_config', str(EXP_CONFIG),
+                                            '--outdir', outdir,
+                                            '--calendar', 'julian',
+                                            '--grid_label', 'gr',
+                                            '--grid_desc', 'FOO_BAR_PLACEHOLD',
+                                            '--nom_res', '10000 km' ] )
     assert result.exit_code == 0, f'case1 failed: {result.output}'
 
     output_ncs = list(Path(outdir).rglob('sos_Omon_*.nc'))
@@ -190,20 +191,20 @@ def test_cli_fremor_run_case1(cli_sos_nc_file, tmp_path):
 
 
 def test_cli_fremor_run_case2(cli_sosv2_nc_file, tmp_path): # pylint: disable=redefined-outer-name
-    '''fremor run, test-use case 2: sosV2 varlist_diff (CMIP6)'''
+    """fremor run, test-use case 2: sosV2 varlist_diff (CMIP6)"""
     outdir = str(tmp_path / 'outdir')
 
-    result = runner.invoke(fremor, args = ["-v", "-v",
-                                           "run", "--run_one",
-                                           "--indir", str(INDIR),
-                                           "--varlist", str(VARLIST_DIFF),
-                                           "--table_config", str(CMIP6_TABLE_CONFIG),
-                                           "--exp_config", str(EXP_CONFIG),
-                                           "--outdir", outdir,
-                                           "--calendar", "julian",
-                                           "--grid_label", "gr",
-                                           "--grid_desc", "FOO_BAR_PLACEHOLD",
-                                           "--nom_res", "10000 km" ] )
+    result = runner.invoke(fremor, args = ['-v', '-v',
+                                           'run', '--run_one',
+                                           '--indir', str(INDIR),
+                                           '--varlist', str(VARLIST_DIFF),
+                                           '--table_config', str(CMIP6_TABLE_CONFIG),
+                                           '--exp_config', str(EXP_CONFIG),
+                                           '--outdir', outdir,
+                                           '--calendar', 'julian',
+                                           '--grid_label', 'gr',
+                                           '--grid_desc', 'FOO_BAR_PLACEHOLD',
+                                           '--nom_res', '10000 km' ] )
     assert result.exit_code == 0, f'case2 failed: {result.output}'
 
     output_ncs = list(Path(outdir).rglob('sos_Omon_*.nc'))
@@ -212,20 +213,20 @@ def test_cli_fremor_run_case2(cli_sosv2_nc_file, tmp_path): # pylint: disable=re
 
 
 def test_cli_fremor_run_cmip7_case1(cli_sos_nc_file, tmp_path): # pylint: disable=redefined-outer-name
-    '''fremor run, test-use case for cmip7: sos → sos'''
+    """fremor run, test-use case for cmip7: sos → sos"""
     outdir = str(tmp_path / 'outdir')
 
-    result = runner.invoke(fremor, args = [ "-v", "-v",
-                                            "run", "--run_one",
-                                            "--indir", str(INDIR),
-                                            "--varlist", str(VARLIST),
-                                            "--table_config", str(CMIP7_TABLE_CONFIG),
-                                            "--exp_config", str(EXP_CONFIG_CMIP7),
-                                            "--outdir", outdir,
-                                            "--calendar", "julian",
-                                            "--grid_label", "g999",
-                                            "--grid_desc", "FOO_BAR_PLACEHOLD",
-                                            "--nom_res", "10000 km" ] )
+    result = runner.invoke(fremor, args = [ '-v', '-v',
+                                            'run', '--run_one',
+                                            '--indir', str(INDIR),
+                                            '--varlist', str(VARLIST),
+                                            '--table_config', str(CMIP7_TABLE_CONFIG),
+                                            '--exp_config', str(EXP_CONFIG_CMIP7),
+                                            '--outdir', outdir,
+                                            '--calendar', 'julian',
+                                            '--grid_label', 'g999',
+                                            '--grid_desc', 'FOO_BAR_PLACEHOLD',
+                                            '--nom_res', '10000 km' ] )
     assert result.exit_code == 0, f'cmip7 case1 failed: {result.output}'
 
     output_ncs = list(Path(outdir).rglob('sos_*.nc'))
@@ -234,20 +235,20 @@ def test_cli_fremor_run_cmip7_case1(cli_sos_nc_file, tmp_path): # pylint: disabl
 
 
 def test_cli_fremor_run_cmip7_case2(cli_sosv2_nc_file, tmp_path): # pylint: disable=redefined-outer-name
-    '''fremor run, test-use case 2 for cmip7: sosV2 varlist_diff'''
+    """fremor run, test-use case 2 for cmip7: sosV2 varlist_diff"""
     outdir = str(tmp_path / 'outdir')
 
-    result = runner.invoke(fremor, args = [ "-v", "-v",
-                                            "run", "--run_one",
-                                            "--indir", str(INDIR),
-                                            "--varlist", str(VARLIST_DIFF),
-                                            "--table_config", str(CMIP7_TABLE_CONFIG),
-                                            "--exp_config", str(EXP_CONFIG_CMIP7),
-                                            "--outdir", outdir,
-                                            "--calendar", "julian",
-                                            "--grid_label", "g999",
-                                            "--grid_desc", "FOO_BAR_PLACEHOLD",
-                                            "--nom_res", "10000 km" ] )
+    result = runner.invoke(fremor, args = [ '-v', '-v',
+                                            'run', '--run_one',
+                                            '--indir', str(INDIR),
+                                            '--varlist', str(VARLIST_DIFF),
+                                            '--table_config', str(CMIP7_TABLE_CONFIG),
+                                            '--exp_config', str(EXP_CONFIG_CMIP7),
+                                            '--outdir', outdir,
+                                            '--calendar', 'julian',
+                                            '--grid_label', 'g999',
+                                            '--grid_desc', 'FOO_BAR_PLACEHOLD',
+                                            '--nom_res', '10000 km' ] )
     assert result.exit_code == 0, f'cmip7 case2 failed: {result.output}'
 
     output_ncs = list(Path(outdir).rglob('sos_*.nc'))
@@ -258,59 +259,59 @@ def test_cli_fremor_run_cmip7_case2(cli_sosv2_nc_file, tmp_path): # pylint: disa
 # ── fremor find ───────────────────────────────────────────────────────────
 
 def test_cli_fremor_find():
-    ''' fremor find (no args) '''
-    result = runner.invoke(fremor, args=["find"])
+    """ fremor find (no args) """
+    result = runner.invoke(fremor, args=['find'])
     assert result.exit_code == 2
 
 def test_cli_fremor_find_help():
-    ''' fremor find --help '''
-    result = runner.invoke(fremor, args=["find", "--help"])
+    """ fremor find --help """
+    result = runner.invoke(fremor, args=['find', '--help'])
     assert result.exit_code == 0
 
 def test_cli_fremor_find_opt_dne():
-    ''' fremor find optionDNE '''
-    result = runner.invoke(fremor, args=["find", "optionDNE"])
+    """ fremor find optionDNE """
+    result = runner.invoke(fremor, args=['find', 'optionDNE'])
     assert result.exit_code == 2
 
 
 def test_cli_fremor_find_cmip6_case1():
-    ''' fremor find, test-use case searching for variables in cmip6 tables '''
-    result = runner.invoke(fremor, args=["-v", "find",
-                                         "--varlist", str(VARLIST),
-                                         "--table_config_dir", str(CMIP6_TABLE_CONFIG.parent)] )
+    """ fremor find, test-use case searching for variables in cmip6 tables """
+    result = runner.invoke(fremor, args=['-v', 'find',
+                                         '--varlist', str(VARLIST),
+                                         '--table_config_dir', str(CMIP6_TABLE_CONFIG.parent)] )
     assert result.exit_code == 0
 
 def test_cli_fremor_find_cmip6_case2():
-    ''' fremor find, test-use case searching for variables in cmip6 tables '''
-    result = runner.invoke(fremor, args=["-v", "find",
-                                         "--opt_var_name", "sos",
-                                         "--table_config_dir", str(CMIP6_TABLE_CONFIG.parent)] )
+    """ fremor find, test-use case searching for variables in cmip6 tables """
+    result = runner.invoke(fremor, args=['-v', 'find',
+                                         '--opt_var_name', 'sos',
+                                         '--table_config_dir', str(CMIP6_TABLE_CONFIG.parent)] )
     assert result.exit_code == 0
 
 
 # ── fremor config ─────────────────────────────────────────────────────────
 
 def test_cli_fremor_config():
-    ''' fremor config (no args) '''
-    result = runner.invoke(fremor, args=["config"])
+    """ fremor config (no args) """
+    result = runner.invoke(fremor, args=['config'])
     assert result.exit_code == 2
 
 def test_cli_fremor_config_help():
-    ''' fremor config --help '''
-    result = runner.invoke(fremor, args=["config", "--help"])
+    """ fremor config --help """
+    result = runner.invoke(fremor, args=['config', '--help'])
     assert result.exit_code == 0
 
 def test_cli_fremor_config_opt_dne():
-    ''' fremor config optionDNE '''
-    result = runner.invoke(fremor, args=["config", "optionDNE"])
+    """ fremor config optionDNE """
+    result = runner.invoke(fremor, args=['config', 'optionDNE'])
     assert result.exit_code == 2
 
 
 def test_cli_fremor_config_case1(cli_sos_nc_file): # pylint: disable=redefined-outer-name
-    '''
+    """
     fremor config -- generate a CMOR YAML config from a mock pp directory tree.
     Uses the ocean_sos_var_file test data with a mock pp layout.
-    '''
+    """
     # set up a mock pp directory tree that the writer can scan
     mock_pp_dir = ROOTDIR / 'mock_pp_writer'
     comp_ts_dir = mock_pp_dir / 'ocean' / 'ts' / 'monthly' / '5yr'
@@ -361,26 +362,26 @@ def test_cli_fremor_config_case1(cli_sos_nc_file): # pylint: disable=redefined-o
     output_yaml.touch()
 
     result = runner.invoke(fremor, args=[
-        "-v", "-v",
-        "config",
-        "--pp_dir", str(mock_pp_dir),
-        "--mip_tables_dir", str(CMIP6_TABLE_CONFIG.parent),
-        "--mip_era", "cmip6",
-        "--exp_config", str(EXP_CONFIG),
-        "--output_yaml", str(output_yaml),
-        "--output_dir", str(output_data_dir),
-        "--varlist_dir", str(varlist_out_dir),
-        "--freq", "monthly",
-        "--chunk", "5yr",
-        "--grid", "gn",
-        "--overwrite"
+        '-v', '-v',
+        'config',
+        '--pp_dir', str(mock_pp_dir),
+        '--mip_tables_dir', str(CMIP6_TABLE_CONFIG.parent),
+        '--mip_era', 'cmip6',
+        '--exp_config', str(EXP_CONFIG),
+        '--output_yaml', str(output_yaml),
+        '--output_dir', str(output_data_dir),
+        '--varlist_dir', str(varlist_out_dir),
+        '--freq', 'monthly',
+        '--chunk', '5yr',
+        '--grid', 'gn',
+        '--overwrite'
     ])
     assert result.exit_code == 0, f'config failed: {result.output}'
     assert output_yaml.exists(), 'output YAML was not created'
     assert (varlist_out_dir / 'CMIP6_CMIP6_Omon_ocean.list').exists(), \
         'CMIP6_CMIP6_Omon_ocean.list was not created for some reason'
 
-    # basic sanity: the written file should contain "cmor:" and "table_targets:"
+    # basic sanity: the written file should contain 'cmor:' and 'table_targets:'
     yaml_text = output_yaml.read_text(encoding='utf-8')
     assert 'cmor:' in yaml_text
     assert 'table_targets:' in yaml_text
@@ -397,33 +398,33 @@ def test_cli_fremor_config_case1(cli_sos_nc_file): # pylint: disable=redefined-o
 # ── fremor varlist ────────────────────────────────────────────────────────
 
 def test_cli_fremor_varlist():
-    ''' fremor varlist (no args) '''
-    result = runner.invoke(fremor, args=["varlist"])
+    """ fremor varlist (no args) """
+    result = runner.invoke(fremor, args=['varlist'])
     assert result.exit_code == 2
 
 def test_cli_fremor_varlist_help():
-    ''' fremor varlist --help '''
-    result = runner.invoke(fremor, args=["varlist", "--help"])
+    """ fremor varlist --help """
+    result = runner.invoke(fremor, args=['varlist', '--help'])
     assert result.exit_code == 0
 
 def test_cli_fremor_varlist_opt_dne():
-    ''' fremor varlist optionDNE '''
-    result = runner.invoke(fremor, args=["varlist", "optionDNE"])
+    """ fremor varlist optionDNE """
+    result = runner.invoke(fremor, args=['varlist', 'optionDNE'])
     assert result.exit_code == 2
 
 
 def test_cli_fremor_varlist_no_table_filter(tmp_path, cli_sos_nc_file, cli_sosv2_nc_file): # pylint: disable=redefined-outer-name
-    '''fremor varlist — no MIP table filter.
+    """fremor varlist — no MIP table filter.
     Creates a variable list from the ocean_sos_var_file test data without a MIP table,
-    so both sos and sosV2 should appear.'''
+    so both sos and sosV2 should appear."""
     output_varlist = tmp_path / 'test_varlist_no_filter.json'
     assert Path(cli_sos_nc_file).parent == Path(cli_sosv2_nc_file).parent, 'something wrong with input nc files'
 
     result = runner.invoke(fremor, args=[
-        "-v", "-v",
-        "varlist",
-        "--dir_targ", str(Path(cli_sos_nc_file).parent),
-        "--output_variable_list", str(output_varlist)
+        '-v', '-v',
+        'varlist',
+        '--dir_targ', str(Path(cli_sos_nc_file).parent),
+        '--output_variable_list', str(output_varlist)
     ])
     assert result.exit_code == 0, f'varlist failed: {result.output}'
     assert output_varlist.exists(), 'output variable list was not created'
@@ -437,17 +438,17 @@ def test_cli_fremor_varlist_no_table_filter(tmp_path, cli_sos_nc_file, cli_sosv2
 
 
 def test_cli_fremor_varlist_cmip6_table_filter(cli_sos_nc_file, cli_sosv2_nc_file, tmp_path): # pylint: disable=redefined-outer-name
-    '''fremor varlist — with CMIP6 Omon MIP table filter.
-    Only sos should survive; sosV2 is not in the CMIP6 Omon table.'''
+    """fremor varlist — with CMIP6 Omon MIP table filter.
+    Only sos should survive; sosV2 is not in the CMIP6 Omon table."""
     output_varlist = tmp_path / 'test_varlist_cmip6_filter.json'
     assert Path(cli_sos_nc_file).parent == Path(cli_sosv2_nc_file).parent, 'something wrong with input nc files'
 
     result = runner.invoke(fremor, args=[
-        "-v", "-v",
-        "varlist",
-        "--dir_targ", str(Path(cli_sos_nc_file).parent),
-        "--output_variable_list", str(output_varlist),
-        "--mip_table", str(CMIP6_TABLE_CONFIG)
+        '-v', '-v',
+        'varlist',
+        '--dir_targ', str(Path(cli_sos_nc_file).parent),
+        '--output_variable_list', str(output_varlist),
+        '--mip_table', str(CMIP6_TABLE_CONFIG)
     ])
     assert result.exit_code == 0, f'varlist failed: {result.output}'
     assert output_varlist.exists(), 'output variable list was not created'
@@ -460,17 +461,17 @@ def test_cli_fremor_varlist_cmip6_table_filter(cli_sos_nc_file, cli_sosv2_nc_fil
 
 
 def test_cli_fremor_varlist_cmip7_table_filter(cli_sos_nc_file, cli_sosv2_nc_file, tmp_path): # pylint: disable=redefined-outer-name
-    '''fremor varlist — with CMIP7 ocean MIP table filter.
-    sos should survive (sos_tavg-u-hxy-sea splits to sos); sosV2 should not.'''
+    """fremor varlist — with CMIP7 ocean MIP table filter.
+    sos should survive (sos_tavg-u-hxy-sea splits to sos); sosV2 should not."""
     output_varlist = tmp_path / 'test_varlist_cmip7_filter.json'
     assert Path(cli_sos_nc_file).parent == Path(cli_sosv2_nc_file).parent, 'something wrong with input nc files'
 
     result = runner.invoke(fremor, args=[
-        "-v", "-v",
-        "varlist",
-        "--dir_targ", str(Path(cli_sos_nc_file).parent),
-        "--output_variable_list", str(output_varlist),
-        "--mip_table", str(CMIP7_TABLE_CONFIG)
+        '-v', '-v',
+        'varlist',
+        '--dir_targ', str(Path(cli_sos_nc_file).parent),
+        '--output_variable_list', str(output_varlist),
+        '--mip_table', str(CMIP7_TABLE_CONFIG)
     ])
     assert result.exit_code == 0, f'varlist failed: {result.output}'
     assert output_varlist.exists(), 'output variable list was not created'
@@ -485,31 +486,31 @@ def test_cli_fremor_varlist_cmip7_table_filter(cli_sos_nc_file, cli_sosv2_nc_fil
 # ── fremor init ───────────────────────────────────────────────────────────
 
 def test_cli_fremor_init():
-    ''' fremor init (no args) '''
-    result = runner.invoke(fremor, args=["init"])
+    """ fremor init (no args) """
+    result = runner.invoke(fremor, args=['init'])
     assert result.exit_code == 2
 
 def test_cli_fremor_init_help():
-    ''' fremor init --help '''
-    result = runner.invoke(fremor, args=["init", "--help"])
+    """ fremor init --help """
+    result = runner.invoke(fremor, args=['init', '--help'])
     assert result.exit_code == 0
 
 def test_cli_fremor_init_opt_dne():
-    ''' fremor init optionDNE '''
-    result = runner.invoke(fremor, args=["init", "optionDNE"])
+    """ fremor init optionDNE """
+    result = runner.invoke(fremor, args=['init', 'optionDNE'])
     assert result.exit_code == 2
 
 
 def test_cli_fremor_init_cmip6_exp_config(tmp_path):
-    '''
+    """
     fremor init -- generate a CMIP6 experiment config template.
-    '''
+    """
     output_path = tmp_path / 'test_cmip6_init_template.json'
 
     result = runner.invoke(fremor, args=[
-        "init",
-        "--mip_era", "cmip6",
-        "--exp_config", str(output_path)
+        'init',
+        '--mip_era', 'cmip6',
+        '--exp_config', str(output_path)
     ])
     assert result.exit_code == 0, f'init failed: {result.output}'
     assert output_path.exists(), 'output config was not created'
@@ -524,15 +525,15 @@ def test_cli_fremor_init_cmip6_exp_config(tmp_path):
 
 
 def test_cli_fremor_init_cmip7_exp_config(tmp_path):
-    '''
+    """
     fremor init -- generate a CMIP7 experiment config template.
-    '''
+    """
     output_path = tmp_path / 'test_cmip7_init_template.json'
 
     result = runner.invoke(fremor, args=[
-        "init",
-        "--mip_era", "cmip7",
-        "--exp_config", str(output_path)
+        'init',
+        '--mip_era', 'cmip7',
+        '--exp_config', str(output_path)
     ])
     assert result.exit_code == 0, f'init failed: {result.output}'
     assert output_path.exists(), 'output config was not created'
@@ -547,15 +548,15 @@ def test_cli_fremor_init_cmip7_exp_config(tmp_path):
 
 
 def test_cli_fremor_init_default_name(tmp_path):
-    '''
+    """
     fremor init -- when no --exp_config is given and no --tables_dir,
     a default-named file should be created in the current directory.
-    '''
+    """
     # Use CliRunner's isolated_filesystem to avoid polluting the actual working directory
     with runner.isolated_filesystem(temp_dir=tmp_path):
         result = runner.invoke(fremor, args=[
-            "init",
-            "--mip_era", "cmip6"
+            'init',
+            '--mip_era', 'cmip6'
         ])
         assert result.exit_code == 0, f'init failed: {result.output}'
 
@@ -570,13 +571,13 @@ def test_cli_fremor_init_default_name(tmp_path):
 # ── fremor run: logfile + omission tracking ───────────────────────────────
 
 def test_cli_fremor_run_with_logfile(cli_sos_nc_file, tmp_path): # pylint: disable=redefined-outer-name
-    '''
+    """
     fremor -vv -l LOGFILE run ...
 
     Runs a real CMOR workflow with the -l flag and verifies that the resulting
     log file contains log lines from both cli.py (the CLI entry point) and
     cmor_mixer (the CMOR processing module).
-    '''
+    """
     log_path = tmp_path / 'TEST_CMOR_RUN.log'
     outdir = str(tmp_path / 'outdir')
 
@@ -609,13 +610,13 @@ def test_cli_fremor_run_with_logfile(cli_sos_nc_file, tmp_path): # pylint: disab
 
 
 def test_cli_fremor_run_with_logfile_omission_case(cli_sos_nc_file, cli_sosv2_nc_file, tmp_path): # pylint: disable=redefined-outer-name
-    '''
+    """
     fremor -vv -l LOGFILE run ...
 
     Uses a varlist where sos->sos succeeds and sosV2->tob fails (tob is a valid
     CMIP6_Omon variable but the sosV2 file contains sos data, not tob).
     Verifies the OMISSION LOG appears in the log file with the failed variable info.
-    '''
+    """
     log_path = tmp_path / 'TEST_CMOR_RUN_OMISSION.log'
     outdir = str(tmp_path / 'outdir')
 
@@ -624,7 +625,7 @@ def test_cli_fremor_run_with_logfile_omission_case(cli_sos_nc_file, cli_sosv2_nc
     varlist_fd, varlist_path = tempfile.mkstemp(suffix='.json')
     with os.fdopen(varlist_fd, 'w') as f:
         json.dump(varlist_data, f)
-    assert Path(cli_sos_nc_file).parent == Path(cli_sosv2_nc_file).parent, "something wrong with input nc files"
+    assert Path(cli_sos_nc_file).parent == Path(cli_sosv2_nc_file).parent, 'something wrong with input nc files'
 
     result = runner.invoke(fremor, args=[
         '-vv', '-l', str(log_path),

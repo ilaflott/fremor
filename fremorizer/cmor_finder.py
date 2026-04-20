@@ -53,9 +53,9 @@ def print_var_content(table_config_file: IO[str],
 
     table_name = None
     try:
-        table_name = proj_table_vars["Header"].get('table_id').split(' ')[1]
+        table_name = proj_table_vars['Header'].get('table_id').split(' ')[1]
     except KeyError:
-        fre_logger.warning("couldn't get header and table_name field")
+        fre_logger.warning('couldn\'t get header and table_name field')
 
     if table_name is not None:
         fre_logger.info('looking for %s data in table %s!', var_name, table_name)
@@ -63,7 +63,7 @@ def print_var_content(table_config_file: IO[str],
         fre_logger.info('looking for %s data in table %s, but could not find its table_name!',
                         var_name, table_config_file.name)
 
-    var_content = proj_table_vars.get("variable_entry", {}).get(var_name)
+    var_content = proj_table_vars.get('variable_entry', {}).get(var_name)
     if var_content is None:
         fre_logger.debug('variable %s not found in %s, moving on!', var_name, Path(table_config_file.name).name)
         return
@@ -107,7 +107,7 @@ def cmor_find_subtool( json_var_list: Optional[str] = None,
 
     var_list = None
     if json_var_list is not None:
-        with open(json_var_list, "r", encoding="utf-8") as var_list_file:
+        with open(json_var_list, 'r', encoding='utf-8') as var_list_file:
             var_list = json.load(var_list_file)
 
     if opt_var_name is None and var_list is None:
@@ -116,14 +116,14 @@ def cmor_find_subtool( json_var_list: Optional[str] = None,
     if opt_var_name is not None:
         fre_logger.info('opt_var_name is not None: looking for only ONE variables worth of info!')
         for json_table_config in json_table_configs:
-            with open(json_table_config, "r", encoding="utf-8") as table_config_file:
+            with open(json_table_config, 'r', encoding='utf-8') as table_config_file:
                 print_var_content(table_config_file, opt_var_name)
 
     elif var_list is not None:
         fre_logger.info('opt_var_name is None, and var_list is not None, looking for many variables worth of info!')
         for var in var_list:
             for json_table_config in json_table_configs:
-                with open(json_table_config, "r", encoding="utf-8") as table_config_file:
+                with open(json_table_config, 'r', encoding='utf-8') as table_config_file:
                     print_var_content(table_config_file, str(var_list[var]))
 
 
@@ -132,7 +132,7 @@ def make_simple_varlist( dir_targ: str,
                          json_mip_table: Optional[str] = None) -> Optional[Dict[str, str]]:
     """
     Generate a JSON file containing a list of variable names from NetCDF files in a specified directory.
-    This function searches for NetCDF files in the given directory, or a subdirectory, "ts/monthly/5yr",
+    This function searches for NetCDF files in the given directory, or a subdirectory, 'ts/monthly/5yr',
     if not already included. It then extracts variable names from the filenames, and writes these variable
     names to a JSON file.
 
@@ -154,22 +154,22 @@ def make_simple_varlist( dir_targ: str,
 
     """
     # if the variable is in the filename, it's likely delimited by another period.
-    all_nc_files = glob.glob(os.path.join(dir_targ, "*.*.nc"))
+    all_nc_files = glob.glob(os.path.join(dir_targ, '*.*.nc'))
     if not all_nc_files:
-        fre_logger.error("No files found in the directory.") #uncovered
+        fre_logger.error('No files found in the directory.') #uncovered
         return None
 
     if len(all_nc_files) == 1:
-        fre_logger.warning("Warning: Only one file found matching the pattern.")
+        fre_logger.warning('Warning: Only one file found matching the pattern.')
 
-    fre_logger.info("Files found matching pattern. Number of files: %d", len(all_nc_files))
+    fre_logger.info('Files found matching pattern. Number of files: %d', len(all_nc_files))
 
     mip_vars = None
     if json_mip_table is not None:
         try:
             # read in mip vars to check against later
             fre_logger.debug('attempting to read in variable entries in specified mip table')
-            full_mip_vars_list=get_json_file_data(json_mip_table)["variable_entry"].keys()
+            full_mip_vars_list=get_json_file_data(json_mip_table)['variable_entry'].keys()
 
         except Exception as exc:
             raise Exception( 'problem opening mip table and getting variable entry data.'

@@ -93,11 +93,11 @@ def cmor_yaml_subtool( yamlfile: str = None,
     fre_logger.info('calling consolidate yamls to create a combined cmor-yaml dictionary')
     if consolidate_yamls is None:
         raise ImportError(
-            "the 'fremor yaml' command requires fre-cli's yamltools module.\n"
-            "install it with: pip install fre-cli")
+            'the \'fremor yaml\' command requires fre-cli\'s yamltools module.\n'
+            'install it with: pip install fre-cli')
     cmor_yaml_dict = consolidate_yamls(yamlfile=yamlfile,
                                        experiment=exp_name, platform=platform, target=target,
-                                       use="cmor", output=output)['cmor']
+                                       use='cmor', output=output)['cmor']
     fre_logger.debug('consolidate_yamls produced the following dictionary of cmor-settings from yamls: \n%s',
                      pprint.pformat(cmor_yaml_dict) )
 

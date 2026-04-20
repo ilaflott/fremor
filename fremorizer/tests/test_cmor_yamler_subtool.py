@@ -1,10 +1,10 @@
-'''
+"""
 tests for fremorizer.cmor_yamler.cmor_yaml_subtool
 
 Covers:
   - full end-to-end run (dry_run_mode=False) via mocked consolidate_yamls
   - every documented exception path in the function
-'''
+"""
 
 import json
 import shutil
@@ -41,7 +41,7 @@ def _build_cmor_dict(*, pp_dir, table_dir, outdir, exp_config,
                      chunk='P5Y', data_series_type='ts',
                      gridding=None, start='1993', stop='1993',
                      calendar_type='julian'):
-    '''Build the dictionary that consolidate_yamls would return.'''
+    """Build the dictionary that consolidate_yamls would return."""
     if gridding is None:
         gridding = {
             'grid_label': GRID_LABEL,
@@ -81,10 +81,10 @@ def _build_cmor_dict(*, pp_dir, table_dir, outdir, exp_config,
 
 @pytest.fixture
 def yamler_env(tmp_path):
-    '''
+    """
     Set up a temporary pp directory tree and output directory that
     cmor_yaml_subtool can use for a real (non-dry-run) CMIP6 Omon/sos test.
-    '''
+    """
     component = 'ocean_monthly_1x1deg'
     freq = 'monthly'
     chunk_bronx = '5yr'
@@ -129,10 +129,10 @@ def yamler_env(tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_cmor_yaml_subtool_dry_run_false(mock_consolidate, yamler_env): # pylint: disable=redefined-outer-name
-    '''
+    """
     Full end-to-end: cmor_yaml_subtool with dry_run_mode=False should
     call cmor_run_subtool and produce at least one CMOR-ised .nc file.
-    '''
+    """
     mock_consolidate.return_value = _build_cmor_dict( pp_dir=yamler_env['pp_dir'],
                                                       table_dir=yamler_env['table_dir'],
                                                       outdir=yamler_env['outdir'],
@@ -162,7 +162,7 @@ def test_cmor_yaml_subtool_dry_run_false(mock_consolidate, yamler_env): # pylint
 # ================================================================
 
 def test_yamlfile_does_not_exist():
-    ''' FileNotFoundError when yamlfile path does not exist '''
+    """ FileNotFoundError when yamlfile path does not exist """
     with pytest.raises(FileNotFoundError):
         cmor_yaml_subtool(
             yamlfile='DOES_NOT_EXIST.yaml',
@@ -172,7 +172,7 @@ def test_yamlfile_does_not_exist():
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_pp_dir_does_not_exist(mock_consolidate, tmp_path):
-    ''' FileNotFoundError when pp_dir does not exist '''
+    """ FileNotFoundError when pp_dir does not exist """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -197,7 +197,7 @@ def test_pp_dir_does_not_exist(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_table_dir_does_not_exist(mock_consolidate, tmp_path):
-    ''' FileNotFoundError when cmip_cmor_table_dir does not exist '''
+    """ FileNotFoundError when cmip_cmor_table_dir does not exist """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -224,7 +224,7 @@ def test_table_dir_does_not_exist(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_exp_json_does_not_exist(mock_consolidate, tmp_path):
-    ''' FileNotFoundError when exp_json path does not exist '''
+    """ FileNotFoundError when exp_json path does not exist """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     pp_dir = tmp_path / 'pp'
@@ -249,7 +249,7 @@ def test_exp_json_does_not_exist(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_mip_table_file_does_not_exist(mock_consolidate, tmp_path):
-    ''' FileNotFoundError when the derived json_mip_table_config does not exist '''
+    """ FileNotFoundError when the derived json_mip_table_config does not exist """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -278,7 +278,7 @@ def test_mip_table_file_does_not_exist(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_cmip7_freq_none_raises(mock_consolidate, tmp_path):
-    ''' ValueError when mip_era=CMIP7 and freq is None '''
+    """ ValueError when mip_era=CMIP7 and freq is None """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -310,10 +310,10 @@ def test_cmip7_freq_none_raises(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_cmip6_freq_none_no_derivation_raises(mock_consolidate, tmp_path):
-    '''
+    """
     ValueError when mip_era=CMIP6, freq is None, and the MIP table
     frequency cannot be derived (e.g. fx table).
-    '''
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -353,13 +353,13 @@ def test_cmip6_freq_none_no_derivation_raises(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_cmip6_freq_none_derivation_exception_caught(mock_consolidate, tmp_path):
-    '''
+    """
     When mip_era=CMIP6, freq is None, and get_bronx_freq_from_mip_table
     raises a KeyError (e.g. the MIP table JSON has no variable_entry key),
     the except (KeyError, TypeError) branch catches it, sets freq = None,
     and the subsequent check raises ValueError.
     Covers the except branch around get_bronx_freq_from_mip_table.
-    '''
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -398,7 +398,7 @@ def test_cmip6_freq_none_derivation_exception_caught(mock_consolidate, tmp_path)
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_gridding_dict_has_none_value_raises(mock_consolidate, tmp_path):
-    ''' ValueError when a gridding field is None '''
+    """ ValueError when a gridding field is None """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -430,11 +430,11 @@ def test_gridding_dict_has_none_value_raises(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_outdir_creation_when_missing(mock_consolidate, tmp_path):
-    '''
+    """
     When cmorized_outdir does not exist, the function should create it
     (rather than raising).  Verify with a dry-run so we only test the
     path-creation logic without running CMOR.
-    '''
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -462,10 +462,10 @@ def test_outdir_creation_when_missing(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_outdir_creation_failure_raises_oserror(mock_consolidate, tmp_path):
-    '''
+    """
     OSError when cmorized_outdir does not exist and Path.mkdir fails.
     Covers the except branch in the outdir-creation block.
-    '''
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -494,11 +494,11 @@ def test_outdir_creation_failure_raises_oserror(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_start_stop_calendar_missing_from_yaml(mock_consolidate, tmp_path):
-    '''
+    """
     When start, stop, and calendar_type are None on the CLI AND absent
     from the YAML dict, the function should log warnings and continue
     (dry-run mode).  Covers the KeyError branches for start/stop/calendar_type.
-    '''
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -534,12 +534,12 @@ def test_start_stop_calendar_missing_from_yaml(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_cmip6_freq_none_derivation_succeeds(mock_consolidate, tmp_path):
-    '''
+    """
     When mip_era=CMIP6 and freq is None, but the MIP table carries a
     derivable frequency (e.g. Omon → "mon" → "monthly"), the function
     should successfully derive freq and continue (dry-run mode).
     Covers the successful get_bronx_freq_from_mip_table path.
-    '''
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -569,10 +569,10 @@ def test_cmip6_freq_none_derivation_succeeds(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_dry_run_prints_cli_call(mock_consolidate, tmp_path):
-    '''
+    """
     dry_run_mode=True with print_cli_call=True should log the CLI
     invocation and never call cmor_run_subtool.
-    '''
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -604,10 +604,10 @@ def test_dry_run_prints_cli_call(mock_consolidate, tmp_path):
 
 @patch('fremorizer.cmor_yamler.consolidate_yamls')
 def test_dry_run_prints_python_call(mock_consolidate, tmp_path):
-    '''
+    """
     dry_run_mode=True with print_cli_call=False should log the Python
     cmor_run_subtool(...) invocation.
-    '''
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -635,12 +635,12 @@ def test_dry_run_prints_python_call(mock_consolidate, tmp_path):
     assert len(output_nc) == 0
 
 def test_modelyaml_dne_raise_filenotfound():
-    '''
+    """
     tests that a FileNotFoundError is raised when the model yaml does not exist
-    '''
+    """
     with pytest.raises(FileNotFoundError):
-        cmor_yaml_subtool( yamlfile = "MODEL YAML DOESN'T EXIST",
-                           exp_name = "FOO",
-                           platform = "BAR",
-                           target = "BAZ",
+        cmor_yaml_subtool( yamlfile = 'MODEL YAML DOESN\'T EXIST',
+                           exp_name = 'FOO',
+                           platform = 'BAR',
+                           target = 'BAZ',
                            dry_run_mode = True )

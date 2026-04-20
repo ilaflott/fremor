@@ -77,9 +77,9 @@ def fake_nc_filenames(tmp_path):
 
 # Shared set of mocks – everything that would touch the filesystem or CMOR
 _MOCKS = [
-    'fremorizer.cmor_mixer.update_calendar_type',
-    'fremorizer.cmor_mixer.cmorize_all_variables_in_dir',
-    'fremorizer.cmor_mixer.glob.glob',
+    "fremorizer.cmor_mixer.update_calendar_type",
+    "fremorizer.cmor_mixer.cmorize_all_variables_in_dir",
+    "fremorizer.cmor_mixer.glob.glob",
 ]
 
 

@@ -8,7 +8,7 @@ from ._version import __version__, version
 
 fre_logger = logging.getLogger(__name__)
 
-FORMAT = "[%(levelname)5s:%(filename)24s:%(funcName)24s] %(message)s"
+FORMAT = '[%(levelname)5s:%(filename)24s:%(funcName)24s] %(message)s'
 logging.basicConfig( level = logging.WARNING,
                      format = FORMAT,
                      filename = None,

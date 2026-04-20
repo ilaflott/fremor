@@ -60,9 +60,9 @@ fre_logger = logging.getLogger(__name__)
 
 # CF calendar aliases mapped to their canonical equivalents
 CF_CALENDAR_ALIASES = {
-    "noleap": "365_day",
-    "all_leap": "366_day",
-    "standard": "gregorian",
+    'noleap': '365_day',
+    'all_leap': '366_day',
+    'standard': 'gregorian',
 }
 
 
@@ -106,13 +106,13 @@ def get_time_calendar_value(time_var) -> Optional[str]:
     try:
         calendar_val = str(time_var.calendar).lower()
     except Exception:
-        fre_logger.debug("could not find calendar attribute on time axis. moving on.")
+        fre_logger.debug('could not find calendar attribute on time axis. moving on.')
 
     if calendar_val is None:
         try:
             calendar_val = str(time_var.calendar_type).lower()
         except Exception:
-            fre_logger.debug("could not find calendar_type attribute on time axis. moving on.")
+            fre_logger.debug('could not find calendar_type attribute on time axis. moving on.')
 
     return normalize_calendar(calendar_val)
 
@@ -276,7 +276,7 @@ def find_statics_file( bronx_file_path: str) -> Optional[str]:
     statics_path = '/'.join(bronx_file_path_elem)
     fre_logger.debug('going to glob the following path for a statics file: \n%s\n', statics_path)
     fre_logger.debug('the call is going to be:')
-    fre_logger.debug("\n glob.glob(%s)  \n", statics_path+'/*static*.nc')
+    fre_logger.debug('\n glob.glob(%s)  \n', statics_path+'/*static*.nc')
 
     statics_file_glob = glob.glob(statics_path+'/*static*.nc') # update to use component TODO
     fre_logger.debug('the output glob looks like: %s', statics_file_glob)
@@ -355,7 +355,7 @@ def get_iso_datetime_ranges( var_filenames: List[str],
 
     for filename in var_filenames:
         fre_logger.debug('filename = %s', filename)
-        iso_daterange = filename.split(".")[-3]  # '????????-????????'
+        iso_daterange = filename.split('.')[-3]  # '????????-????????'
         fre_logger.debug('iso_daterange = %s', iso_daterange)
 
         if start_stop_filter:
@@ -387,13 +387,13 @@ def check_dataset_for_ocean_grid( ds: Dataset) -> bool:
     .. note:: Logs a warning if an ocean grid is detected.
     """
     ds_var_keys = list(ds.variables.keys())
-    uses_ocean_grid = any(["xh" in ds_var_keys, "yh" in ds_var_keys])
+    uses_ocean_grid = any(['xh' in ds_var_keys, 'yh' in ds_var_keys])
     if uses_ocean_grid:
         fre_logger.warning(
-            "\n----------------------------------------------------------------------------------\n"
-            " 'xh' found in var_list: ocean grid req'd\n"
-            "     sometimes i don't cmorize right! check me!\n"
-            "----------------------------------------------------------------------------------\n"
+            '\n----------------------------------------------------------------------------------\n'
+            ' \'xh\' found in var_list: ocean grid req\'d\n'
+            '     sometimes i don\'t cmorize right! check me!\n'
+            '----------------------------------------------------------------------------------\n'
         )
     return uses_ocean_grid
 
@@ -421,7 +421,7 @@ def get_vertical_dimension( ds: Dataset,
             if dim.lower() == 'landuse':
                 vert_dim = dim
                 break
-            if not (ds[dim].axis and ds[dim].axis == "Z"):
+            if not (ds[dim].axis and ds[dim].axis == 'Z'):
                 continue
             vert_dim = dim
     return vert_dim
@@ -434,24 +434,24 @@ def create_tmp_dir( outdir: str,
 
     :param outdir: Base output directory.
     :type outdir: str
-    :param json_exp_config: Path to a JSON config file with an "outpath" key.
+    :param json_exp_config: Path to a JSON config file with an 'outpath' key.
     :type json_exp_config: str, optional
     :raises OSError: If the temporary directory cannot be created.
     :return: Path to the created temporary directory.
     :rtype: str
 
-    .. note:: If json_exp_config is provided and contains "outpath", a subdirectory is also created.
+    .. note:: If json_exp_config is provided and contains 'outpath', a subdirectory is also created.
     """
     outdir_from_exp_config = None
     if json_exp_config is not None:
-        with open(json_exp_config, "r", encoding="utf-8") as table_config_file:
+        with open(json_exp_config, 'r', encoding='utf-8') as table_config_file:
             try:
-                outdir_from_exp_config = json.load(table_config_file)["outpath"]
+                outdir_from_exp_config = json.load(table_config_file)['outpath']
             except Exception:
                 fre_logger.warning(
                     'could not read outdir from json_exp_config. the cmor module will throw a toothless warning')
 
-    tmp_dir = str(Path(f"{outdir}/CMOR_tmp/").resolve())
+    tmp_dir = str(Path(f'{outdir}/CMOR_tmp/').resolve())
     try:
         os.makedirs(tmp_dir, exist_ok=True)
         if outdir_from_exp_config is not None:
@@ -478,7 +478,7 @@ def get_json_file_data( json_file_path: Optional[str] = None) -> dict:
     :rtype: dict
     """
     try:
-        with open(json_file_path, "r", encoding="utf-8") as json_config_file:
+        with open(json_file_path, 'r', encoding='utf-8') as json_config_file:
             return json.load(json_config_file)
     except Exception as exc:
         raise FileNotFoundError(
@@ -493,15 +493,15 @@ def update_grid_and_label( json_file_path: str,
                            new_nom_res: str,
                            output_file_path: Optional[str] = None) -> None:
     """
-    Update the "grid_label", "grid", and "nominal_resolution" fields in a JSON experiment config.
+    Update the 'grid_label', 'grid', and 'nominal_resolution' fields in a JSON experiment config.
 
     :param json_file_path: Path to the input JSON file.
     :type json_file_path: str
-    :param new_grid_label: New value for the "grid_label" field.
+    :param new_grid_label: New value for the 'grid_label' field.
     :type new_grid_label: str
-    :param new_grid: New value for the "grid" field.
+    :param new_grid: New value for the 'grid' field.
     :type new_grid: str
-    :param new_nom_res: New value for the "nominal_resolution" field.
+    :param new_nom_res: New value for the 'nominal_resolution' field.
     :type new_nom_res: str
     :param output_file_path: Path to save the updated JSON file. If None, overwrites the original file.
     :type output_file_path: str, optional
@@ -521,48 +521,48 @@ def update_grid_and_label( json_file_path: str,
         raise ValueError
 
     try:
-        with open(json_file_path, "r", encoding="utf-8") as file:
+        with open(json_file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
         try:
-            fre_logger.info('Original "grid": %s', data["grid"])
-            data["grid"] = new_grid
-            fre_logger.info('Updated "grid": %s', data["grid"])
+            fre_logger.info('Original grid: %s', data['grid'])
+            data['grid'] = new_grid
+            fre_logger.info('Updated grid: %s', data['grid'])
         except KeyError as e:
-            fre_logger.error("Failed to update 'grid': %s", e)
-            raise KeyError("Error while updating 'grid'. Ensure the field exists and is modifiable.") from e
+            fre_logger.error('Failed to update grid: %s', e)
+            raise KeyError('Error while updating grid. Ensure the field exists and is modifiable.') from e
 
         try:
-            fre_logger.info('Original "grid_label": %s', data["grid_label"])
-            data["grid_label"] = new_grid_label
-            fre_logger.info('Updated "grid_label": %s', data["grid_label"])
+            fre_logger.info('Original grid_label: %s', data['grid_label'])
+            data['grid_label'] = new_grid_label
+            fre_logger.info('Updated grid_label: %s', data['grid_label'])
         except KeyError as e:
-            fre_logger.error("Failed to update 'grid_label': %s", e)
-            raise KeyError("Error while updating 'grid_label'. Ensure the field exists and is modifiable.") from e
+            fre_logger.error('Failed to update grid_label: %s', e)
+            raise KeyError('Error while updating grid_label. Ensure the field exists and is modifiable.') from e
 
         try:
-            fre_logger.info('Original "nominal_resolution": %s', data["nominal_resolution"])
-            data["nominal_resolution"] = new_nom_res
-            fre_logger.info('Updated "nominal_resolution": %s', data["nominal_resolution"])
+            fre_logger.info('Original nominal_resolution: %s', data['nominal_resolution'])
+            data['nominal_resolution'] = new_nom_res
+            fre_logger.info('Updated nominal_resolution: %s', data['nominal_resolution'])
         except KeyError as e:
-            fre_logger.error("Failed to update 'nominal_resolution': %s", e)
-            raise KeyError("Error updating 'nominal_resolution'. Ensure the field exists and is modifiable.") from e
+            fre_logger.error('Failed to update nominal_resolution: %s', e)
+            raise KeyError('Error updating nominal_resolution. Ensure the field exists and is modifiable.') from e
 
         output_file_path = output_file_path or json_file_path
 
-        with open(output_file_path, "w", encoding="utf-8") as file:
+        with open(output_file_path, 'w', encoding='utf-8') as file:
             json.dump(data, file, indent=4)
 
         fre_logger.info('Successfully updated fields and saved to %s', output_file_path)
 
     except FileNotFoundError:
-        fre_logger.error("The file '%s' does not exist.", json_file_path)
+        fre_logger.error('The file %s does not exist.', json_file_path)
         raise
     except json.JSONDecodeError:
-        fre_logger.error("Failed to decode JSON from the file '%s'.", json_file_path)
+        fre_logger.error('Failed to decode JSON from the file %s.', json_file_path)
         raise
     except Exception as e:
-        fre_logger.error("An unexpected error occurred: %s", e)
+        fre_logger.error('An unexpected error occurred: %s', e)
         raise
 
 
@@ -570,23 +570,23 @@ def update_calendar_type( json_file_path: str,
                           new_calendar_type: str,
                           output_file_path: Optional[str] = None) -> None:
     """
-    Update the "calendar" field in a JSON experiment config file.
+    Update the 'calendar' field in a JSON experiment config file.
 
     :param json_file_path: Path to the input JSON file.
     :type json_file_path: str
-    :param new_calendar_type: New value for the "calendar" field.
+    :param new_calendar_type: New value for the 'calendar' field.
     :type new_calendar_type: str
     :param output_file_path: Path to save the updated JSON file. If None, overwrites the original file.
     :type output_file_path: str, optional
     :raises FileNotFoundError: If the input JSON file does not exist.
-    :raises KeyError: If the "calendar" field is not found in the JSON file.
+    :raises KeyError: If the 'calendar' field is not found in the JSON file.
     :raises ValueError: If new_calendar_type is None.
     :raises json.JSONDecodeError: If the JSON file cannot be decoded.
     :return: None
     :rtype: None
 
     .. note:: The function logs before and after values, and overwrites the input file unless an output path is given.
-              CF calendar aliases (e.g., "noleap") are normalized to their canonical CF names (e.g., "365_day").
+              CF calendar aliases (e.g., 'noleap') are normalized to their canonical CF names (e.g., '365_day').
     """
     if new_calendar_type is None:
         fre_logger.error(
@@ -597,35 +597,35 @@ def update_calendar_type( json_file_path: str,
     normalized_calendar_type = normalize_calendar(new_calendar_type)
 
     try:
-        with open(json_file_path, "r", encoding="utf-8") as file:
+        with open(json_file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
         try:
-            fre_logger.info('Original "calendar": %s', data["calendar"])
+            fre_logger.info('Original calendar: %s', data['calendar'])
             if normalized_calendar_type != str(new_calendar_type).lower():
-                fre_logger.info('Normalizing calendar alias "%s" to "%s"',
+                fre_logger.info('Normalizing calendar alias %s to %s',
                                 new_calendar_type, normalized_calendar_type)
-            data["calendar"] = normalized_calendar_type
-            fre_logger.info('Updated "calendar": %s', data["calendar"])
+            data['calendar'] = normalized_calendar_type
+            fre_logger.info('Updated calendar: %s', data['calendar'])
         except KeyError as e:
-            fre_logger.error("Failed to update 'calendar': %s", e)
-            raise KeyError("Error while updating 'calendar'. Ensure the field exists and is modifiable.") from e
+            fre_logger.error('Failed to update calendar: %s', e)
+            raise KeyError('Error while updating calendar. Ensure the field exists and is modifiable.') from e
 
         output_file_path = output_file_path or json_file_path
 
-        with open(output_file_path, "w", encoding="utf-8") as file:
+        with open(output_file_path, 'w', encoding='utf-8') as file:
             json.dump(data, file, indent=4)
 
         fre_logger.info('Successfully updated fields and saved to %s', output_file_path)
 
     except FileNotFoundError:
-        fre_logger.error("The file '%s' does not exist.", json_file_path)
+        fre_logger.error('The file %s does not exist.', json_file_path)
         raise
     except json.JSONDecodeError:
-        fre_logger.error("Failed to decode JSON from the file '%s'.", json_file_path)
+        fre_logger.error('Failed to decode JSON from the file %s.', json_file_path)
         raise
     except Exception as e:
-        fre_logger.error("An unexpected error occurred: %s", e)
+        fre_logger.error('An unexpected error occurred: %s', e)
         raise
 
 def check_path_existence(some_path: str):
@@ -668,28 +668,28 @@ def conv_mip_to_bronx_freq(cmor_table_freq: str) -> Optional[str]:
     :rtype: str or None
     """
     cmor_to_bronx_dict = {
-        "1hr"    : "1hr",
-        "1hrCM"  : None,
-        "1hrPt"  : None,
-        "3hr"    : "3hr",
-        "3hrPt"  : None,
-        "6hr"    : "6hr",
-        "6hrPt"  : None,
-        "day"    : "daily",
-        "dec"    : None,
-        "fx"     : None,
-        "mon"    : "monthly",
-        "monC"   : None,
-        "monPt"  : None,
-        "subhrPt": None,
-        "yr"     : "annual",
-        "yrPt"   : None
+        '1hr'    : '1hr',
+        '1hrCM'  : None,
+        '1hrPt'  : None,
+        '3hr'    : '3hr',
+        '3hrPt'  : None,
+        '6hr'    : '6hr',
+        '6hrPt'  : None,
+        'day'    : 'daily',
+        'dec'    : None,
+        'fx'     : None,
+        'mon'    : 'monthly',
+        'monC'   : None,
+        'monPt'  : None,
+        'subhrPt': None,
+        'yr'     : 'annual',
+        'yrPt'   : None
     }
     bronx_freq = cmor_to_bronx_dict.get(cmor_table_freq)
     if bronx_freq is None:
         fre_logger.warning('MIP table frequency = %s does not have a FRE-bronx equivalent', cmor_table_freq)
     if cmor_table_freq not in cmor_to_bronx_dict:
-        raise KeyError(f'MIP table frequency = "{cmor_table_freq}" is not a valid MIP frequency')
+        raise KeyError(f'MIP table frequency = {cmor_table_freq} is not a valid MIP frequency')
     return bronx_freq
 
 def get_bronx_freq_from_mip_table(json_table_config: str) -> str:
@@ -719,7 +719,7 @@ def get_bronx_freq_from_mip_table(json_table_config: str) -> str:
 #                    outpath: str,
 #                    output_file_path: Optional[str] = None) -> None:
 #    """
-#    Update the "outpath" field in a JSON experiment config file.
+#    Update the 'outpath' field in a JSON experiment config file.
 #
 #    :param json_file_path: Path to the input JSON file.
 #    :type json_file_path: str
@@ -736,32 +736,32 @@ def get_bronx_freq_from_mip_table(json_table_config: str) -> str:
 #        raise ValueError
 #
 #    try:
-#        with open(json_file_path, "r", encoding="utf-8") as file:
+#        with open(json_file_path, 'r', encoding='utf-8') as file:
 #            data = json.load(file)
 #
 #        try:
-#            fre_logger.info('Original "outpath": %s', data["outpath"])
-#            data["outpath"] = outpath
-#            fre_logger.info('Updated "outpath": %s', data["outpath"])
+#            fre_logger.info('Original 'outpath': %s', data['outpath'])
+#            data['outpath'] = outpath
+#            fre_logger.info('Updated 'outpath': %s', data['outpath'])
 #        except KeyError as e:
-#            fre_logger.error("Failed to update 'outpath': %s", e)
-#            raise KeyError("Error while updating 'outpath'. Ensure the field exists and is modifiable.") from e
+#            fre_logger.error('Failed to update 'outpath': %s', e)
+#            raise KeyError('Error while updating 'outpath'. Ensure the field exists and is modifiable.') from e
 #
 #        output_file_path = output_file_path or json_file_path
 #
-#        with open(output_file_path, "w", encoding="utf-8") as file:
+#        with open(output_file_path, 'w', encoding='utf-8') as file:
 #            json.dump(data, file, indent=4)
 #
 #        fre_logger.info('Successfully updated fields and saved to %s', output_file_path)
 #
 #    except FileNotFoundError:
-#        fre_logger.error("The file '%s' does not exist.", json_file_path)
+#        fre_logger.error('The file %s does not exist.', json_file_path)
 #        raise
 #    except json.JSONDecodeError:
-#        fre_logger.error("Failed to decode JSON from the file '%s'.", json_file_path)
+#        fre_logger.error('Failed to decode JSON from the file %s.', json_file_path)
 #        raise
 #    except Exception as e:
-#        fre_logger.error("An unexpected error occurred: %s", e)
+#        fre_logger.error('An unexpected error occurred: %s', e)
 #        raise
 
 
@@ -789,7 +789,7 @@ def filter_brands( brands: list,
     :param target_var: The base variable name (before the brand suffix).
     :type target_var: str
     :param mip_var_cfgs: The full MIP table config dict (must contain
-        ``"variable_entry"``).
+        ``'variable_entry'``).
     :type mip_var_cfgs: dict
     :param has_time_bnds: Whether the input dataset contains ``time_bnds``.
     :type has_time_bnds: bool
@@ -809,7 +809,7 @@ def filter_brands( brands: list,
     filtered_brands = []
     for brand in brands:
         mip_key = f'{target_var}_{brand}'
-        mip_dims = mip_var_cfgs["variable_entry"][mip_key]["dimensions"]
+        mip_dims = mip_var_cfgs['variable_entry'][mip_key]['dimensions']
 
         # time filter
         if has_time_bnds and 'time1' in mip_dims:

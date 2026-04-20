@@ -18,14 +18,14 @@ from fremorizer.cmor_mixer import cmorize_all_variables_in_dir
 # ---------------------------------------------------------------------------
 
 DUMMY_ARGS = {
-    "indir": '/fake/indir',
-    "iso_datetime_range_arr": ['00010101-00041231'],
-    "name_of_set": 'component',
-    "json_exp_config": '/fake/exp.json',
-    "outdir": '/fake/outdir',
-    "mip_var_cfgs": {'variable_entry': {}},
-    "json_table_config": '/fake/table.json',
-    "run_one_mode": False,
+    'indir': '/fake/indir',
+    'iso_datetime_range_arr': ['00010101-00041231'],
+    'name_of_set': 'component',
+    'json_exp_config': '/fake/exp.json',
+    'outdir': '/fake/outdir',
+    'mip_var_cfgs': {'variable_entry': {}},
+    'json_table_config': '/fake/table.json',
+    'run_one_mode': False,
 }
 
 

@@ -50,56 +50,56 @@ MIP_TABLE_REPOS = {
 def _cmip6_exp_config_template():
     """Return an ordered dict-like structure for an empty CMIP6 experiment config."""
     return {
-        "#note": " **** CMIP6 experiment configuration template – fill in values below ****",
-        "source_type": "",
-        "experiment_id": "",
-        "activity_id": "",
-        "sub_experiment_id": "none",
-        "realization_index": "1",
-        "initialization_index": "1",
-        "physics_index": "1",
-        "forcing_index": "1",
-        "run_variant": "",
-        "parent_experiment_id": "no parent",
-        "parent_activity_id": "no parent",
-        "parent_source_id": "no parent",
-        "parent_variant_label": "no parent",
-        "parent_time_units": "no parent",
-        "branch_method": "no parent",
-        "branch_time_in_child": 0.0,
-        "branch_time_in_parent": 0.0,
-        "institution_id": "",
-        "source_id": "",
-        "calendar": "",
-        "grid": "",
-        "grid_label": "",
-        "nominal_resolution": "",
-        "license": "",
-        "outpath": "",
-        "contact": "",
-        "history": "",
-        "comment": "",
-        "references": "",
-        "sub_experiment": "none",
-        "institution": "",
-        "source": "",
-        "_controlled_vocabulary_file": "CMIP6_CV.json",
-        "_AXIS_ENTRY_FILE": "CMIP6_coordinate.json",
-        "_FORMULA_VAR_FILE": "CMIP6_formula_terms.json",
-        "_cmip6_option": "CMIP6",
-        "mip_era": "CMIP6",
-        "parent_mip_era": "no parent",
-        "tracking_prefix": "hdl:21.14100",
-        "_history_template": (
-            "%s ;rewrote data to be consistent with "
-            "<activity_id> for variable <variable_id> found in table <table_id>."
+        '#note': ' **** CMIP6 experiment configuration template – fill in values below ****',
+        'source_type': '',
+        'experiment_id': '',
+        'activity_id': '',
+        'sub_experiment_id': 'none',
+        'realization_index': '1',
+        'initialization_index': '1',
+        'physics_index': '1',
+        'forcing_index': '1',
+        'run_variant': '',
+        'parent_experiment_id': 'no parent',
+        'parent_activity_id': 'no parent',
+        'parent_source_id': 'no parent',
+        'parent_variant_label': 'no parent',
+        'parent_time_units': 'no parent',
+        'branch_method': 'no parent',
+        'branch_time_in_child': 0.0,
+        'branch_time_in_parent': 0.0,
+        'institution_id': '',
+        'source_id': '',
+        'calendar': '',
+        'grid': '',
+        'grid_label': '',
+        'nominal_resolution': '',
+        'license': '',
+        'outpath': '',
+        'contact': '',
+        'history': '',
+        'comment': '',
+        'references': '',
+        'sub_experiment': 'none',
+        'institution': '',
+        'source': '',
+        '_controlled_vocabulary_file': 'CMIP6_CV.json',
+        '_AXIS_ENTRY_FILE': 'CMIP6_coordinate.json',
+        '_FORMULA_VAR_FILE': 'CMIP6_formula_terms.json',
+        '_cmip6_option': 'CMIP6',
+        'mip_era': 'CMIP6',
+        'parent_mip_era': 'no parent',
+        'tracking_prefix': 'hdl:21.14100',
+        '_history_template': (
+            '%s ;rewrote data to be consistent with '
+            '<activity_id> for variable <variable_id> found in table <table_id>.'
         ),
-        "output_path_template": (
-            "<mip_era><activity_id><institution_id><source_id>"
-            "<experiment_id><_member_id><table><variable_id><grid_label><version>"
+        'output_path_template': (
+            '<mip_era><activity_id><institution_id><source_id>'
+            '<experiment_id><_member_id><table><variable_id><grid_label><version>'
         ),
-        "output_file_template": (
-            "<variable_id><table><source_id><experiment_id><_member_id><grid_label>"
+        'output_file_template': (
+            '<variable_id><table><source_id><experiment_id><_member_id><grid_label>'
         ),
     }
 
@@ -107,57 +107,57 @@ def _cmip6_exp_config_template():
 def _cmip7_exp_config_template():
     """Return an ordered dict-like structure for an empty CMIP7 experiment config."""
     return {
-        "#note": " **** CMIP7 experiment configuration template – fill in values below ****",
-        "contact": "MIP participant mipmember@foobar.c.om",
-        "comment": "additional important information not fitting into other fields can be placed here",
-        "license": "",
-        "references": "",
-        "drs_specs": "MIP-DRS7",
-        "archive_id": "WCRP",
-        "license_id": "CC-BY-4-0",
-        "tracking_prefix": "hdl:21.14107",
-        "_cmip7_option": 1,
-        "mip_era": "CMIP7",
-        "activity_id": "CMIP",
-        "institution": "",
-        "institution_id": "",
-        "source": "",
-        "source_id": "",
-        "source_type": "",
-        "experiment_id": "",
-        "sub_experiment": "none",
-        "sub_experiment_id": "none",
-        "realization_index": "r1",
-        "initialization_index": "i1",
-        "physics_index": "p1",
-        "forcing_index": "f1",
-        "run_variant": "",
-        "branch_method": "no parent",
-        "branch_time_in_child": 0.0,
-        "branch_time_in_parent": 0.0,
-        "calendar": "",
-        "grid": "PLACEHOLD",
-        "grid_label": "g999",
-        "frequency": "",
-        "region": "",
-        "nominal_resolution": "",
-        "history": "",
-        "_history_template": (
-            "%s ;rewrote data to be consistent with "
-            "<activity_id> for variable <variable_id> found in table <table_id>."
+        '#note': ' **** CMIP7 experiment configuration template – fill in values below ****',
+        'contact': 'MIP participant mipmember@foobar.c.om',
+        'comment': 'additional important information not fitting into other fields can be placed here',
+        'license': '',
+        'references': '',
+        'drs_specs': 'MIP-DRS7',
+        'archive_id': 'WCRP',
+        'license_id': 'CC-BY-4-0',
+        'tracking_prefix': 'hdl:21.14107',
+        '_cmip7_option': 1,
+        'mip_era': 'CMIP7',
+        'activity_id': 'CMIP',
+        'institution': '',
+        'institution_id': '',
+        'source': '',
+        'source_id': '',
+        'source_type': '',
+        'experiment_id': '',
+        'sub_experiment': 'none',
+        'sub_experiment_id': 'none',
+        'realization_index': 'r1',
+        'initialization_index': 'i1',
+        'physics_index': 'p1',
+        'forcing_index': 'f1',
+        'run_variant': '',
+        'branch_method': 'no parent',
+        'branch_time_in_child': 0.0,
+        'branch_time_in_parent': 0.0,
+        'calendar': '',
+        'grid': 'PLACEHOLD',
+        'grid_label': 'g999',
+        'frequency': '',
+        'region': '',
+        'nominal_resolution': '',
+        'history': '',
+        '_history_template': (
+            '%s ;rewrote data to be consistent with '
+            '<activity_id> for variable <variable_id> found in table <table_id>.'
         ),
-        "outpath": ".",
-        "output_path_template": (
-            "<activity_id><source_id><experiment_id><member_id>"
-            "<variable_id><branding_suffix><grid_label>"
+        'outpath': '.',
+        'output_path_template': (
+            '<activity_id><source_id><experiment_id><member_id>'
+            '<variable_id><branding_suffix><grid_label>'
         ),
-        "output_file_template": (
-            "<variable_id><branding_suffix><frequency><region>"
-            "<grid_label><source_id><experiment_id><variant_label>"
+        'output_file_template': (
+            '<variable_id><branding_suffix><frequency><region>'
+            '<grid_label><source_id><experiment_id><variant_label>'
         ),
-        "_controlled_vocabulary_file": "../tables-cvs/cmor-cvs.json",
-        "_AXIS_ENTRY_FILE": "CMIP7_coordinate.json",
-        "_FORMULA_VAR_FILE": "CMIP7_formula_terms.json",
+        '_controlled_vocabulary_file': '../tables-cvs/cmor-cvs.json',
+        '_AXIS_ENTRY_FILE': 'CMIP7_coordinate.json',
+        '_FORMULA_VAR_FILE': 'CMIP7_formula_terms.json',
     }
 
 
@@ -273,7 +273,7 @@ def cmor_init_subtool(
     """
     mip_era_lower = mip_era.lower()
     if mip_era_lower not in ('cmip6', 'cmip7'):
-        raise ValueError(f"mip_era must be 'cmip6' or 'cmip7', got '{mip_era}'")
+        raise ValueError(f'mip_era must be cmip6 or cmip7, got {mip_era}')
 
     result = {'exp_config': None, 'tables_dir': None}
 

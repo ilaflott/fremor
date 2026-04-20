@@ -28,21 +28,21 @@ import cmor
 # Vertical-coordinate classification (used by cmor_mixer)
 # ---------------------------------------------------------------------------
 ACCEPTED_VERT_DIMS = [
-    "z_l", "landuse",
-    "plev39", "plev30", "plev19", "plev8",
-    "height2m",
-    "level", "lev", "levhalf",
+    'z_l', 'landuse',
+    'plev39', 'plev30', 'plev19', 'plev8',
+    'height2m',
+    'level', 'lev', 'levhalf',
 ]
 
 NON_HYBRID_SIGMA_COORDS = [
-    "landuse",
-    "plev39", "plev30", "plev19", "plev8",
-    "height2m",
+    'landuse',
+    'plev39', 'plev30', 'plev19', 'plev8',
+    'height2m',
 ]
 
-ALT_HYBRID_SIGMA_COORDS = ["level", "lev", "levhalf"]
+ALT_HYBRID_SIGMA_COORDS = ['level', 'lev', 'levhalf']
 
-DEPTH_COORDS = ["z_l"]
+DEPTH_COORDS = ['z_l']
 
 
 # ---------------------------------------------------------------------------
@@ -62,10 +62,10 @@ CMOR_LOG             = None
 # equivalents.  Dimensions whose names already match (e.g. plev39, height2m)
 # need no entry; the look-up falls back to using the input name directly.
 INPUT_TO_MIP_VERT_DIM = {
-    "z_l":      "olevel",
-    "level":    "alevel",
-    "lev":      "alevel",
-    "levhalf":  "alevhalf",
+    'z_l':      'olevel',
+    'level':    'alevel',
+    'lev':      'alevel',
+    'levhalf':  'alevhalf',
 }
 
 

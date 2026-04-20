@@ -1,6 +1,6 @@
-'''
+"""
 tests for fremorizer.cmor_finder.make_simple_varlist
-'''
+"""
 
 import json
 from unittest.mock import patch
@@ -17,9 +17,9 @@ def temp_netcdf_dir_files(tmp_path):
     """
     # Create sample NetCDF filenames following the expected pattern
     netcdf_files = [
-        "model.19900101.temp.nc",
-        "model.19900101.salt.nc",
-        "model.19900101.velocity.nc"
+        'model.19900101.temp.nc',
+        'model.19900101.salt.nc',
+        'model.19900101.velocity.nc'
     ]
 
     for filename in netcdf_files:
@@ -34,7 +34,7 @@ def temp_netcdf_dir_file(tmp_path):
     """
     Fixture to create a temporary directory with a single NetCDF file.
     """
-    file_path = tmp_path / "model.19900101.temp.nc"
+    file_path = tmp_path / 'model.19900101.temp.nc'
     file_path.touch()
     return tmp_path
 
@@ -47,7 +47,7 @@ def test_make_simple_varlist_success(netcdf_dir_files):
     Test successful creation of variable list from NetCDF files.
     """
     # Arrange
-    output_file = netcdf_dir_files / "varlist.json"
+    output_file = netcdf_dir_files / 'varlist.json'
 
     # Act
     result = make_simple_varlist(str(netcdf_dir_files), str(output_file))
@@ -55,16 +55,16 @@ def test_make_simple_varlist_success(netcdf_dir_files):
     # Assert
     assert result is not None
     assert isinstance(result, dict)
-    assert "temp" in result
-    assert "salt" in result
-    assert "velocity" in result
-    assert result["temp"] == "temp"
-    assert result["salt"] == "salt"
-    assert result["velocity"] == "velocity"
+    assert 'temp' in result
+    assert 'salt' in result
+    assert 'velocity' in result
+    assert result['temp'] == 'temp'
+    assert result['salt'] == 'salt'
+    assert result['velocity'] == 'velocity'
 
     # Verify output file was created
     assert output_file.exists()
-    with open(output_file, "r", encoding='utf-8') as f:
+    with open(output_file, 'r', encoding='utf-8') as f:
         saved_data = json.load(f)
         assert saved_data == result
 
@@ -79,9 +79,9 @@ def test_make_simple_varlist_return_value_only(netcdf_dir_files):
     # Assert
     assert result is not None
     assert isinstance(result, dict)
-    assert "temp" in result
-    assert "salt" in result
-    assert "velocity" in result
+    assert 'temp' in result
+    assert 'salt' in result
+    assert 'velocity' in result
 
 
 def test_make_simple_varlist_single_file_warning(netcdf_dir_file):
@@ -89,7 +89,7 @@ def test_make_simple_varlist_single_file_warning(netcdf_dir_file):
     Test warning when only one file is found.
     """
     # Arrange
-    output_file = netcdf_dir_file / "varlist.json"
+    output_file = netcdf_dir_file / 'varlist.json'
 
     # Act
     result = make_simple_varlist(str(netcdf_dir_file), str(output_file))
@@ -97,8 +97,8 @@ def test_make_simple_varlist_single_file_warning(netcdf_dir_file):
     # Assert
     assert result is not None
     assert isinstance(result, dict)
-    assert "temp" in result
-    assert result["temp"] == "temp"
+    assert 'temp' in result
+    assert result['temp'] == 'temp'
 
 
 def test_make_simple_varlist_no_files(tmp_path):
@@ -117,10 +117,10 @@ def test_make_simple_varlist_invalid_output_path(netcdf_dir_file):
     Test OSError when output file cannot be written.
     """
     # Arrange - try to write to a directory that doesn't exist
-    invalid_output_path = "/nonexistent_directory/varlist.json"
+    invalid_output_path = '/nonexistent_directory/varlist.json'
 
     # Act & Assert
-    with pytest.raises(OSError, match="output variable list created but cannot be written"):
+    with pytest.raises(OSError, match='output variable list created but cannot be written'):
         make_simple_varlist(str(netcdf_dir_file), invalid_output_path)
 
 
@@ -129,8 +129,8 @@ def test_make_simple_varlist_no_matching_pattern(tmp_path):
     Test behavior when files exist but don't match the expected pattern.
     """
     # Arrange - create files that don't follow the expected pattern
-    (tmp_path / "random_file.txt").touch()
-    (tmp_path / "another_file.nc").touch()  # Missing datetime pattern
+    (tmp_path / 'random_file.txt').touch()
+    (tmp_path / 'another_file.nc').touch()  # Missing datetime pattern
 
     # Act
     result = make_simple_varlist(str(tmp_path), None)
@@ -146,15 +146,15 @@ def test_make_simple_varlist_deduplicates(tmp_path):
     the result should contain the variable only once. Variables that only
     appear at a single datetime are still included.
     """
-    # Two files with var_name "temp" and one with "salt"
-    (tmp_path / "model.19900101.temp.nc").touch()
-    (tmp_path / "model.19900201.temp.nc").touch()  # duplicate var_name
-    (tmp_path / "model.19900101.salt.nc").touch()
+    # Two files with var_name 'temp' and one with 'salt'
+    (tmp_path / 'model.19900101.temp.nc').touch()
+    (tmp_path / 'model.19900201.temp.nc').touch()  # duplicate var_name
+    (tmp_path / 'model.19900101.salt.nc').touch()
 
     result = make_simple_varlist(str(tmp_path), None)
 
     assert result is not None
-    assert result == {"temp": "temp", "salt": "salt"}
+    assert result == {'temp': 'temp', 'salt': 'salt'}
 
 
 # ---- mip-table filtering coverage ----
@@ -164,22 +164,22 @@ def test_make_simple_varlist_mip_table_filter(tmp_path):
     should appear in the result.
     """
     # create data files
-    (tmp_path / "model.19900101.sos.nc").touch()
-    (tmp_path / "model.19900101.notinmip.nc").touch()
+    (tmp_path / 'model.19900101.sos.nc').touch()
+    (tmp_path / 'model.19900101.notinmip.nc').touch()
 
-    # create a minimal MIP table with only "sos"
-    mip_table = tmp_path / "Omon.json"
+    # create a minimal MIP table with only 'sos'
+    mip_table = tmp_path / 'Omon.json'
     mip_table.write_text(json.dumps({
-        "variable_entry": {
-            "sos": {"frequency": "mon"}
+        'variable_entry': {
+            'sos': {'frequency': 'mon'}
         }
     }))
 
     result = make_simple_varlist(str(tmp_path), None, json_mip_table=str(mip_table))
 
     assert result is not None
-    assert "sos" in result
-    assert "notinmip" not in result
+    assert 'sos' in result
+    assert 'notinmip' not in result
 
 
 # ---- no files matching search pattern ----
@@ -190,7 +190,7 @@ def test_make_simple_varlist_no_files_matching_pattern(tmp_path):
     glob.glob to return an empty list.
     """
     # Create a file for the probe to land on (but the patch overrides it)
-    probe_file = tmp_path / "model.19900101.temp.nc"
+    probe_file = tmp_path / 'model.19900101.temp.nc'
     probe_file.touch()
 
     # Patch glob.glob to return empty list
@@ -207,12 +207,12 @@ def test_make_simple_varlist_single_file_hits_warning(tmp_path):
     log a warning and still return the variable.
     Covers the 'elif len(files) == 1' branch.
     """
-    (tmp_path / "model.19900101.salinity.nc").touch()
+    (tmp_path / 'model.19900101.salinity.nc').touch()
 
     result = make_simple_varlist(str(tmp_path), None)
 
     assert result is not None
-    assert result == {"salinity": "salinity"}
+    assert result == {'salinity': 'salinity'}
 
 
 # ---- duplicate var_name skip with datetime grouping ----
@@ -223,17 +223,17 @@ def test_make_simple_varlist_dedup_across_datetimes(tmp_path):
     All files across all datetimes are scanned; duplicate var names
     are collapsed by dict assignment.
     """
-    (tmp_path / "ocean.19900101.tos.nc").touch()
-    (tmp_path / "ocean.19900201.tos.nc").touch()
-    (tmp_path / "ocean.19900101.sos.nc").touch()
-    (tmp_path / "ocean.19900201.sos.nc").touch()
+    (tmp_path / 'ocean.19900101.tos.nc').touch()
+    (tmp_path / 'ocean.19900201.tos.nc').touch()
+    (tmp_path / 'ocean.19900101.sos.nc').touch()
+    (tmp_path / 'ocean.19900201.sos.nc').touch()
 
     # All four files are scanned; tos and sos each appear twice but
     # dict assignment deduplicates them.
     result = make_simple_varlist(str(tmp_path), None)
 
     assert result is not None
-    assert result == {"tos": "tos", "sos": "sos"}
+    assert result == {'tos': 'tos', 'sos': 'sos'}
 
 
 # ---- mip table filtering: no variables match ----
@@ -243,12 +243,12 @@ def test_make_simple_varlist_mip_table_no_match(tmp_path):
     the result should be an empty dict (quick_vlist stays empty → 'no
     variables in target mip table found' warning, var_list stays {}).
     """
-    (tmp_path / "model.19900101.fake_var.nc").touch()
+    (tmp_path / 'model.19900101.fake_var.nc').touch()
 
-    mip_table = tmp_path / "table.json"
+    mip_table = tmp_path / 'table.json'
     mip_table.write_text(json.dumps({
-        "variable_entry": {
-            "sos": {"frequency": "mon"}
+        'variable_entry': {
+            'sos': {'frequency': 'mon'}
         }
     }))
 
@@ -265,13 +265,13 @@ def test_make_simple_varlist_minority_datetime_var_included(tmp_path):
     even when most files belong to a different datetime.  Scanning all files
     (not just those at the most-common datetime) guarantees this.
     """
-    # "temp" appears four times at 19900101; "salt" appears only once at 19900201.
+    # 'temp' appears four times at 19900101; 'salt' appears only once at 19900201.
     for i in range(1, 5):
-        (tmp_path / f"model.1990010{i}.temp.nc").touch()
-    (tmp_path / "model.19900201.salt.nc").touch()
+        (tmp_path / f'model.1990010{i}.temp.nc').touch()
+    (tmp_path / 'model.19900201.salt.nc').touch()
 
     result = make_simple_varlist(str(tmp_path), None)
 
     assert result is not None
-    assert "temp" in result
-    assert "salt" in result  # must not be silently dropped
+    assert 'temp' in result
+    assert 'salt' in result  # must not be silently dropped

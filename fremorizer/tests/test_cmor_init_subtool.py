@@ -1,11 +1,12 @@
-'''Unit tests for cmor_init module
+"""
+Unit tests for cmor_init module
 
 Tests the cmor_init_subtool and its helper functions including:
 - _fetch_tables_git: git clone table fetching
 - _fetch_tables_curl: curl tarball table fetching
 - cmor_init_subtool: main initialization logic
 - ValueError handling for invalid mip_era
-'''
+"""
 
 import json
 
@@ -20,23 +21,26 @@ from fremorizer.cmor_init import (
 
 
 def test_cmor_init_invalid_mip_era():
-    '''Test that invalid mip_era raises ValueError'''
-    with pytest.raises(ValueError, match="mip_era must be 'cmip6' or 'cmip7'"):
+    """
+    Test that invalid mip_era raises ValueError
+    """
+    with pytest.raises(ValueError, match='mip_era must be cmip6 or cmip7'):
         cmor_init_subtool(mip_era='cmip5')
 
-    with pytest.raises(ValueError, match="mip_era must be 'cmip6' or 'cmip7'"):
+    with pytest.raises(ValueError, match='mip_era must be cmip6 or cmip7'):
         cmor_init_subtool(mip_era='invalid')
 
-    with pytest.raises(ValueError, match="mip_era must be 'cmip6' or 'cmip7'"):
+    with pytest.raises(ValueError, match='mip_era must be cmip6 or cmip7'):
         cmor_init_subtool(mip_era='CMIP8')
 
 
 def test_cmor_init_tables_dir_with_curl(tmp_path):
-    '''Test fetching tables with curl (fast mode) when tables_dir is provided.
+    """
+    Test fetching tables with curl (fast mode) when tables_dir is provided.
 
     This test actually fetches the CMIP6 tables from GitHub using curl,
     without mocking, to ensure the full integration works.
-    '''
+    """
     tables_dir = tmp_path / 'cmip6_tables_curl'
 
     result = cmor_init_subtool(
@@ -70,11 +74,12 @@ def test_cmor_init_tables_dir_with_curl(tmp_path):
 
 
 def test_cmor_init_tables_dir_with_git(tmp_path):
-    '''Test fetching tables with git clone when tables_dir is provided.
+    """
+    Test fetching tables with git clone when tables_dir is provided.
 
     This test actually clones the CMIP7 tables from GitHub using git,
     without mocking, to ensure the full integration works.
-    '''
+    """
     tables_dir = tmp_path / 'cmip7_tables_git'
 
     result = cmor_init_subtool(
@@ -107,11 +112,12 @@ def test_cmor_init_tables_dir_with_git(tmp_path):
 
 
 def test_fetch_tables_git_directly(tmp_path):
-    '''Test _fetch_tables_git function directly.
+    """
+    Test _fetch_tables_git function directly.
 
     This test exercises the git clone functionality without mocking,
     using a small repository to keep the test fast.
-    '''
+    """
     tables_dir = tmp_path / 'direct_git_test'
     repo_url = MIP_TABLE_REPOS['cmip6']
 
@@ -128,11 +134,12 @@ def test_fetch_tables_git_directly(tmp_path):
 
 
 def test_fetch_tables_curl_directly(tmp_path):
-    '''Test _fetch_tables_curl function directly.
+    """
+    Test _fetch_tables_curl function directly.
 
     This test exercises the curl + tarball extraction functionality
     without mocking, using the actual CMIP7 repository.
-    '''
+    """
     tables_dir = tmp_path / 'direct_curl_test'
     repo_url = MIP_TABLE_REPOS['cmip7']
 
@@ -152,7 +159,9 @@ def test_fetch_tables_curl_directly(tmp_path):
 
 
 def test_cmor_init_tables_dir_and_exp_config(tmp_path):
-    '''Test that both exp_config and tables_dir can be provided together.'''
+    """
+    Test that both exp_config and tables_dir can be provided together.
+    """
     tables_dir = tmp_path / 'tables'
     exp_config = tmp_path / 'experiment.json'
 
@@ -179,7 +188,9 @@ def test_cmor_init_tables_dir_and_exp_config(tmp_path):
 
 
 def test_cmor_init_tables_dir_only_no_exp_config(tmp_path):
-    '''Test that when only tables_dir is provided, no exp_config is created.'''
+    """
+    Test that when only tables_dir is provided, no exp_config is created.
+    """
     tables_dir = tmp_path / 'tables_only'
 
     result = cmor_init_subtool(
@@ -200,11 +211,12 @@ def test_cmor_init_tables_dir_only_no_exp_config(tmp_path):
 
 
 def test_fetch_tables_curl_with_tag(tmp_path):
-    '''Test fetching tables with a specific git tag using curl.
+    """
+    Test fetching tables with a specific git tag using curl.
 
     This verifies that the tag parameter works correctly.
     Uses a known tag from the CMIP6 repository (6.9.33).
-    '''
+    """
     tables_dir = tmp_path / 'tables_with_tag'
     repo_url = MIP_TABLE_REPOS['cmip6']
 
@@ -219,11 +231,12 @@ def test_fetch_tables_curl_with_tag(tmp_path):
 
 
 def test_fetch_tables_git_with_tag(tmp_path):
-    '''Test fetching tables with a specific git tag using git clone.
+    """
+    Test fetching tables with a specific git tag using git clone.
 
     This verifies that the --branch tag parameter works correctly.
     Uses a known tag from the CMIP6 repository (6.9.33).
-    '''
+    """
     tables_dir = tmp_path / 'tables_git_with_tag'
     repo_url = MIP_TABLE_REPOS['cmip6']
 
