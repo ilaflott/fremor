@@ -1077,7 +1077,7 @@ def cmor_run_subtool(indir: str = None,
         raise ValueError('runnable variable list is of length 0 '
                          'this means no variables in input variable list are in '
                          'the mip table configuration, so there\'s nothing to process!')
-    if all([opt_var_name is not None, opt_var_name not in list(vars_to_run.keys())]):
+    if all([opt_var_name is not None, opt_var_name not in list(vars_to_run)]):
         raise ValueError('opt_var_name is not None! (== %s)'
                          '... but the variable is not contained in the target mip table'
                          '... there\'s nothing to process, exit', opt_var_name)
