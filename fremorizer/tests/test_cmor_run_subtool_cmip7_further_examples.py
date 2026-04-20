@@ -91,7 +91,7 @@ def _ncgen_for_case(testfile_dir, opt_var_name):
 )
 def test_case_cmip7_ocean_so(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     testfile_dir, table, opt_var_name, grid_label, start, calendar,
-    tmp_path, monkeypatch,
+    tmp_path,
 ):
     '''Run cmor_run_subtool for CMIP7 ocean so variable and assert output exists.'''
     _ncgen_for_case(testfile_dir, opt_var_name)
@@ -142,7 +142,7 @@ def test_case_cmip7_ocean_so(  # pylint: disable=too-many-arguments,too-many-pos
 )
 def test_case_cmip7_ocean_sos(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     testfile_dir, table, opt_var_name, grid_label, start, calendar,
-    tmp_path, monkeypatch,
+    tmp_path,
 ):
     '''Run cmor_run_subtool for CMIP7 ocean sos variable and assert output exists.'''
     _ncgen_for_case(testfile_dir, opt_var_name)
@@ -189,7 +189,7 @@ def test_case_cmip7_ocean_sos(  # pylint: disable=too-many-arguments,too-many-po
 )
 def test_case_cmip7_land_lai(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     testfile_dir, table, opt_var_name, grid_label, start, calendar,
-    tmp_path, monkeypatch,
+    tmp_path,
 ):
     '''Run cmor_run_subtool for CMIP7 land lai variable and assert output exists.'''
     _ncgen_for_case(testfile_dir, opt_var_name)
