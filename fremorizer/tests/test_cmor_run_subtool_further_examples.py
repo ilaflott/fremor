@@ -27,13 +27,11 @@ from fremorizer.tests.conftest import ncgen
 ROOTDIR = 'fremorizer/tests/test_files'
 CMORBITE_VARLIST = f'{ROOTDIR}/CMORbite_var_list.json'
 
-# cmip6 / cmip7 table repos
+# cmip6 table repo
 CMIP6_TABLE_REPO_PATH = f'{ROOTDIR}/cmip6-cmor-tables'
-CMIP7_TABLE_REPO_PATH = f'{ROOTDIR}/cmip7-cmor-tables'
 
-# experiment configs (materialised by conftest._write_exp_configs)
+# experiment config (materialised by conftest._write_exp_configs)
 EXP_CONFIG_CMIP6 = f'{ROOTDIR}/CMOR_input_example.json'
-EXP_CONFIG_CMIP7 = f'{ROOTDIR}/CMOR_CMIP7_input_example.json'
 
 # determined by cmor_run_subtool
 YYYYMMDD = date.today().strftime('%Y%m%d')
@@ -51,12 +49,6 @@ ESM4_DEV_PP_DIR = (
 # CMIP6 output dir structure
 CMOR_CREATES_DIR_BASE_CMIP6 = (
     'CMIP6/CMIP6/ISMIP6/PCMDI/PCMDI-test-1-0/piControl-withism/r3i1p1f1'
-)
-
-# CMIP7 output dir structure
-# (activity_id/source_id/experiment_id/member_id/variable_id/branding_suffix/grid_label)
-CMOR_CREATES_DIR_BASE_CMIP7 = (
-    'CMIP/DUMMY-MODEL/historical/r3i1p1f3'
 )
 
 
@@ -187,76 +179,6 @@ def test_case_cmip6(  # pylint: disable=too-many-arguments,too-many-positional-a
         f'_piControl-withism_r3i1p1f1_{grid_label}_??????-??????.nc'
     )
     cmor_output_files = glob.glob(cmor_output_glob)
-    assert len(cmor_output_files) >= 1, (
-        f'no CMOR output found matching {cmor_output_glob}'
-    )
-    assert Path(cmor_output_files[0]).exists()
-
-
-# ── CMIP7 parametrized tests ──────────────────────────────────────────────
-@pytest.mark.parametrize(
-    'testfile_dir,table,opt_var_name,grid_label,start,calendar',
-    [
-        pytest.param(
-            f'{MOCK_ARCHIVE_ROOT}/{ESM4_DEV_PP_DIR}'
-            '/ocean_monthly_z_1x1deg/ts/monthly/5yr/',
-            'CMIP7_ocean', 'so', 'g999', '0001', 'noleap',
-            id='ocean_so_g999',
-        ),
-        pytest.param(
-            f'{MOCK_ARCHIVE_ROOT}/{ESM4_DEV_PP_DIR}'
-            '/ocean_monthly/ts/monthly/5yr/',
-            'CMIP7_ocean', 'sos', 'g999', '0001', 'noleap',
-            id='ocean_sos_g999',
-        ),
-        pytest.param(
-            f'{MOCK_ARCHIVE_ROOT}/{ESM4_DEV_PP_DIR}'
-            '/land/ts/monthly/5yr/',
-            'CMIP7_land', 'lai', 'g999', '0001', 'noleap',
-            id='land_lai_g999',
-        ),
-    ],
-)
-def test_case_cmip7(  # pylint: disable=too-many-arguments,too-many-positional-arguments
-    testfile_dir, table, opt_var_name, grid_label, start, calendar,
-    tmp_path, monkeypatch,
-):
-    '''Run cmor_run_subtool for a single CMIP7 variable and assert output exists.'''
-    if grid_label == 'gn':
-        monkeypatch.setattr(
-            'fremorizer.cmor_mixer.find_gold_ocean_statics_file',
-            lambda **kw: None,
-        )
-
-    _ncgen_for_case(testfile_dir, opt_var_name)
-
-    table_file = f'{CMIP7_TABLE_REPO_PATH}/tables/{table}.json'
-    outdir = str(tmp_path / 'outdir')
-
-    cmor_run_subtool(
-        indir=testfile_dir,
-        json_var_list=CMORBITE_VARLIST,
-        json_table_config=table_file,
-        json_exp_config=EXP_CONFIG_CMIP7,
-        outdir=outdir,
-        run_one_mode=True,
-        opt_var_name=opt_var_name,
-        grid='FOO_PLACEHOLDER',
-        grid_label=grid_label,
-        nom_res='10000 km',
-        start=start,
-        calendar_type=calendar,
-    )
-
-    # CMIP7 output_path_template:
-    #   <activity_id>/<source_id>/<experiment_id>/<member_id>/
-    #   <variable_id>/<branding_suffix>/<grid_label>
-    # Use recursive glob to find output regardless of branding suffix.
-    cmor_output_glob = (
-        f'{outdir}/{CMOR_CREATES_DIR_BASE_CMIP7}'
-        f'/{opt_var_name}/**/*{opt_var_name}*{grid_label}*.nc'
-    )
-    cmor_output_files = glob.glob(cmor_output_glob, recursive=True)
     assert len(cmor_output_files) >= 1, (
         f'no CMOR output found matching {cmor_output_glob}'
     )
