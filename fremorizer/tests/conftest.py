@@ -155,7 +155,7 @@ def _write_exp_configs():
 
     The JSON data lives in this module (_CMIP6_EXP_CONFIG_DATA /
     _CMIP7_EXP_CONFIG_DATA) so the on-disk files are no longer tracked by git.
-    This session-scoped autouse fixture materialises fresh copies before any
+    This session-scoped autouse fixture materializes fresh copies before any
     test that needs them runs, and cleans them up afterwards.
     """
     EXP_CONFIG.write_text(json.dumps(_CMIP6_EXP_CONFIG_DATA, indent=4))

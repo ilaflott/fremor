@@ -63,6 +63,7 @@ autoattribute
 autoclass
 autodoc
 autofunction
+autouse
 automethod
 automodule
 basetemp
