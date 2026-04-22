@@ -506,7 +506,7 @@ def rewrite_netcdf_file_var( mip_var_cfgs: dict = None,
                                    coord_vals=lev[:], units=lev_units)
             else:
                 landuse_str_list = ['primary_and_secondary_land', 'pastures', 'crops', 'urban']
-                cmor_vert_dim_name = 'landUse'
+                cmor_vert_dim_name = 'landUse' if exp_cfg_mip_era == 'CMIP6' else 'landuse'
                 cmor_z = cmor.axis(cmor_vert_dim_name,
                                    coord_vals=np.array(
                                        landuse_str_list,

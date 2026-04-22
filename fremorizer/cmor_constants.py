@@ -49,8 +49,8 @@ DEPTH_COORDS = ['z_l']
 # CMOR module defaults (passed to cmor.setup in cmor_mixer)
 # ---------------------------------------------------------------------------
 CMOR_NC_FILE_ACTION = cmor.CMOR_REPLACE
-CMOR_VERBOSITY      = cmor.CMOR_NORMAL
-CMOR_EXIT_CTL       = cmor.CMOR_NORMAL
+CMOR_VERBOSITY      = cmor.CMOR_NORMAL#cmor.CMOR_QUIET#
+CMOR_EXIT_CTL       = cmor.cmor.CMOR_NORMAL#CMOR_EXIT_ON_WARNING#
 CMOR_MK_SUBDIRS     = 1
 CMOR_LOG             = None
 

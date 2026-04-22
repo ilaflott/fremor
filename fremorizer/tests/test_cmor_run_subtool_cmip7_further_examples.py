@@ -152,12 +152,12 @@ def test_case_cmip7(  # pylint: disable=too-many-arguments,too-many-positional-a
             '(CMIP7 uses ch4 variants instead); '
             'needs new mock data or a different variable mapping'
         )
-    if opt_var_name == 'gppLut':
-        pytest.skip(
-            'gppLut_tavg-u-hxy-multi cmor.axis fails: '
-            'CMIP7 landuse coordinate definition is incompatible '
-            'with the mock archive landuse axis values'
-        )
+    #if opt_var_name == 'gppLut':
+    #    pytest.skip(
+    #        'gppLut_tavg-u-hxy-multi cmor.axis fails: '
+    #        'CMIP7 landuse coordinate definition is incompatible '
+    #        'with the mock archive landuse axis values'
+    #    )
 
     # native-grid ocean tests: prevent gold statics lookup from finding /archive files
     if grid_label == 'gn':
