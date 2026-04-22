@@ -210,22 +210,22 @@ def test_cli_fremor_run_case1(cli_sos_nc_file, tmp_path):
 def test_cli_fremor_run_case2(cli_sosv2_nc_file, tmp_path):
     """
     fremor run, test error case: filename variable != file variable (CMIP6).
-    The sosV2 file has variable "sos" inside, but the varlist expects "sosV2" as the
+    The sosV2 file has variable 'sos' inside, but the varlist expects 'sosV2' as the
     modeler variable name. This mismatch should cause a non-zero exit code.
     """
     outdir = str(tmp_path / 'outdir')
 
-    result = runner.invoke(fremor, args = ["-v", "-v",
-                                           "run", "--run_one",
-                                           "--indir", str(INDIR),
-                                           "--varlist", str(VARLIST_DIFF),
-                                           "--table_config", str(CMIP6_TABLE_CONFIG),
-                                           "--exp_config", str(EXP_CONFIG),
-                                           "--outdir", outdir,
-                                           "--calendar", "julian",
-                                           "--grid_label", "gr",
-                                           "--grid_desc", "FOO_BAR_PLACEHOLD",
-                                           "--nom_res", "10000 km" ] )
+    result = runner.invoke(fremor, args = ['-v', '-v',
+                                           'run', '--run_one',
+                                           '--indir', str(INDIR),
+                                           '--varlist', str(VARLIST_DIFF),
+                                           '--table_config', str(CMIP6_TABLE_CONFIG),
+                                           '--exp_config', str(EXP_CONFIG),
+                                           '--outdir', outdir,
+                                           '--calendar', 'julian',
+                                           '--grid_label', 'gr',
+                                           '--grid_desc', 'FOO_BAR_PLACEHOLD',
+                                           '--nom_res', '10000 km' ] )
     assert result.exit_code == 0
 
 
@@ -254,40 +254,40 @@ def test_cli_fremor_run_cmip7_case1(cli_sos_nc_file, tmp_path): # pylint: disabl
 def test_cli_fremor_run_cmip7_case2(cli_sosv2_nc_file, tmp_path):
     """
     fremor run, test error case for cmip7: filename variable != file variable.
-    The sosV2 file has variable "sos" inside, but the varlist expects "sosV2" as the
+    The sosV2 file has variable 'sos' inside, but the varlist expects 'sosV2' as the
     modeler variable name. This mismatch should cause a non-zero exit code.
     """
     outdir = str(tmp_path / 'outdir')
 
-    result = runner.invoke(fremor, args = [ "-v", "-v",
-                                            "run", "--run_one",
-                                            "--indir", str(INDIR),
-                                            "--varlist", str(VARLIST_DIFF),
-                                            "--table_config", str(CMIP7_TABLE_CONFIG),
-                                            "--exp_config", str(EXP_CONFIG_CMIP7),
-                                            "--outdir", outdir,
-                                            "--calendar", "julian",
-                                            "--grid_label", "g99",
-                                            "--grid_desc", "FOO_BAR_PLACEHOLD",
-                                            "--nom_res", "10000 km" ] )
+    result = runner.invoke(fremor, args = [ '-v', '-v',
+                                            'run', '--run_one',
+                                            '--indir', str(Path(cli_sosv2_nc_file).parent),
+                                            '--varlist', str(VARLIST_DIFF),
+                                            '--table_config', str(CMIP7_TABLE_CONFIG),
+                                            '--exp_config', str(EXP_CONFIG_CMIP7),
+                                            '--outdir', outdir,
+                                            '--calendar', 'julian',
+                                            '--grid_label', 'g99',
+                                            '--grid_desc', 'FOO_BAR_PLACEHOLD',
+                                            '--nom_res', '10000 km' ] )
     assert result.exit_code == 0
 
 
 def test_cli_fremor_run_case3(cli_mapped_nc_file, tmp_path):
-    '''fremor run, test-use case 3: sea_sfc_salinity → sos mapped variable (CMIP6)'''
+    """fremor run, test-use case 3: sea_sfc_salinity → sos mapped variable (CMIP6)"""
     outdir = str(tmp_path / 'outdir')
 
-    result = runner.invoke(fremor, args = [ "-v", "-v",
-                                            "run", "--run_one",
-                                            "--indir", str(INDIR),
-                                            "--varlist", str(VARLIST_MAPPED),
-                                            "--table_config", str(CMIP6_TABLE_CONFIG),
-                                            "--exp_config", str(EXP_CONFIG),
-                                            "--outdir", outdir,
-                                            "--calendar", "julian",
-                                            "--grid_label", "gr",
-                                            "--grid_desc", "FOO_BAR_PLACEHOLD",
-                                            "--nom_res", "10000 km" ] )
+    result = runner.invoke(fremor, args = [ '-v', '-v',
+                                            'run', '--run_one',
+                                            '--indir', str(INDIR),
+                                            '--varlist', str(VARLIST_MAPPED),
+                                            '--table_config', str(CMIP6_TABLE_CONFIG),
+                                            '--exp_config', str(EXP_CONFIG),
+                                            '--outdir', outdir,
+                                            '--calendar', 'julian',
+                                            '--grid_label', 'gr',
+                                            '--grid_desc', 'FOO_BAR_PLACEHOLD',
+                                            '--nom_res', '10000 km' ] )
     assert result.exit_code == 0, f'case3 failed: {result.output}'
 
     output_ncs = list(Path(outdir).rglob('sos_Omon_*.nc'))
@@ -296,20 +296,20 @@ def test_cli_fremor_run_case3(cli_mapped_nc_file, tmp_path):
 
 
 def test_cli_fremor_run_cmip7_case3(cli_mapped_nc_file, tmp_path):
-    '''fremor run, test-use case 3 for cmip7: sea_sfc_salinity → sos mapped variable'''
+    """fremor run, test-use case 3 for cmip7: sea_sfc_salinity → sos mapped variable"""
     outdir = str(tmp_path / 'outdir')
 
-    result = runner.invoke(fremor, args = [ "-v", "-v",
-                                            "run", "--run_one",
-                                            "--indir", str(INDIR),
-                                            "--varlist", str(VARLIST_MAPPED),
-                                            "--table_config", str(CMIP7_TABLE_CONFIG),
-                                            "--exp_config", str(EXP_CONFIG_CMIP7),
-                                            "--outdir", outdir,
-                                            "--calendar", "julian",
-                                            "--grid_label", "g999",
-                                            "--grid_desc", "FOO_BAR_PLACEHOLD",
-                                            "--nom_res", "10000 km" ] )
+    result = runner.invoke(fremor, args = [ '-v', '-v',
+                                            'run', '--run_one',
+                                            '--indir', str(INDIR),
+                                            '--varlist', str(VARLIST_MAPPED),
+                                            '--table_config', str(CMIP7_TABLE_CONFIG),
+                                            '--exp_config', str(EXP_CONFIG_CMIP7),
+                                            '--outdir', outdir,
+                                            '--calendar', 'julian',
+                                            '--grid_label', 'g999',
+                                            '--grid_desc', 'FOO_BAR_PLACEHOLD',
+                                            '--nom_res', '10000 km' ] )
     assert result.exit_code == 0, f'cmip7 case3 failed: {result.output}'
 
     output_ncs = list(Path(outdir).rglob('sos_*.nc'))

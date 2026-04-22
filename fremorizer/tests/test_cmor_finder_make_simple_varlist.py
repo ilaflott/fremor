@@ -178,9 +178,9 @@ def test_make_simple_varlist_mip_table_filter(tmp_path):
     result = make_simple_varlist(str(tmp_path), None, json_mip_table=str(mip_table))
 
     assert result is not None
-    assert result.get("sos") == "sos", "MIP variable should be self-mapped"
-    assert "notinmip" in result, "non-MIP variable should be included"
-    assert result["notinmip"] == '', "non-MIP variable should have empty string value"
+    assert result.get('sos') == 'sos', 'MIP variable should be self-mapped'
+    assert 'notinmip' in result, 'non-MIP variable should be included'
+    assert result['notinmip'] == '', 'non-MIP variable should have empty string value'
 
 
 

@@ -20,17 +20,17 @@ from .cmor_init import cmor_init_subtool
 
 fre_logger = logging.getLogger(__name__)
 
-OPT_VAR_NAME_HELP="optional, specify a variable name to specifically process only filenames " + \
-                  "matching that variable name. I.e., this string help target local_vars, not " + \
-                  "target_vars."
-VARLIST_HELP="path pointing to a json file containing directory of key/value pairs. " + \
-             "the keys are the modeler\'s variable names used in the filename and " + \
-             "expected as the variable name within the targeted files. the values " + \
-             "pointed to by those keys are strings representing the corresponding " + \
-             "MIP table variable name. the key and value are often the same, " + \
-             "but it is not required."
-RUN_ONE_HELP="process only one file, then exit. mostly for debugging and isolating issues."
-DRY_RUN_HELP="don't call the cmor_mixer subtool, just printout what would be called and move on until natural exit"
+OPT_VAR_NAME_HELP='optional, specify a variable name to specifically process only filenames ' + \
+                  'matching that variable name. I.e., this string help target local_vars, not ' + \
+                  'target_vars.'
+VARLIST_HELP='path pointing to a json file containing directory of key/value pairs. ' + \
+             'the keys are the modeler\'s variable names used in the filename and ' + \
+             'expected as the variable name within the targeted files. the values ' + \
+             'pointed to by those keys are strings representing the corresponding ' + \
+             'MIP table variable name. the key and value are often the same, ' + \
+             'but it is not required.'
+RUN_ONE_HELP='process only one file, then exit. mostly for debugging and isolating issues.'
+DRY_RUN_HELP='don\'t call the cmor_mixer subtool, just printout what would be called and move on until natural exit'
 START_YEAR_HELP = 'string representing the minimum calendar year CMOR should start processing for. ' + \
                   'currently, only YYYY format is supported.'
 STOP_YEAR_HELP = 'string representing the maximum calendar year CMOR should stop processing for. ' + \

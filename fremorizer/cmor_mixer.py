@@ -86,9 +86,9 @@ def rewrite_netcdf_file_var( mip_var_cfgs: dict = None,
     .. note:: This function performs extensive setup of axes and metadata, and conditionally handles tripolar
               ocean grids.
     """
-    fre_logger.info("input data:")
-    fre_logger.info("     local_var = %s (modeler variable name, in filename and file)", local_var)
-    fre_logger.info("    target_var = %s (MIP table variable name)", target_var)
+    fre_logger.info('input data:')
+    fre_logger.info('     local_var = %s (modeler variable name, in filename and file)', local_var)
+    fre_logger.info('    target_var = %s (MIP table variable name)', target_var)
 
     # open the input file
     fre_logger.info('opening %s', netcdf_file)
@@ -215,7 +215,7 @@ def rewrite_netcdf_file_var( mip_var_cfgs: dict = None,
 
     # determine the vertical dimension by looping over netcdf variables
     vert_dim = get_vertical_dimension(ds, local_var)  # returns int(0) if not present
-    fre_logger.info("Vertical dimension of %s: %s", local_var, vert_dim)
+    fre_logger.info('Vertical dimension of %s: %s', local_var, vert_dim)
 
     # Check var_dim and vert_dim and assign lev if relevant.
     lev, lev_units = None, '1'
@@ -719,9 +719,9 @@ def cmorize_target_var_files(indir: str = None,
     .. note:: Copies files to a temporary directory, runs CMORization, moves results to output, cleans up temp files.
     """
 
-    fre_logger.info("local_var = %s to be used for file-targeting and reading data.\n"
-                    "target_var = %s to be used for MIP table lookups.\n"
-                    "outdir = %s", local_var, target_var, outdir)
+    fre_logger.info('local_var = %s to be used for file-targeting and reading data.\n'
+                    'target_var = %s to be used for MIP table lookups.\n'
+                    'outdir = %s', local_var, target_var, outdir)
 
     # determine a tmp dir for working on files.
     tmp_dir = create_tmp_dir(outdir, json_exp_config) + '/'

@@ -192,7 +192,9 @@ def test_setup_fre_cmor_run_subtool(capfd):
     _out, _err = capfd.readouterr()
 
 def test_fre_cmor_run_subtool_case1(capfd):
-    """ fre cmor run, test-use case """
+    """
+    fre cmor run, test-use case
+    """
 
     #import sys
     #assert False, f'{sys.path}'
@@ -227,7 +229,9 @@ def test_fre_cmor_run_subtool_case1(capfd):
     _out, _err = capfd.readouterr()
 
 def test_fre_cmor_run_subtool_case1_output_compare_data(capfd):
-    """ I/O data-only comparison of test case1 """
+    """
+    I/O data-only comparison of test case1
+    """
     print(f'FULL_OUTPUTFILE={FULL_OUTPUTFILE}')
     print(f'FULL_INPUTFILE={FULL_INPUTFILE}')
 
@@ -241,7 +245,9 @@ def test_fre_cmor_run_subtool_case1_output_compare_data(capfd):
     _out, _err = capfd.readouterr()
 
 def test_fre_cmor_run_subtool_case1_output_compare_metadata(capfd):
-    """ I/O metadata-only comparison of test case1 """
+    """
+    I/O metadata-only comparison of test case1
+    """
     print(f'FULL_OUTPUTFILE={FULL_OUTPUTFILE}')
     print(f'FULL_INPUTFILE={FULL_INPUTFILE}')
 
@@ -263,9 +269,11 @@ FULL_INPUTFILE_DIFF = \
 VARLIST_DIFF = \
     f'{ROOTDIR}/varlist_local_target_vars_differ'
 def test_setup_fre_cmor_run_subtool_case2(capfd):
-    """ make a copy of the input file to the slightly different name.
+    """
+    make a copy of the input file to the slightly different name.
     checks for outputfile from prev pytest runs, removes it if it's present.
-    this routine also checks to make sure the desired input file is present"""
+    this routine also checks to make sure the desired input file is present
+    """
     if Path(FULL_OUTPUTFILE).exists():
         Path(FULL_OUTPUTFILE).unlink()
     assert not Path(FULL_OUTPUTFILE).exists()
@@ -338,7 +346,9 @@ VARLIST_MAPPED = f'{ROOTDIR}/varlist_mapped'
 FILENAME_MAPPED = f'reduced_ocean_monthly_1x1deg.{DATETIMES_INPUTFILE}.sea_sfc_salinity'
 FULL_INPUTFILE_MAPPED = f"{INDIR}/{FILENAME_MAPPED}.nc"
 def test_setup_fre_cmor_run_subtool_case3(capfd):
-    ''' Generate the sea_sfc_salinity NetCDF file from CDL and clean up previous output.'''
+    """
+    Generate the sea_sfc_salinity NetCDF file from CDL and clean up previous output.
+    """
     if Path(FULL_OUTPUTFILE).exists():
         Path(FULL_OUTPUTFILE).unlink()
     assert not Path(FULL_OUTPUTFILE).exists()
@@ -373,7 +383,9 @@ def test_setup_fre_cmor_run_subtool_case3(capfd):
     _out, _err = capfd.readouterr()
 
 def test_fre_cmor_run_subtool_case3(capfd):
-    ''' fre cmor run, test-use case3: mapped variable sea_sfc_salinity → sos '''
+    """
+    fre cmor run, test-use case3: mapped variable sea_sfc_salinity → sos
+    """
 
     cmor_run_subtool(
         indir = INDIR,
@@ -394,49 +406,49 @@ def test_fre_cmor_run_subtool_case3(capfd):
 
 
 def _assert_mapped_data_matches(ds_in, ds_out):
-    '''
+    """
     helper: assert that science variable data, coordinate data, and shapes
     are preserved between input (sea_sfc_salinity) and CMOR output (sos) datasets.
-    '''
+    """
     assert np.array_equal(ds_in.variables['sea_sfc_salinity'][:], ds_out.variables['sos'][:]), \
-        "sea_sfc_salinity data values differ from sos in CMOR output"
+        'sea_sfc_salinity data values differ from sos in CMOR output'
 
     assert np.allclose(ds_in.variables['lat'][:], ds_out.variables['lat'][:]), \
-        "latitude data differs between input and CMOR output"
+        'latitude data differs between input and CMOR output'
     assert np.allclose(ds_in.variables['lon'][:], ds_out.variables['lon'][:]), \
-        "longitude data differs between input and CMOR output"
+        'longitude data differs between input and CMOR output'
     assert np.allclose(ds_in.variables['time'][:], ds_out.variables['time'][:]), \
-        "time data differs between input and CMOR output"
+        'time data differs between input and CMOR output'
 
     assert ds_in.variables['sea_sfc_salinity'][:].shape == ds_out.variables['sos'][:].shape, \
-        "sea_sfc_salinity data shape differs from sos in CMOR output"
+        'sea_sfc_salinity data shape differs from sos in CMOR output'
 
 
 def _assert_mapped_metadata_matches(ds_in, ds_out):
-    '''
+    """
     helper: assert that CMIP6-required global attributes are present and that
     key variable-level metadata is preserved between input (sea_sfc_salinity)
     and CMOR output (sos) datasets.
-    '''
+    """
     for required_attr in CMIP6_REQUIRED_GLOBAL_ATTRS:
         assert required_attr in ds_out.ncattrs(), \
-            f"CMOR output missing required global attribute '{required_attr}'"
+            f'CMOR output missing required global attribute {required_attr}'
 
     assert ds_in.variables['sea_sfc_salinity'].standard_name == ds_out.variables['sos'].standard_name, \
-        "standard_name differs between input sea_sfc_salinity and CMOR output sos"
+        'standard_name differs between input sea_sfc_salinity and CMOR output sos'
     assert ds_in.variables['sea_sfc_salinity'].long_name == ds_out.variables['sos'].long_name, \
-        "long_name differs between input sea_sfc_salinity and CMOR output sos"
+        'long_name differs between input sea_sfc_salinity and CMOR output sos'
 
     assert ds_in.variables['sea_sfc_salinity']._FillValue == ds_out.variables['sos']._FillValue, \
-        "_FillValue differs between input sea_sfc_salinity and CMOR output sos"
+        '_FillValue differs between input sea_sfc_salinity and CMOR output sos'
     assert ds_in.variables['sea_sfc_salinity'].missing_value == ds_out.variables['sos'].missing_value, \
-        "missing_value differs between input sea_sfc_salinity and CMOR output sos"
+        'missing_value differs between input sea_sfc_salinity and CMOR output sos'
 
 
 def test_fre_cmor_run_subtool_case3_output_compare_data(capfd):
-    '''
+    """
     I/O data-only comparison of test case3 (mapped variable)
-    '''
+    """
     print(f'FULL_OUTPUTFILE={FULL_OUTPUTFILE}')
     print(f'FULL_INPUTFILE_MAPPED={FULL_INPUTFILE_MAPPED}')
 
@@ -450,9 +462,9 @@ def test_fre_cmor_run_subtool_case3_output_compare_data(capfd):
 
 
 def test_fre_cmor_run_subtool_case3_output_compare_metadata(capfd):
-    '''
+    """
     I/O metadata-only comparison of test case3 (mapped variable)
-    '''
+    """
     print(f'FULL_OUTPUTFILE={FULL_OUTPUTFILE}')
     print(f'FULL_INPUTFILE_MAPPED={FULL_INPUTFILE_MAPPED}')
 
