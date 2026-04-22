@@ -66,7 +66,7 @@ class MyClass(object):
     :ivar str var2: description, initial value: par2
     """
 
-    var3: ClassVar[str] = "I am a class variable"
+    var3: ClassVar[str] = 'I am a class variable'
 
     def __init__(self, par1: int, par2: int):
         self.var1 = par1 # instance variables
@@ -89,7 +89,7 @@ def func_with_return_and_optional_param(a: int, c: List[int] = [1,2]) -> Any:
     """
 
     if a > 10:
-        raise ValueError("a is more than 10")
+        raise ValueError('a is more than 10')
     return c
 
 def simple_func(foo: str):
