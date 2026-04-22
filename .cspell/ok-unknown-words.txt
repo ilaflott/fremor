@@ -95,6 +95,7 @@ fullvar
 geolat
 geolon
 getcwd
+getncattr
 giccm
 gridding
 hpoint
@@ -108,6 +109,7 @@ intercomparisons
 interp
 ints
 ised
+isunlimited
 isort
 ivar
 ixin
@@ -182,6 +184,7 @@ rgxs
 rstcheck
 rtype
 setuptools
+setncatts
 smth
 sosv
 spinup
