@@ -256,8 +256,9 @@ def test_make_simple_varlist_mip_table_no_match(tmp_path):
 
     result = make_simple_varlist(str(tmp_path), None, json_mip_table=str(mip_table))
 
-    # No variables matched
-    assert result is None
+    # With new semantics, all found variables are included: non-MIP vars get '' as value.
+    assert result is not None
+    assert result == {'fake_var': ''}
 
 
 # ---- variable only present at a minority datetime is still returned ----

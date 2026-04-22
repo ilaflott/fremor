@@ -63,13 +63,13 @@ CMIP7_REQUIRED_GLOBAL_ATTRS = [
 ]
 
 
-def _assert_data_matches(ds_in, ds_out):
+def _assert_data_matches(ds_in, ds_out, in_var_name='sos'):
     """
     helper: assert that science variable data, coordinate data, and shapes
     are preserved between input and CMOR output datasets.
     """
     # the science variable data must be preserved exactly
-    assert np.array_equal(ds_in.variables['sos'][:], ds_out.variables['sos'][:]), \
+    assert np.array_equal(ds_in.variables[in_var_name][:], ds_out.variables['sos'][:]), \
         'sos data values differ between input and CMOR output'
 
     # coordinate data must be preserved
@@ -81,11 +81,11 @@ def _assert_data_matches(ds_in, ds_out):
         'time data differs between input and CMOR output'
 
     # variable shapes must be preserved
-    assert ds_in.variables['sos'][:].shape == ds_out.variables['sos'][:].shape, \
+    assert ds_in.variables[in_var_name][:].shape == ds_out.variables['sos'][:].shape, \
         'sos data shape differs between input and CMOR output'
 
 
-def _assert_metadata_matches(ds_in, ds_out):
+def _assert_metadata_matches(ds_in, ds_out, in_var_name='sos'):
     """
     helper: assert that CMIP7-required global attributes are present and that
     key variable-level metadata is preserved between input and CMOR output datasets.
@@ -102,15 +102,15 @@ def _assert_metadata_matches(ds_in, ds_out):
         'CMOR output should not have table_id for CMIP7 (uses table_info instead)'
 
     # science variable standard_name and long_name must be preserved
-    assert ds_in.variables['sos'].standard_name == ds_out.variables['sos'].standard_name, \
+    assert ds_in.variables[in_var_name].standard_name == ds_out.variables['sos'].standard_name, \
         'sos standard_name differs between input and CMOR output'
-    assert ds_in.variables['sos'].long_name == ds_out.variables['sos'].long_name, \
+    assert ds_in.variables[in_var_name].long_name == ds_out.variables['sos'].long_name, \
         'sos long_name differs between input and CMOR output'
 
     # _FillValue and missing_value must be preserved
-    assert ds_in.variables['sos']._FillValue == ds_out.variables['sos']._FillValue, \
+    assert ds_in.variables[in_var_name]._FillValue == ds_out.variables['sos']._FillValue, \
         'sos _FillValue differs between input and CMOR output' # pylint: disable=protected-access
-    assert ds_in.variables['sos'].missing_value == ds_out.variables['sos'].missing_value, \
+    assert ds_in.variables[in_var_name].missing_value == ds_out.variables['sos'].missing_value, \
         'sos missing_value differs between input and CMOR output'
 
 
@@ -228,11 +228,21 @@ def test_setup_fre_cmor_run_subtool_cmip7_case2(capfd):
         except OSError as exc:
             print(f'WARNING: OUTDIR={OUTDIR} could not be removed: {exc}')
 
-    # make a copy of the usual test file.
-    if not Path(FULL_INPUTFILE_DIFF).exists():
-        shutil.copy(
-            Path(FULL_INPUTFILE),
-            Path(FULL_INPUTFILE_DIFF) )
+    # make a copy of the usual test file, always recreating so the variable rename is fresh.
+    if Path(FULL_INPUTFILE_DIFF).exists():
+        Path(FULL_INPUTFILE_DIFF).unlink()
+    # copy and rename the variable inside from 'sos' to 'sosV2' using netCDF4,
+    # so that local_var='sosV2' matches the variable name in the file per new semantics.
+    with netCDF4.Dataset(str(FULL_INPUTFILE), 'r') as src, \
+         netCDF4.Dataset(str(FULL_INPUTFILE_DIFF), 'w') as dst:
+        for name, dim in src.dimensions.items():
+            dst.createDimension(name, None if dim.isunlimited() else len(dim))
+        for name, var in src.variables.items():
+            out_name = 'sosV2' if name == 'sos' else name
+            out_var = dst.createVariable(out_name, var.datatype, var.dimensions)
+            out_var.setncatts({k: var.getncattr(k) for k in var.ncattrs()})
+            out_var[:] = var[:]
+        dst.setncatts({k: src.getncattr(k) for k in src.ncattrs()})
     assert Path(FULL_INPUTFILE_DIFF).exists()
     _out, _err = capfd.readouterr()
 
@@ -272,7 +282,7 @@ def test_fre_cmor_run_subtool_cmip7_case2_output_compare_data(capfd):
         assert ds_in.file_format != ds_out.file_format, \
             f'expected file formats to differ, got input={ds_in.file_format}, output={ds_out.file_format}'
 
-        _assert_data_matches(ds_in, ds_out)
+        _assert_data_matches(ds_in, ds_out, in_var_name='sosV2')
     _out, _err = capfd.readouterr()
 
 def test_fre_cmor_run_subtool_cmip7_case2_output_compare_metadata(capfd):
@@ -288,7 +298,7 @@ def test_fre_cmor_run_subtool_cmip7_case2_output_compare_metadata(capfd):
         assert set(ds_in.ncattrs()) != set(ds_out.ncattrs()), \
             'expected global attributes to differ between input and CMOR output'
 
-        _assert_metadata_matches(ds_in, ds_out)
+        _assert_metadata_matches(ds_in, ds_out, in_var_name='sosV2')
     _out, _err = capfd.readouterr()
 
 

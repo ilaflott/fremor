@@ -307,7 +307,7 @@ def test_cli_fremor_run_cmip7_case3(cli_mapped_nc_file, tmp_path):
                                             "--exp_config", str(EXP_CONFIG_CMIP7),
                                             "--outdir", outdir,
                                             "--calendar", "julian",
-                                            "--grid_label", "g99",
+                                            "--grid_label", "g999",
                                             "--grid_desc", "FOO_BAR_PLACEHOLD",
                                             "--nom_res", "10000 km" ] )
     assert result.exit_code == 0, f'cmip7 case3 failed: {result.output}'
