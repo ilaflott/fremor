@@ -1,4 +1,4 @@
-# `fremorizer`
+# `fremorizer` / `fremor`
 `fremorizer` CMORizes FRE output with `CMOR`. It is a `conda` package and it's documentation can be found on
 [`readthedocs`](https://fremorizer.readthedocs.io/en/latest/).
 
@@ -23,17 +23,23 @@
 
 
 
-
 ## Background and Purpose
-`fremorizer` is a model output rewriter (CMORizer) for FRE/FMS based models and output. It was originally the `fre.cmor`
-submodule of [`NOAA-GFDL/fre-cli`](https://github.com/NOAA-GFDL/fre-cli). `fremorizer` (or `fremor` for short) is geared
-for rewriting NOAA-GFDL datasets for further quality control checks, assessments and data publishing pipelines in the
+`fremorizer` is a model output rewriter (CMORizer) for FRE/FMS based models and output. `fremorizer` (or `fremor` for short) is
+geared for standardizing NOAA-GFDL datasets for further quality control checks, assessments and data publishing pipelines in the
 context of CMIP7 using the [`CMOR`](https://cmor.llnl.gov/) library.
 
+### Relationship to `fre-cli`
+`fremorizer` was originally the `fre.cmor` submodule of [`NOAA-GFDL/fre-cli`](https://github.com/NOAA-GFDL/fre-cli) and so stands
+on the shoulders of it's contributors, retaining it's general structure and lessons learned from it. Future re-integrations back 
+into `fre-cli`, as a formal package dependency, are being assessed.
 
+### Contributors
+[![Contributors](https://contrib.rocks/image?repo=ilaflott/fremorizer)](https://github.com/ilaflott/fremorizer/graphs/contributors)
+
+#### AI Disclaimer
+AI was heavily used in the creation of this repository, primarily `github`'s `copilot` with `Claude` (`opus4.6` `sonnet4.6`, and `haiku`), and `Gemini` and `Chat-GPT` models to a lesser extent, in agent mode. `Claude` and `Codex` agents have also contributed.
 
 ## Installation / Access
-
 
 ### Requirements
 
