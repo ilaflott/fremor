@@ -3,5 +3,5 @@ version info for fremorizer, isolated to avoid importing heavy dependencies at b
 """
 
 import os
-version = os.getenv("GIT_DESCRIBE_TAG", "0.9.0")
+version = os.getenv("GIT_DESCRIBE_TAG", "0.9.0post")
 __version__ = version
