@@ -166,3 +166,6 @@ wcrp_compliance_reports/
 docs/fremorizer.*
 docs/modules.rst
 docs/build/
+fremorizer/tests/test_files/mock_pp_writer/
+fremorizer/tests/test_files/mock_writer_output.yaml
+fremorizer/tests/test_files/mock_writer_varlists/
