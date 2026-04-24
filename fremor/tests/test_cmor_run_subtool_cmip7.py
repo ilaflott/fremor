@@ -1,5 +1,5 @@
 """
-CMIP7-flavored tests for fremorizer.cmor_run_subtool
+CMIP7-flavored tests for fremor.cmor_run_subtool
 
 Each test mirrors a corresponding CMIP6 test in test_cmor_run_subtool.py but
 targets the CMIP7 experiment-configuration JSON and CMIP7-format CMOR tables.
@@ -14,11 +14,11 @@ import netCDF4
 import numpy as np
 import pytest
 
-from fremorizer import cmor_run_subtool
+from fremor import cmor_run_subtool
 
 
 # where are we? we're running pytest from the base directory of this repo
-ROOTDIR = 'fremorizer/tests/test_files'
+ROOTDIR = 'fremor/tests/test_files'
 
 # setup- cmip/cmor variable table(s)
 CMIP7_TABLE_REPO_PATH = \

@@ -1,5 +1,5 @@
 """
-tests for fremorizer.cmor_finder.make_simple_varlist
+tests for fremor.cmor_finder.make_simple_varlist
 """
 
 import json
@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
-from fremorizer.cmor_finder import make_simple_varlist
+from fremor.cmor_finder import make_simple_varlist
 
 
 @pytest.fixture(name='netcdf_dir_files')
@@ -196,7 +196,7 @@ def test_make_simple_varlist_no_files_matching_pattern(tmp_path):
     probe_file.touch()
 
     # Patch glob.glob to return empty list
-    with patch('fremorizer.cmor_finder.glob.glob', return_value=[]):
+    with patch('fremor.cmor_finder.glob.glob', return_value=[]):
         result = make_simple_varlist(str(tmp_path), None)
 
     assert result is None

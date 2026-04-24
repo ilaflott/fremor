@@ -1,5 +1,5 @@
 '''
-largely tests for fremorizer.cmor_config.cmor_config_subtool error conditions / messages
+largely tests for fremor.cmor_config.cmor_config_subtool error conditions / messages
 '''
 
 import tempfile
@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from fremorizer.cmor_config import cmor_config_subtool
+from fremor.cmor_config import cmor_config_subtool
 
 @pytest.fixture
 def temp_dir():
@@ -37,7 +37,7 @@ def test_cmor_config_subtool_noppdir_err(temp_dir): # pylint: disable=redefined-
 def test_cmor_config_subtool_notabledir_err(temp_dir): # pylint: disable=redefined-outer-name
     ''' mip_tables_dir arg does not exist '''
     pp_dir_targ=Path(temp_dir) / 'foobar'
-    mip_tables_targ='fremorizer/tests/test_files/cmip7-cmor-tables/tablesDNE'
+    mip_tables_targ='fremor/tests/test_files/cmip7-cmor-tables/tablesDNE'
     mip_era_targ=''
     exp_config_targ=''
     pp_dir_targ.mkdir(exist_ok=True,parents=True)
@@ -56,9 +56,9 @@ def test_cmor_config_subtool_notabledir_err(temp_dir): # pylint: disable=redefin
 def test_cmor_config_subtool_noexpcfg_err(temp_dir): # pylint: disable=redefined-outer-name
     ''' exp_config arg does not exist '''
     pp_dir_targ=Path(temp_dir) / 'foobar'
-    mip_tables_targ='fremorizer/tests/test_files/cmip7-cmor-tables/tables'
+    mip_tables_targ='fremor/tests/test_files/cmip7-cmor-tables/tables'
     mip_era_targ=''
-    exp_config_targ='fremorizer/tests/test_files/DNE_CMOR_CMIP7_input_example.json'
+    exp_config_targ='fremor/tests/test_files/DNE_CMOR_CMIP7_input_example.json'
     pp_dir_targ.mkdir(exist_ok=True,parents=True)
     with pytest.raises(FileNotFoundError,
                        match=f'exp_config does not exist: {exp_config_targ}'):
@@ -75,9 +75,9 @@ def test_cmor_config_subtool_noexpcfg_err(temp_dir): # pylint: disable=redefined
 def test_cmor_config_subtool_nomip6_tables_in_mip7_tables_err(temp_dir): # pylint: disable=redefined-outer-name
     ''' trying to target mip7 tables for mip6 '''
     pp_dir_targ= Path(temp_dir) / 'foobar'
-    mip_tables_targ='fremorizer/tests/test_files/cmip7-cmor-tables/tables'
+    mip_tables_targ='fremor/tests/test_files/cmip7-cmor-tables/tables'
     mip_era_targ='cmip6'
-    exp_config_targ='fremorizer/tests/test_files/CMOR_CMIP7_input_example.json'
+    exp_config_targ='fremor/tests/test_files/CMOR_CMIP7_input_example.json'
     pp_dir_targ.mkdir(exist_ok=True,parents=True)
     with pytest.raises(ValueError,
                        match=f'no MIP tables found in {mip_tables_targ} for era {mip_era_targ} after filtering'):
@@ -94,9 +94,9 @@ def test_cmor_config_subtool_nomip6_tables_in_mip7_tables_err(temp_dir): # pylin
 def test_cmor_config_subtool_nomip7_tables_in_mip6_tables_err(temp_dir): # pylint: disable=redefined-outer-name
     ''' trying to target mip6 tables for mip7 '''
     pp_dir_targ= Path(temp_dir) / 'foobar'
-    mip_tables_targ='fremorizer/tests/test_files/cmip6-cmor-tables/Tables'
+    mip_tables_targ='fremor/tests/test_files/cmip6-cmor-tables/Tables'
     mip_era_targ='cmip7'
-    exp_config_targ='fremorizer/tests/test_files/CMOR_input_example.json'
+    exp_config_targ='fremor/tests/test_files/CMOR_input_example.json'
     pp_dir_targ.mkdir(exist_ok=True,parents=True)
     with pytest.raises(ValueError,
                        match=f'no MIP tables found in {mip_tables_targ} for era {mip_era_targ} after filtering'):

@@ -1,5 +1,5 @@
 """
-Shared fixtures for fremorizer/tests CLI integration tests.
+Shared fixtures for fremor/tests CLI integration tests.
 """
 
 from datetime import date
@@ -10,11 +10,11 @@ import subprocess
 
 import pytest
 
-import fremorizer
+import fremor
 
 
 # ── path constants ──────────────────────────────────────────────────────────
-ROOTDIR = Path(fremorizer.__file__).parent / 'tests' / 'test_files'
+ROOTDIR = Path(fremor.__file__).parent / 'tests' / 'test_files'
 
 CMIP6_TABLE_CONFIG = ROOTDIR / 'cmip6-cmor-tables' / 'Tables' / 'CMIP6_Omon.json'
 CMIP7_TABLE_CONFIG = ROOTDIR / 'cmip7-cmor-tables' / 'tables' / 'CMIP7_ocean.json'

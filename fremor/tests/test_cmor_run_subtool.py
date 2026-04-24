@@ -1,5 +1,5 @@
 """
-tests for fremorizer.cmor_run_subtool
+tests for fremor.cmor_run_subtool
 """
 
 from datetime import date
@@ -12,12 +12,12 @@ import netCDF4
 import numpy as np
 import pytest
 
-from fremorizer import cmor_run_subtool
-from fremorizer.tests.conftest import _CMIP6_EXP_CONFIG_DATA
+from fremor import cmor_run_subtool
+from fremor.tests.conftest import _CMIP6_EXP_CONFIG_DATA
 
 
 # where are we? we're running pytest from the base directory of this repo
-ROOTDIR = 'fremorizer/tests/test_files'
+ROOTDIR = 'fremor/tests/test_files'
 
 # setup- cmip/cmor variable table(s)
 CMIP6_TABLE_REPO_PATH = \

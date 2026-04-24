@@ -140,8 +140,8 @@ which is equivalent to ``.github/workflows/build_conda.yml`` with an extra ``con
 Get Desired Verbosity
 ~~~~~~~~~~~~~~~~~~~~~
 
-The ``logging`` module's configuration initially occurs in ``fremorizer/__init__.py``, and gets inherited
-everywhere else ``logging`` creates a ``logger`` object under the ``fremorizer`` namespace. If your
+The ``logging`` module's configuration initially occurs in ``fremor/__init__.py``, and gets inherited
+everywhere else ``logging`` creates a ``logger`` object under the ``fremor`` namespace. If your
 development is being tested with a ``fremor COMMAND *ARGV`` style CLI call, add verbosity flags:
 
 .. code-block:: bash
@@ -149,7 +149,7 @@ development is being tested with a ``fremor COMMAND *ARGV`` style CLI call, add 
    fremor -vv run ...
 
 If your development does not fit that category, the next easiest thing is to adjust the base ``logger``
-object in ``fremorizer/__init__.py``. Adjust it back to the default verbosity level before requesting
+object in ``fremor/__init__.py``. Adjust it back to the default verbosity level before requesting
 a merge.
 
 
@@ -189,10 +189,10 @@ instances, use the following pattern to safely ``chdir`` and ``chdir`` back:
 
 In the case where non-Python files like templates, examples, and outputs are to be included in the
 ``fremorizer`` package, ``MANIFEST.in`` can provide the solution. Ensure the file exists within the
-correct folder and add a line such as ``include fremorizer/fileName.fileExtension``.
+correct folder and add a line such as ``include fremor/fileName.fileExtension``.
 
 For more efficiency, if there are multiple files of the same type needed, use something like
-``recursive-include fremorizer *.fileExtension`` which recursively includes every file matching that
+``recursive-include fremor *.fileExtension`` which recursively includes every file matching that
 extension within the specified directory and its subdirectories.
 
 

@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import pytest
 
-from fremorizer.cmor_helpers import update_grid_and_label
+from fremor.cmor_helpers import update_grid_and_label
 
 # Sample data for testing
 TEST_JSON_CONTENT = {

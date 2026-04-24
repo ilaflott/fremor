@@ -59,7 +59,7 @@ jobs:
 
       - name: Run pytest
         run: |
-          pytest --cov=fremorizer --cov-config=coveragerc --cov-report=xml fremorizer/tests/ -v
+          pytest --cov=fremor --cov-config=coveragerc --cov-report=xml fremor/tests/ -v
 
       - name: Upload Coverage to Codecov
         if: ${{ always() }}

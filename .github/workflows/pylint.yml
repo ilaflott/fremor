@@ -52,4 +52,4 @@ jobs:
 
       - name: Run pylint
         run: |
-          pylint --rcfile pylintrc fremorizer/
+          pylint --rcfile pylintrc fremor/

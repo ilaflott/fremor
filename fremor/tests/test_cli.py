@@ -24,7 +24,7 @@ from unittest.mock import patch
 
 from click.testing import CliRunner
 
-from fremorizer.cli import fremor
+from fremor.cli import fremor
 
 from .conftest import (
     ROOTDIR, INDIR, VARLIST, VARLIST_DIFF, VARLIST_MAPPED,
@@ -135,7 +135,7 @@ def test_cli_fremor_yaml_opt_dne():
     result = runner.invoke(fremor, args=['yaml', 'optionDNE'])
     assert result.exit_code == 2
 
-@patch('fremorizer.cli.cmor_yaml_subtool')
+@patch('fremor.cli.cmor_yaml_subtool')
 def test_cli_fremor_yaml_case1(mock_subtool, tmp_path):
     """ fremor yaml --dry_run -y YAMLFILE ... --output FOO_cmor.yaml """
     # use a temporary yaml placeholder file as the model yaml input

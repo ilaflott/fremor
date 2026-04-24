@@ -10,7 +10,7 @@ emitted at the end of processing, including the expected file paths.
 import logging
 from unittest.mock import patch
 
-from fremorizer.cmor_mixer import cmorize_all_variables_in_dir
+from fremor.cmor_mixer import cmorize_all_variables_in_dir
 
 
 # ---------------------------------------------------------------------------
@@ -33,12 +33,12 @@ DUMMY_ARGS = {
 # tests
 # ---------------------------------------------------------------------------
 
-@patch('fremorizer.cmor_mixer.cmorize_target_var_files')
+@patch('fremor.cmor_mixer.cmorize_target_var_files')
 def test_omission_tracking_single_failure(mock_cmorize, caplog):
     """A single variable failure is tracked and logged with variable name and file path."""
     mock_cmorize.side_effect = RuntimeError('test failure')
 
-    with caplog.at_level(logging.WARNING, logger='fremorizer.cmor_mixer'):
+    with caplog.at_level(logging.WARNING, logger='fremor.cmor_mixer'):
         status = cmorize_all_variables_in_dir(
             vars_to_run={'var_a': 'var_a'},
             **DUMMY_ARGS,
@@ -52,12 +52,12 @@ def test_omission_tracking_single_failure(mock_cmorize, caplog):
     assert any(expected_path in msg for msg in caplog.messages)
 
 
-@patch('fremorizer.cmor_mixer.cmorize_target_var_files')
+@patch('fremor.cmor_mixer.cmorize_target_var_files')
 def test_omission_tracking_multiple_failures(mock_cmorize, caplog):
     """Multiple variable failures are each tracked and all appear in the summary with file paths."""
     mock_cmorize.side_effect = RuntimeError('kaboom')
 
-    with caplog.at_level(logging.WARNING, logger='fremorizer.cmor_mixer'):
+    with caplog.at_level(logging.WARNING, logger='fremor.cmor_mixer'):
         status = cmorize_all_variables_in_dir(
             vars_to_run={'alpha': 'alpha', 'beta': 'beta'},
             **DUMMY_ARGS,
@@ -72,12 +72,12 @@ def test_omission_tracking_multiple_failures(mock_cmorize, caplog):
     assert any('/fake/indir/component.00010101-00041231.beta.nc' in msg for msg in caplog.messages)
 
 
-@patch('fremorizer.cmor_mixer.cmorize_target_var_files')
+@patch('fremor.cmor_mixer.cmorize_target_var_files')
 def test_no_omission_log_when_all_succeed(mock_cmorize, caplog):
     """When every variable succeeds, no omission summary is logged."""
     mock_cmorize.return_value = None  # success
 
-    with caplog.at_level(logging.WARNING, logger='fremorizer.cmor_mixer'):
+    with caplog.at_level(logging.WARNING, logger='fremor.cmor_mixer'):
         status = cmorize_all_variables_in_dir(
             vars_to_run={'good_var': 'good_var'},
             **DUMMY_ARGS,
@@ -87,7 +87,7 @@ def test_no_omission_log_when_all_succeed(mock_cmorize, caplog):
     assert not any('OMISSION LOG' in msg for msg in caplog.messages)
 
 
-@patch('fremorizer.cmor_mixer.cmorize_target_var_files')
+@patch('fremor.cmor_mixer.cmorize_target_var_files')
 def test_omission_tracking_mixed_success_failure(mock_cmorize, caplog):
     """Only failed variables appear in the omission log with their file paths."""
     def side_effect( indir, target_var, local_var, *args, **kwargs ): # pylint: disable=unused-argument
@@ -96,7 +96,7 @@ def test_omission_tracking_mixed_success_failure(mock_cmorize, caplog):
 
     mock_cmorize.side_effect = side_effect
 
-    with caplog.at_level(logging.WARNING, logger='fremorizer.cmor_mixer'):
+    with caplog.at_level(logging.WARNING, logger='fremor.cmor_mixer'):
         status = cmorize_all_variables_in_dir(
             vars_to_run={'good_var': 'good_var', 'bad_var': 'bad_var'},
             **DUMMY_ARGS,
