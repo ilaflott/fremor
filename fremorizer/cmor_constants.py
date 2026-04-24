@@ -23,7 +23,6 @@ Sections
 
 import cmor
 
-
 # ---------------------------------------------------------------------------
 # Vertical-coordinate classification (used by cmor_mixer)
 # ---------------------------------------------------------------------------
@@ -49,8 +48,8 @@ DEPTH_COORDS = ['z_l']
 # CMOR module defaults (passed to cmor.setup in cmor_mixer)
 # ---------------------------------------------------------------------------
 CMOR_NC_FILE_ACTION = cmor.CMOR_REPLACE
-CMOR_VERBOSITY      = cmor.CMOR_NORMAL#cmor.CMOR_QUIET#
-CMOR_EXIT_CTL       = cmor.CMOR_NORMAL#CMOR_EXIT_ON_WARNING#
+CMOR_VERBOSITY      = cmor.cmor.CMOR_NORMAL#CMOR_QUIET#
+CMOR_EXIT_CTL       = cmor.CMOR_EXIT_ON_WARNING#CMOR_NORMAL#
 CMOR_MK_SUBDIRS     = 1
 CMOR_LOG             = None
 
@@ -73,7 +72,9 @@ INPUT_TO_MIP_VERT_DIM = {
 # Archive / filesystem paths (used by cmor_helpers)
 # ---------------------------------------------------------------------------
 ARCHIVE_GOLD_DATA_DIR = '/archive/gold/datasets'
-CMIP7_GOLD_OCEAN_FILE_STUB='OM5_025/ocean_mosaic_v20250916_unpacked/ocean_static.nc'
+#CMIP7_GOLD_OCEAN_FILE_STUB='OM5_025/ocean_mosaic_v20250916_unpacked/ocean_static.nc' # nope, yh/xh repurposed for "mesh index"
+#CMIP7_GOLD_OCEAN_FILE_STUB='OM5_025/ocean_mosaic_v20250916_unpacked/ocean_hgrid.nc' # nope, xh/xq/yh/yq all encoded but no geolat/lon
+CMIP7_GOLD_OCEAN_FILE_STUB='OM5_025/ocean_mosaic_v20250916_unpacked/ocean_static_no_basin.nc' # surprisingly, this should work
 CMIP6_GOLD_OCEAN_FILE_STUB=None #TODO
 
 # ---------------------------------------------------------------------------
