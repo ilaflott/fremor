@@ -1,11 +1,11 @@
 """
-tests for fremorizer.cmor_helpers.update_calendar_type
+tests for fremor.cmor_helpers.update_calendar_type
 """
 import json
 
 import pytest
 
-from fremorizer.cmor_helpers import (
+from fremor.cmor_helpers import (
     calendars_are_equivalent,
     get_time_calendar_value,
     normalize_calendar,

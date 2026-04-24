@@ -40,11 +40,11 @@ dynamic = [
 
 
 [tool.setuptools.dynamic]
-version = {attr = "fremorizer._version.__version__"}
+version = {attr = "fremor._version.__version__"}
 
 
 [project.scripts]
-fremor = 'fremorizer.cli:fremor'
+fremor = 'fremor.cli:fremor'
 
 
 [project.optional-dependencies]

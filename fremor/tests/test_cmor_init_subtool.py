@@ -12,7 +12,7 @@ import json
 
 import pytest
 
-from fremorizer.cmor_init import (
+from fremor.cmor_init import (
     cmor_init_subtool,
     _fetch_tables_git,
     _fetch_tables_curl,

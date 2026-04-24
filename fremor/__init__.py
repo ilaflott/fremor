@@ -1,5 +1,5 @@
 """
-module init file for fremorizer. sets the version attribute, and sets up a fre_logger
+module init file for fremor. sets the version attribute, and sets up a fre_logger
 """
 
 import logging

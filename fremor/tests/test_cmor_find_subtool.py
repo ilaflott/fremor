@@ -1,5 +1,5 @@
 """
-tests for fremorizer.cmor_finder.cmor_find_subtool,
+tests for fremor.cmor_finder.cmor_find_subtool,
 mostly
 """
 
@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from fremorizer.cmor_finder import make_simple_varlist, cmor_find_subtool
+from fremor.cmor_finder import make_simple_varlist, cmor_find_subtool
 
 def test_make_simple_varlist(tmp_path):
     """
@@ -69,5 +69,5 @@ def test_find_subtool_no_varlist_no_optvarname_err():
     """    
     with pytest.raises(ValueError, match='ERROR: no opt_var_name given but also no content in variable list!!! exit!'):
         cmor_find_subtool(json_var_list=None,
-                          json_table_config_dir='fremorizer/tests/test_files/cmip6-cmor-tables/Tables',
+                          json_table_config_dir='fremor/tests/test_files/cmip6-cmor-tables/Tables',
                           opt_var_name=None)

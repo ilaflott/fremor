@@ -1,10 +1,10 @@
 """
-tests for fremorizer.cmor_helpers.conv_mip_to_bronx_freq
+tests for fremor.cmor_helpers.conv_mip_to_bronx_freq
 """
 
 import pytest
 
-from fremorizer.cmor_helpers import conv_mip_to_bronx_freq
+from fremor.cmor_helpers import conv_mip_to_bronx_freq
 
 def test_conv_mip_to_bronx_freq_valid_frequencies():
     """

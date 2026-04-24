@@ -1,5 +1,5 @@
 """
-tests for fremorizer.cmor_yamler.cmor_yaml_subtool
+tests for fremor.cmor_yamler.cmor_yaml_subtool
 
 Covers:
   - full end-to-end run (dry_run_mode=False) via mocked consolidate_yamls
@@ -14,13 +14,13 @@ from unittest.mock import patch
 
 import pytest
 
-import fremorizer
-from fremorizer.cmor_yamler import cmor_yaml_subtool
+import fremor
+from fremor.cmor_yamler import cmor_yaml_subtool
 
 
 # ---- paths to the existing repo test fixtures ----
 #ROOTDIR = 'fre/tests/test_files'
-ROOTDIR = str( Path( fremorizer.__file__ ).parent ) + '/tests/test_files'
+ROOTDIR = str( Path( fremor.__file__ ).parent ) + '/tests/test_files'
 CMIP6_TABLE_DIR = f'{ROOTDIR}/cmip6-cmor-tables/Tables'
 CMIP6_TABLE_CONFIG = f'{CMIP6_TABLE_DIR}/CMIP6_Omon.json'
 VARLIST = f'{ROOTDIR}/varlist'
@@ -127,7 +127,7 @@ def yamler_env(tmp_path):
 # end-to-end: dry_run_mode=False
 # ================================================================
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_cmor_yaml_subtool_dry_run_false(mock_consolidate, yamler_env): # pylint: disable=redefined-outer-name
     """
     Full end-to-end: cmor_yaml_subtool with dry_run_mode=False should
@@ -170,7 +170,7 @@ def test_yamlfile_does_not_exist():
             dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_pp_dir_does_not_exist(mock_consolidate, tmp_path):
     """ FileNotFoundError when pp_dir does not exist """
     dummy_yaml = tmp_path / 'model.yaml'
@@ -195,7 +195,7 @@ def test_pp_dir_does_not_exist(mock_consolidate, tmp_path):
             dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_table_dir_does_not_exist(mock_consolidate, tmp_path):
     """ FileNotFoundError when cmip_cmor_table_dir does not exist """
     dummy_yaml = tmp_path / 'model.yaml'
@@ -222,7 +222,7 @@ def test_table_dir_does_not_exist(mock_consolidate, tmp_path):
             dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_exp_json_does_not_exist(mock_consolidate, tmp_path):
     """ FileNotFoundError when exp_json path does not exist """
     dummy_yaml = tmp_path / 'model.yaml'
@@ -247,7 +247,7 @@ def test_exp_json_does_not_exist(mock_consolidate, tmp_path):
             dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_mip_table_file_does_not_exist(mock_consolidate, tmp_path):
     """ FileNotFoundError when the derived json_mip_table_config does not exist """
     dummy_yaml = tmp_path / 'model.yaml'
@@ -276,7 +276,7 @@ def test_mip_table_file_does_not_exist(mock_consolidate, tmp_path):
             dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_cmip7_freq_none_raises(mock_consolidate, tmp_path):
     """ ValueError when mip_era=CMIP7 and freq is None """
     dummy_yaml = tmp_path / 'model.yaml'
@@ -308,7 +308,7 @@ def test_cmip7_freq_none_raises(mock_consolidate, tmp_path):
             dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_cmip6_freq_none_no_derivation_raises(mock_consolidate, tmp_path):
     """
     ValueError when mip_era=CMIP6, freq is None, and the MIP table
@@ -351,7 +351,7 @@ def test_cmip6_freq_none_no_derivation_raises(mock_consolidate, tmp_path):
             dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_cmip6_freq_none_derivation_exception_caught(mock_consolidate, tmp_path):
     """
     When mip_era=CMIP6, freq is None, and get_bronx_freq_from_mip_table
@@ -396,7 +396,7 @@ def test_cmip6_freq_none_derivation_exception_caught(mock_consolidate, tmp_path)
             dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_gridding_dict_has_none_value_raises(mock_consolidate, tmp_path):
     """ ValueError when a gridding field is None """
     dummy_yaml = tmp_path / 'model.yaml'
@@ -428,7 +428,7 @@ def test_gridding_dict_has_none_value_raises(mock_consolidate, tmp_path):
             dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_outdir_creation_when_missing(mock_consolidate, tmp_path):
     """
     When cmorized_outdir does not exist, the function should create it
@@ -460,7 +460,7 @@ def test_outdir_creation_when_missing(mock_consolidate, tmp_path):
     assert outdir.is_dir()
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_outdir_creation_failure_raises_oserror(mock_consolidate, tmp_path):
     """
     OSError when cmorized_outdir does not exist and Path.mkdir fails.
@@ -492,7 +492,7 @@ def test_outdir_creation_failure_raises_oserror(mock_consolidate, tmp_path):
                 dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_start_stop_calendar_missing_from_yaml(mock_consolidate, tmp_path):
     """
     When start, stop, and calendar_type are None on the CLI AND absent
@@ -532,7 +532,7 @@ def test_start_stop_calendar_missing_from_yaml(mock_consolidate, tmp_path):
         calendar_type=None)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_cmip6_freq_none_derivation_succeeds(mock_consolidate, tmp_path):
     """
     When mip_era=CMIP6 and freq is None, but the MIP table carries a
@@ -567,7 +567,7 @@ def test_cmip6_freq_none_derivation_succeeds(mock_consolidate, tmp_path):
         dry_run_mode=True)
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_dry_run_prints_cli_call(mock_consolidate, tmp_path):
     """
     dry_run_mode=True with print_cli_call=True should log the CLI
@@ -602,7 +602,7 @@ def test_dry_run_prints_cli_call(mock_consolidate, tmp_path):
     assert len(output_nc) == 0
 
 
-@patch('fremorizer.cmor_yamler.consolidate_yamls')
+@patch('fremor.cmor_yamler.consolidate_yamls')
 def test_dry_run_prints_python_call(mock_consolidate, tmp_path):
     """
     dry_run_mode=True with print_cli_call=False should log the Python
