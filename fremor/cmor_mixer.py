@@ -1,14 +1,8 @@
 """
-``fremor run``: CMORization for FRE output
-==========================================
+``fremor run``
+==============
 
-This module provides routines which rewrite post-processed FRE/FMS model output in a community-driven, standardized way.
-This module relies heavily on PCMDI's CMOR module and it's python API. It is the core implementation for
-``fremor run`` operations- mixing and matching GFDL's and FRE's conventions to CMOR's expectations, so that
-participation in model-intercomparison projects may be eased. For more usage details, see the project README.md, the
-FRE documentation, and PCMDI's CMOR module documentation available at https://cmor.llnl.gov/.
-
-This module currently follows a composite pattern, analogous to nested/russian doll, where a large piece contains a
+This submodule currently follows a composite pattern, analogous to nested/russian doll, where a large piece contains a
 smaller piece which contains another. ``fremor run`` leads directly to ``cmor_run_subtool``, which calls
 ``cmorize_all_variables_in_dir`` once, which calls ``cmorize_all_variables_in_dir`` once, which calls
 ``cmorize_target_var_files`` once per variable in a variable list, and calls ``rewrite_netcdf_file_var`` once per found
