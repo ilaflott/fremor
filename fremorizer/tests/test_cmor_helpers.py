@@ -104,7 +104,7 @@ def test_find_gold_ocean_statics_file_mock_copy(tmp_path):
 
     # build a fake archive layout:  <tmp>/gold/datasets/OM5_025/.../ocean_static.nc
     fake_archive_root = tmp_path / 'fake_archive' / 'gold' / 'datasets'
-    fake_gold_file = fake_archive_root / 'OM5_025' / 'ocean_mosaic_v20250916_unpacked' / 'ocean_static.nc'
+    fake_gold_file = fake_archive_root / 'OM5_025' / 'ocean_mosaic_v20250916_unpacked' / 'ocean_static_no_basin.nc'
     fake_gold_file.parent.mkdir(parents=True, exist_ok=True)
     fake_gold_file.write_text('placeholder')
 
@@ -122,7 +122,7 @@ def test_find_gold_ocean_statics_file_mock_copy(tmp_path):
 
     assert result is not None
     assert Path(result).is_file()
-    assert 'ocean_static.nc' in result
+    assert 'ocean_static_no_basin.nc' in result
 
 
 # ---- create_lev_bnds failure case ----
