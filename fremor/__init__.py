@@ -8,8 +8,8 @@ This module relies heavily on PCMDI's CMOR module and it's ``python`` API. It is
 participation in model-intercomparison projects may be eased. For more usage details, see the project README.md, the
 FRE documentation, and PCMDI's CMOR module documentation available at https://cmor.llnl.gov/.
 
-.. note:: this text is set by `fremor/__init__.py`'s docstring. Importing `fremor` sets the version attribute, and sets 
-          up a `fre_logger`
+.. note:: this text is set by ``fremor/__init__.py``'s docstring. Importing ``fremor`` sets the version attribute, and sets 
+          up a ``fre_logger``
 """
 
 import logging
