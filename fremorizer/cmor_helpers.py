@@ -177,7 +177,6 @@ def find_gold_ocean_statics_file(put_copy_here: Optional[str] = None) -> Optiona
     """
     archive_gold_file = (
         f'{ARCHIVE_GOLD_DATA_DIR}/{CMIP7_GOLD_OCEAN_FILE_STUB}'
-        #f'{ARCHIVE_GOLD_DATA_DIR}/OM5_025/ocean_mosaic_v20250916_unpacked/ocean_static.nc'
     )
     fre_logger.debug('ARCHIVE_GOLD_DATA_DIR=%s', ARCHIVE_GOLD_DATA_DIR)
     fre_logger.debug('archive_gold_file=%s', archive_gold_file)
