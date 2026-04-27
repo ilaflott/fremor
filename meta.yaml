@@ -12,8 +12,8 @@ build:
   noarch: python
 
 channels:
-    - conda-forge
-    - noaa-gfdl
+  - conda-forge
+  - noaa-gfdl
 
 requirements:
   host:
