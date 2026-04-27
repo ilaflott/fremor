@@ -11,13 +11,9 @@ build:
   number: 0
   noarch: python
 
-channels:
-  - conda-forge
-  - noaa-gfdl
-
 requirements:
   host:
-    - python>=3.11
+    - python
     - pip
     - setuptools
   run:
@@ -62,4 +58,5 @@ about:
   license: Apache-2.0
   license_file: LICENSE.md
   summary: Model output rewriter (CMORizer) for FRE/FMS based models
-  author: Ian Laflotte, Sergey Nikonov, Chris Blanton, and NOAA-GFDL Modeling Systems Division
+  description: |
+    Written by Ian Laflotte, Sergey Nikonov, Chris Blanton, and NOAA-GFDL Modeling Systems Division
