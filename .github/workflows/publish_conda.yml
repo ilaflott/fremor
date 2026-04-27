@@ -64,7 +64,7 @@ jobs:
           conda build --version
           conda build --debug .
 
-        # -----------------------------------------------------------------
+      # -----------------------------------------------------------------
       # Post-publish verification: install epmt from the noaa-gfdl channel
       # into a clean environment and run tests against it.
       # -----------------------------------------------------------------
@@ -87,7 +87,7 @@ jobs:
           conda install -y conda-forge::pytest
           conda list -n fremor-verify
 
-        - name: Resolve site-packages path
+      - name: Resolve site-packages path
         id: site_pkgs
         run: |
           conda activate fremor-verify
