@@ -21,15 +21,12 @@ jobs:
     steps:
       - name: Checkout Files
         uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'
 
       - name: Set up base Miniforge
-        uses: conda-incubator/setup-miniconda@v3
+        uses: conda-incubator/setup-miniconda@v4
         with:
           miniforge-version: latest
           conda-remove-defaults: true
-          python-version: "3.11"
 
       - name: Configure Conda
         run: |
@@ -69,16 +66,35 @@ jobs:
              echo "ANACONDA_TOKEN is set (length: ${#ANACONDA_API_TOKEN})"
           fi
 
+          echo ""
+          echo "sanity check, which shell?"
+          echo $SHELL
+
+          echo ""
           echo "printing conda config... again... just in case..."
           conda config --show
 
+          echo ""
           echo "conda build version is"
           conda build --version
 
+          echo ""
+          echo "python version"
+          python --version
+
+          echo ""
+          echo "conda build check"
+          conda build --debug --check .
+
+          echo ""
           echo "building conda package for publishing"
-          conda build --debug .
+          CONDA_PKG=$(conda build --debug --output .)
+          conda build --debug --no-test --token "$ANACONDA_API_TOKEN" .
+
+          sleep 5
+          echo ""
           echo "extra info from additional force-upload step:"
-          anaconda --verbose upload --force /home/runner/miniconda3/envs/test/conda-bld/noarch/fremor-develop-py_0.conda
+          anaconda --verbose upload --force $CONDA_PKG
 
       # -----------------------------------------------------------------
       # Post-publish verification: install epmt from the noaa-gfdl channel
