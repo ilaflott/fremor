@@ -9,9 +9,9 @@ configuration and CMIP7-format CMOR tables.
    By default pytest removes temp directories after the session. To keep
    them around for debugging, run::
 
-       pytest --basetemp=/tmp/fremorizer-debug -k test_case_cmip7 -x
+       pytest --basetemp=/tmp/fremor-debug -k test_case_cmip7 -x
 
-   Output files will then persist under ``/tmp/fremorizer-debug``.
+   Output files will then persist under ``/tmp/fremor-debug``.
 """
 
 from datetime import date
@@ -165,7 +165,7 @@ def test_case_cmip7(  # pylint: disable=too-many-arguments,too-many-positional-a
     ## native-grid ocean tests: prevent gold statics lookup from finding /archive files
     #if opt_var_name == 'sos':
     #    monkeypatch.setattr(
-    #        'fremorizer.cmor_mixer.find_gold_ocean_statics_file',
+    #        'fremor.cmor_mixer.find_gold_ocean_statics_file',
     #        lambda **kw: None,
     #    )
 

@@ -1,7 +1,7 @@
 """
 CLI Tests for fremor subcommands
 
-Tests the command-line-interface calls for the fremor CLI (fremorizer package).
+Tests the command-line-interface calls for the fremor CLI (fremor package).
 Each tool generally gets 3 tests:
 
 - fremor $tool, checking for exit code 0 or 2 (fails if cli isn't configured right)

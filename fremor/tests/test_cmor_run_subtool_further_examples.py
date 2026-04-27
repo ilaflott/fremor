@@ -8,9 +8,9 @@ and grid labels drawn from a mock pp-archive.
    By default pytest removes temp directories after the session. To keep
    them around for debugging, run::
 
-       pytest --basetemp=/tmp/fremorizer-debug -k test_case_cmip6 -x
+       pytest --basetemp=/tmp/fremor-debug -k test_case_cmip6 -x
 
-   Output files will then persist under ``/tmp/fremorizer-debug``.
+   Output files will then persist under ``/tmp/fremor-debug``.
 '''
 
 from datetime import date

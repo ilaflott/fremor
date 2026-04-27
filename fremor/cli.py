@@ -38,12 +38,12 @@ STOP_YEAR_HELP = 'string representing the maximum calendar year CMOR should stop
 
 
 @click.version_option(
-    package_name = 'fremorizer',
+    package_name = 'fremor',
     version = version
 )
 @click.group(
     help = click.style(
-        'fremor is the main CLI for fremorizer. it houses the cmor subcommands.',
+        'fremor is the main CLI for fremor. it houses the cmor subcommands.',
         fg = 'cyan')
 )
 @click.option( '-v', '--verbose', default = 0, required = False, count = True, type = int,

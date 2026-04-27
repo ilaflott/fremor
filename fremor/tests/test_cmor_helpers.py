@@ -1,5 +1,5 @@
 """
-tests for fremorizer helper functions in cmor_helpers
+tests for fremor helper functions in cmor_helpers
 """
 
 import json
