@@ -46,8 +46,8 @@ jobs:
           echo "conda install conda-build"
           conda install conda-forge::conda-build conda-forge::anaconda-client
 
-      - name: Build fremorizer Conda Package
+      - name: Build fremor Conda Package
         run: |
-          echo "conda building fremorizer package"
+          echo "conda building fremor package"
           export ANACONDA_API_TOKEN=${{ secrets.TEMP_ANACONDA_API_TOKEN }}
           conda build .

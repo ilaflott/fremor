@@ -267,7 +267,7 @@ Common Issues and Solutions
 
    The ``fremor yaml`` subcommand optionally relies on ``fre-cli``\'s ``yamltools`` module for
    YAML consolidation. If ``fre-cli`` is not installed, you can use
-   ``fremorizer``\'s native YAML loader with a single pre-consolidated YAML file.
+   ``fremor``\'s native YAML loader with a single pre-consolidated YAML file.
 
 To debug this issue:
 
