@@ -1,40 +1,40 @@
-# `fremorizer` / `fremor`
-`fremorizer` CMORizes FRE output with `CMOR`. It is a `conda` package and it's documentation can be found on
-[`readthedocs`](https://fremorizer.readthedocs.io/en/latest/).
+# `fremor`
+`fremor` CMORizes FRE output with `CMOR`. It is a `conda` package and it's documentation can be found on
+[`readthedocs`](https://fremor.readthedocs.io/en/latest/).
 
-[![Anaconda-Server Badge](https://anaconda.org/ilaflott/fremorizer/badges/version.svg)](https://anaconda.org/ilaflott/fremorizer)
-[![Anaconda-Server Badge](https://anaconda.org/ilaflott/fremorizer/badges/latest_release_date.svg)](https://anaconda.org/ilaflott/fremorizer)
-[![Anaconda-Server Badge](https://anaconda.org/ilaflott/fremorizer/badges/latest_release_relative_date.svg)](https://anaconda.org/ilaflott/fremorizer)
+[![Anaconda-Server Badge](https://anaconda.org/NOAA-GFDL/fremor/badges/version.svg)](https://anaconda.org/NOAA-GFDL/fremor)
+[![Anaconda-Server Badge](https://anaconda.org/NOAA-GFDL/fremor/badges/latest_release_date.svg)](https://anaconda.org/NOAA-GFDL/fremor)
+[![Anaconda-Server Badge](https://anaconda.org/NOAA-GFDL/fremor/badges/latest_release_relative_date.svg)](https://anaconda.org/NOAA-GFDL/fremor)
 
-[![pylint](https://img.shields.io/badge/pylint-%E2%89%A59.7-brightgreen)](https://github.com/ilaflott/fremorizer/actions/workflows/pylint.yml)
-[![codecov](https://codecov.io/gh/ilaflott/fremorizer/branch/main/graph/badge.svg)](https://codecov.io/gh/ilaflott/fremorizer)
+[![pylint](https://img.shields.io/badge/pylint-%E2%89%A59.7-brightgreen)](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml)
+[![codecov](https://codecov.io/gh/NOAA-GFDL/fremor/branch/main/graph/badge.svg)](https://codecov.io/gh/NOAA-GFDL/fremor)
 
-[![publish_conda](https://github.com/ilaflott/fremorizer/actions/workflows/publish_conda.yml/badge.svg?branch=main)](https://github.com/ilaflott/fremorizer/actions/workflows/publish_conda.yml)
-[![readthedocs](https://app.readthedocs.org/projects/fremorizer/badge/?version=latest&style=flat)](https://fremorizer.readthedocs.io/en/latest/)
-[![pylint](https://github.com/ilaflott/fremorizer/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/ilaflott/fremorizer/actions/workflows/pylint.yml)
+[![publish_conda](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_conda.yml/badge.svg?branch=main)](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_conda.yml)
+[![readthedocs](https://app.readthedocs.org/projects/fremor/badge/?version=latest&style=flat)](https://fremor.readthedocs.io/en/latest/)
+[![pylint](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml)
 
-`python3.11`:[![3.11](https://github.com/ilaflott/fremorizer/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/ilaflott/fremorizer/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.11)
+`python3.11`:[![3.11](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.11)
 
-`python3.12`:[![3.12](https://github.com/ilaflott/fremorizer/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/ilaflott/fremorizer/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.12)
+`python3.12`:[![3.12](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.12)
 
-`python3.13`:[![3.13](https://github.com/ilaflott/fremorizer/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/ilaflott/fremorizer/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.13)
+`python3.13`:[![3.13](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.13)
 
-`python3.14`:[![3.14](https://github.com/ilaflott/fremorizer/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/ilaflott/fremorizer/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.14)
+`python3.14`:[![3.14](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.14)
 
 
 
 ## Background and Purpose
-`fremorizer` is a model output rewriter (CMORizer) for FRE/FMS based models and output. `fremorizer` (or `fremor` for short) is
+`fremor` is a model output rewriter (CMORizer) for FRE/FMS based models and output. `fremor` (or `fremor` for short) is
 geared for standardizing NOAA-GFDL datasets for further quality control checks, assessments and data publishing pipelines in the
 context of CMIP7 using the [`CMOR`](https://cmor.llnl.gov/) library.
 
 ### Relationship to `fre-cli`
-`fremorizer` was originally the `fre.cmor` submodule of [`NOAA-GFDL/fre-cli`](https://github.com/NOAA-GFDL/fre-cli) and so stands
+`fremor` was originally the `fre.cmor` submodule of [`NOAA-GFDL/fre-cli`](https://github.com/NOAA-GFDL/fre-cli) and so stands
 on the shoulders of it's contributors, retaining it's general structure and lessons learned from it. Future re-integrations back 
 into `fre-cli`, as a formal package dependency, are being assessed.
 
 ### Contributors
-[![Contributors](https://contrib.rocks/image?repo=ilaflott/fremorizer)](https://github.com/ilaflott/fremorizer/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=NOAA-GFDL/fremor)](https://github.com/NOAA-GFDL/fremor/graphs/contributors)
 
 #### AI Disclaimer
 AI was heavily used in the creation of this repository, primarily `github`'s `copilot` with `Claude` (`opus4.6` `sonnet4.6`, and `haiku`), and `Gemini` and `Chat-GPT` models to a lesser extent, in agent mode. `Claude` and `Codex` agents have also contributed.
@@ -57,59 +57,59 @@ For development and testing, `pylint`, `pytest`, and `pytest-cov` are all highly
 If you're trying to gain access to `fremor` functionality as quickly as possible:
 ```bash
 # the current post-release in main
-module load fremorizer/test
+module load fremor/test
 
-# a tagged version of fremorizer, post-releases will never be named modules
-module load fremorizer/X.Y.Z
+# a tagged version of fremor, post-releases will never be named modules
+module load fremor/X.Y.Z
 ```
 
 
 ### via `conda`
-If you have a path to a `fremorizer` environment you can activate it like so:
+If you have a path to a `fremor` environment you can activate it like so:
 ```bash
-conda activate some/path/to/fremorizer_env
+conda activate some/path/to/fremor_env
 ```
 
-If you want your own `fremorizer` environment:
+If you want your own `fremor` environment:
 ```bash
-# the environment will be named fremorizer_en
-conda create -n fremorizer_env ilaflott::fremorizer
+# the environment will be named fremor_en
+conda create -n fremor_env NOAA-GFDL::fremor
 
-# see fremorizer_env in the list --> activate it by name
+# see fremor_env in the list --> activate it by name
 conda env list
-conda activate fremorizer_env
+conda activate fremor_env
 ```
 
 or, if you've already activated a `conda` environment
 ```bash
 conda create -n empty_env
 conda activate empty_env
-conda install -c ilaflott fremorizer
+conda install -c NOAA-GFDL fremor
 
 # equivalent syntax
-conda install ilaflott::fremorizer
+conda install NOAA-GFDL::fremor
 ```
 
 
 ### `pip` install source/checkout into a virtual environment (`conda`/`venv`)
-If you're trying to develop `fremorizer` capabilities, or edit the code to your liking in either a big or small way,
+If you're trying to develop `fremor` capabilities, or edit the code to your liking in either a big or small way,
 **this is for you**. This checks out the code, creates and activates an environment, installs into the environment,
 and runs all unit-tests and `pylint` checks:
 ```bash
 # omit --recursive if you don't want tables as submodules
-git clone --recursive https://github.com/ilaflott/fremorizer.git
-cd fremorizer
+git clone --recursive https://github.com/NOAA-GFDL/fremor.git
+cd fremor
 
 # create an environment and install the local checkout
 conda env create -f environment.yaml
-conda activate fremorizer
+conda activate fremor
 pip install -e . 
 
 # Run tests
-pytest fremorizer/tests/
+pytest fremor/tests/
 
 # Run linter
-pylint --rcfile pylintrc fremorizer/
+pylint --rcfile pylintrc fremor/
 ```
 
 
@@ -144,7 +144,7 @@ If you've used the previous `fre cmor` command, there is a direct mapping of syn
 # past fre-cli command
 fre -vv -l logfile.txt cmor <COMMAND> [OPTIONS]
 
-# fremorizer equivalent
+# fremor equivalent
 fremor -vv -l logfile.txt <COMMAND> [OPTIONS]
 ```
 
@@ -165,7 +165,7 @@ For an overview of required inputs and sample commands, see the [CMOR Quickstart
 
 ### WCRP Compliance Checking (under development)
 
-[![wcrp_compliance_check](https://github.com/ilaflott/fremorizer/actions/workflows/wcrp_compliance_check.yml/badge.svg?branch=main)](https://github.com/ilaflott/fremorizer/actions/workflows/wcrp_compliance_check.yml)
+[![wcrp_compliance_check](https://github.com/NOAA-GFDL/fremor/actions/workflows/wcrp_compliance_check.yml/badge.svg?branch=main)](https://github.com/NOAA-GFDL/fremor/actions/workflows/wcrp_compliance_check.yml)
 
 The `wcrp_compliance_check` workflow validates CMORized NetCDF outputs against WCRP project
 specifications using [cc-plugin-wcrp](https://github.com/ESGF/cc-plugin-wcrp), a plugin for
@@ -193,16 +193,16 @@ Apache License 2.0 — see [LICENSE.md](LICENSE.md)
 
 
 ## Releases and Versioning
-`fremorizer` uses a post-release scheme to identify development beyond the latest tagged version and tie the current `main` branch to a
+`fremor` uses a post-release scheme to identify development beyond the latest tagged version and tie the current `main` branch to a
 `conda` package versioned as `develop`. To avoid confusion with `fre-workflows` and `fre-cli`, which often demand that the version tags 
-match, `fremorizer`'s version format is `X.Y.Z[.post]`. 
+match, `fremor`'s version format is `X.Y.Z[.post]`. 
 
 
 ### new published release procedure 
 To publish new release carefully follow the below procedure:
 1. create a new branch off of `main`, which is already published to `conda` under `develop`/the previous tagged version + `.post`
-2. edit the version number in `fremorizer/_version.py` from the current one, to the desired version tag, remove `.post`, then open a PR. edit nothing else (usually).
+2. edit the version number in `fremor/_version.py` from the current one, to the desired version tag, remove `.post`, then open a PR. edit nothing else (usually).
 3. confirm the branch is functional by letting workflows finish, if you see green checks only, proceed. otherwise, stop and debug.
 4. draft a new release pointing to the PR branch, click release. the publishing workflow should trigger and finish, and you should see the `X.Y.Z` version in the conda channel.
 5. *releases in this repository are immutable*, **so even if the release workflow fails, breathe and move on to the next step.**
-6. edit the version number in `fremorizer/_version.py` to `X.Y.Z.post`, and merge the PR to main workflow steps passed. **`publish_conda`** will trigger again and upload what is in `main` under the `conda` version `develop` and `pip` version `X.Y.Z.post`
+6. edit the version number in `fremor/_version.py` to `X.Y.Z.post`, and merge the PR to main workflow steps passed. **`publish_conda`** will trigger again and upload what is in `main` under the `conda` version `develop` and `pip` version `X.Y.Z.post`

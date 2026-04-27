@@ -19,7 +19,7 @@ Get your own copy of the code:
 
 .. code-block:: bash
 
-   git clone --recursive git@github.com:ilaflott/fremor.git
+   git clone --recursive git@github.com:NOAA-GFDL/fremor.git
 
 Or replace with your fork's link (recommended).
 

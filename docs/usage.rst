@@ -64,5 +64,5 @@ Additional Resources
 * `CMIP6 Tables <https://github.com/pcmdi/cmip6-cmor-tables>`_
 * `CMIP6 Controlled Vocabulary <https://github.com/WCRP-CMIP/CMIP6_CVs>`_
 * `PCMDI CMOR User Guide <http://cmor.llnl.gov/>`_
-* `fremor on GitHub <https://github.com/ilaflott/fremor>`_
+* `fremor on GitHub <https://github.com/NOAA-GFDL/fremor>`_
 * `fre-cli (upstream) <https://github.com/NOAA-GFDL/fre-cli>`_
