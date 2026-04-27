@@ -1,4 +1,4 @@
-name: fremorizer
+name: fremor
 channels:
   - conda-forge
   - noaa-gfdl

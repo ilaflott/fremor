@@ -40,7 +40,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           conda-remove-defaults: true
           environment-file: environment.yaml
-          activate-environment: fremorizer
+          activate-environment: fremor
 
       - name: Show installed packages
         run: |
@@ -53,7 +53,7 @@ jobs:
           echo "printing conda config just in case"
           conda config --show
 
-      - name: Install fremorizer
+      - name: Install fremor
         run: |
           pip install .
 

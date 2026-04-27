@@ -24,7 +24,7 @@ pkg_version = _ver_mod.__version__
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'fremorizer'
+project = 'fremor'
 copyright = f'{dt.datetime.now().year}, NOAA-GFDL MSD Workflow Team'
 author = 'NOAA-GFDL MSD Workflow Team'
 release = pkg_version   # type: ignore

@@ -27,7 +27,7 @@ jobs:
       - name: Setup Conda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          activate-environment: fremorizer-wcrp
+          activate-environment: fremor-wcrp
           environment-file: environment.yaml
           conda-remove-defaults: true
           auto-activate: false
@@ -47,7 +47,7 @@ jobs:
           echo "printing conda config just in case"
           conda config --show
 
-      - name: Install fremorizer
+      - name: Install fremor
         run: |
           pip install .
 
