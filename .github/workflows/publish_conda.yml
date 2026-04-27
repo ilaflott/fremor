@@ -1,5 +1,6 @@
 name: publish_conda
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -32,6 +33,11 @@ jobs:
 
       - name: Configure Conda
         run: |
+          echo "removing main and r channels from defaults"
+          conda config --remove channels defaults || true
+          conda config --remove channels main || true
+          conda config --remove channels r || true
+
           echo "setting strict channel priority"
           conda config --set channel_priority strict
 
@@ -40,6 +46,13 @@ jobs:
 
           echo "printing conda config just in case"
           conda config --show
+
+      - name: Update Conda and Conda Package Indices
+        run: |
+          echo "updating conda and package channel indices for conda-forge, noaa-gfdl"
+          conda update -y conda
+          conda update -y --all --override-channels -c conda-forge
+          conda update -y --all --override-channels -c noaa-gfdl
 
       - name: Conda install conda-build
         run: |
