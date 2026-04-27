@@ -3,13 +3,13 @@ A decent cheat-sheet for reStructuredText can be found
 `at this gist <https://gist.github.com/SMotaal/24006b13b354e6edad0c486749171a70#sections>`__.
 
 
-With a PR to ilaflott/fremor (recommended)
+With a PR to NOAA-GFDL/fremor (recommended)
 ----------------------------------------------
 
 This approach is the easiest and most automated option for open-source contributors. It is completely
 appropriate for casual editing of the docs and previewing the changes.
 
-* Make a branch, either with ``ilaflott/fremor`` as the remote, or your own fork.
+* Make a branch, either with ``NOAA-GFDL/fremor`` as the remote, or your own fork.
 * Edit a file any non-zero amount, commit that change to your branch, and push. If the branch is
   identical to ``main``, you cannot open a PR.
 * Once the PR is opened, a ``readthedocs`` workflow will be run, even if that PR is in draft mode.

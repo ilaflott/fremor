@@ -58,7 +58,7 @@ test:
     - pytest --durations=5 --log-level DEBUG fremor/
 
 about:
-  home: https://github.com/ilaflott/fremorizer
+  home: https://github.com/NOAA-GFDL/fremorizer
   license: Apache-2.0
   license_file: LICENSE.md
   summary: Model output rewriter (CMORizer) for FRE/FMS based models
