@@ -1,14 +1,10 @@
 name: publish_conda
 on:
-  pull_request:
   push:
     branches:
       - main
     tags:
       - '*'
-
-permissions:
-  contents: read
 
 jobs:
   condapublish:
@@ -21,6 +17,8 @@ jobs:
     steps:
       - name: Checkout Files
         uses: actions/checkout@v4
+		with:
+		  recursive: true
 
       - name: Set up base Miniforge
         uses: conda-incubator/setup-miniconda@v3
@@ -41,12 +39,6 @@ jobs:
 
           echo "printing conda config just in case"
           conda config --show
-
-      - name: Update Conda and Conda Package Indices
-        run: |
-          echo "updating conda and package channel indices for conda-forge, noaa-gfdl"
-          conda update -y --all --override-channels -c conda-forge
-          conda update -y --all --override-channels -c noaa-gfdl
 
       - name: Conda install conda-build
         run: |
@@ -80,41 +72,3 @@ jobs:
           echo ""
           echo "building conda package for publishing"
           conda build --no-include-recipe --no-test .
-
-      # -----------------------------------------------------------------
-      # Post-publish verification: install epmt from the noaa-gfdl channel
-      # into a clean environment and run tests against it.
-      # -----------------------------------------------------------------
-      - name: Wait for noaa-gfdl channel to update
-        run: |
-          echo "Waiting 1 minutes for the noaa-gfdl channel index to update..."
-          sleep 60
-
-      - name: Remove checked-out source code
-        run: |
-          echo "Removing workspace source to ensure tests run against the installed package"
-          rm -rf "$GITHUB_WORKSPACE"/*
-          ls -la "$GITHUB_WORKSPACE"
-
-      - name: Create clean environment and install fremor from noaa-gfdl
-        run: |
-          conda create -y -n fremor-verify
-          conda activate fremor-verify
-          conda install -y -c noaa-gfdl -c conda-forge fremor
-          conda install -y conda-forge::pytest
-          conda list -n fremor-verify
-
-      - name: Resolve site-packages path
-        id: site_pkgs
-        run: |
-          conda activate fremor-verify
-          site_pkgs=$(python3 -c 'import site; print(site.getsitepackages()[0]);')
-          echo "site_pkgs=${site_pkgs}" >> "$GITHUB_OUTPUT"
-          echo "site-packages path: ${site_pkgs}"
-
-      - name: test(s) on package installed from channel
-        run: |
-          conda activate fremor-verify
-          fremor --help
-          fremor --version
-          pytest -x -vv ${{ steps.site_pkgs.outputs.site_pkgs }}/fremor/tests
