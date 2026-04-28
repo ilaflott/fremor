@@ -6,29 +6,33 @@ on:
     tags:
       - '*'
 
-permissions:
-  contents: read
-
 jobs:
   condapublish:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         shell: bash -l {0}
+
     steps:
       - name: Checkout Files
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
 
-      - name: Setup Conda
+      - name: Set up base Miniforge
         uses: conda-incubator/setup-miniconda@v3
         with:
           auto-activate: true
           activate-environment: base
-          conda-remove-defaults: true
           miniforge-version: latest
+          conda-remove-defaults: true
           channels: conda-forge,noaa-gfdl
+
+      - name: Conda install conda-build
+        run: |
+          echo "conda install conda-build"
+          conda install conda-forge::conda-build conda-forge::anaconda-client
 
       - name: Configure Conda
         run: |
@@ -41,13 +45,16 @@ jobs:
           echo "printing conda config just in case"
           conda config --show
 
-      - name: Conda install conda-build
+      - name: Conda Build Check
         run: |
-          echo "conda install conda-build"
-          conda install conda-forge::conda-build conda-forge::anaconda-client
+          echo ""
+          echo "sanity check, conda build check"
+          conda build --check .          
 
       - name: Build fremor Conda Package
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
         run: |
-          echo "conda building fremor package"
-          export ANACONDA_API_TOKEN=${{ secrets.ANACONDA_TOKEN }}
-          conda build .
+          echo ""
+          echo "building conda package for publishing"
+          conda build --no-include-recipe --no-test .
