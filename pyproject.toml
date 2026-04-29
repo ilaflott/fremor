@@ -77,3 +77,8 @@ ignore_directives = [
     "glossary",
 ]
 ignore_roles = ["ref"]
+
+[project.urls]
+Homepage = "https://github.com/NOAA-GFDL/fremor"
+Repository = "https://github.com/NOAA-GFDL/fremor"
+Changelog = "https://github.com/NOAA-GFDL/fremor/releases"
