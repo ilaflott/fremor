@@ -1,5 +1,10 @@
 name: publish_conda
-
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - 'main'
 
 jobs:
   condapublish:
