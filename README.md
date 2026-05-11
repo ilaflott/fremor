@@ -25,9 +25,9 @@
 
 
 ## Background and Purpose
-`fremor` is a model output rewriter (CMORizer) for FRE/FMS based models and output. `fremor` (or `fremor` for short) is
-geared for standardizing NOAA-GFDL datasets for further quality control checks, assessments and data publishing pipelines in the
-context of CMIP7 using the [`CMOR`](https://cmor.llnl.gov/) library.
+`fremor` is a model output rewriter (CMORizer) for FRE/FMS based models and output. It is specifically geared for standardizing 
+NOAA-GFDL datasets for further quality control checks, assessments and data publishing pipelines in the context of CMIP7 
+using the [`CMOR`](https://cmor.llnl.gov/) library.
 
 ### Relationship to `fre-cli`
 `fremor` was originally the `fre.cmor` submodule of [`NOAA-GFDL/fre-cli`](https://github.com/NOAA-GFDL/fre-cli) and so stands
@@ -38,7 +38,8 @@ into `fre-cli`, as a formal package dependency, are being assessed.
 [![Contributors](https://contrib.rocks/image?repo=NOAA-GFDL/fremor)](https://github.com/NOAA-GFDL/fremor/graphs/contributors)
 
 #### AI Disclaimer
-AI was heavily used in the creation of this repository, primarily `github`'s `copilot` with `Claude` (`opus4.6` `sonnet4.6`, and `haiku`), and `Gemini` and `Chat-GPT` models to a lesser extent, in agent mode. `Claude` and `Codex` agents have also contributed.
+AI was heavily used in the creation of this repository, primarily `github`'s `copilot` with `Claude` (`opus4.6` `sonnet4.6`, 
+and `haiku`), and `Gemini` and `Chat-GPT` models to a lesser extent, in agent mode. `Claude` and `Codex` agents have also contributed.
 
 ## Installation / Access
 
