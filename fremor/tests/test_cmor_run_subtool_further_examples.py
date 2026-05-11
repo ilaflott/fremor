@@ -146,7 +146,7 @@ def test_case_cmip6(  # pylint: disable=too-many-arguments,too-many-positional-a
     # native-grid ocean tests: prevent gold statics lookup from finding /archive files
     if grid_label == 'gn':
         monkeypatch.setattr(
-            'fremor.cmor_mixer.find_gold_ocean_statics_file',
+            'fremor.cmor_helpers.find_gold_ocean_statics_file',
             lambda **kw: None,
         )
 
