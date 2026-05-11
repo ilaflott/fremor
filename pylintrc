@@ -39,7 +39,7 @@ extension-pkg-whitelist=
 fail-on=
 
 # Specify a score threshold under which the program will exit with error.
-fail-under=9.6
+fail-under=9.7
 
 # Interpret the stdin as a python script, whose filename needs to be passed as
 # the module_or_package argument.
@@ -553,7 +553,7 @@ spelling-store-unknown-words=no
 
 # This flag controls whether inconsistent-quotes generates a warning when the
 # character used as a quote delimiter is used inconsistently within a module.
-check-quote-consistency=no
+check-quote-consistency=yes
 
 # This flag controls whether the implicit-str-concat should generate a warning
 # on implicit string concatenation in sequences defined over several lines.

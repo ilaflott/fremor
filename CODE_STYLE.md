@@ -2,7 +2,7 @@
 
 Disclaimer: This style guide is still in development.
 
-Follow these Style Guidelines when contributing to the `fremorizer` repository.
+Follow these Style Guidelines when contributing to the `fremor` repository.
 
 ## Code Checklist
 
@@ -47,7 +47,7 @@ Annotations are described in [PEP 3107](https://peps.python.org/pep-3107/).
 
 Useful Resources
  - https://docs.python.org/3/library/typing.html
- - https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html (Note: fremorizer is not dependent on mypy)
+ - https://mypy.readthedocs.io/en/stable/cheat_sheet_py3.html (Note: fremor is not dependent on mypy)
  - https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#field-lists
  - https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html
 
@@ -66,7 +66,9 @@ class MyClass(object):
     :ivar str var2: description, initial value: par2
     """
 
-    var3: ClassVar[str] = "I am a class variable"
+    # space after the pound for a comment
+	# single quotes for in-body quoted objects, e.g. the next line
+    var3: ClassVar[str] = 'I am a class variable'
 
     def __init__(self, par1: int, par2: int):
         self.var1 = par1 # instance variables
@@ -89,7 +91,7 @@ def func_with_return_and_optional_param(a: int, c: List[int] = [1,2]) -> Any:
     """
 
     if a > 10:
-        raise ValueError("a is more than 10")
+        raise ValueError('a is more than 10')
     return c
 
 def simple_func(foo: str):
