@@ -744,8 +744,7 @@ def cmorize_all_variables_in_dir(vars_to_run: Dict[str, Any],
             return_status = 0
         except Exception as exc: #uncovered
             return_status = 1
-            fre_logger.warning('!!!EXCEPTION CAUGHT!!!   !!!READ THE NEXT LINE!!!')
-            fre_logger.warning('exc=%s', exc)
+            fre_logger.exception('!!!EXCEPTION CAUGHT!!!')
             fre_logger.warning('this message came from within cmorize_target_var_files')
             fre_logger.warning('COULD NOT PROCESS: %s/%s...moving on', local_var, target_var)
             expected_files = [
