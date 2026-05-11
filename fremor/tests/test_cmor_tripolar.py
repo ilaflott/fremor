@@ -3,24 +3,51 @@ tests for fremor.cmor_tripolar.load_tripolar_grid
 """
 
 from pathlib import Path
-import shutil
 
 import netCDF4
 import numpy as np
 import pytest
 
-import fremor.cmor_constants as _const
-import fremor.cmor_helpers as _helpers
 from fremor.cmor_tripolar import load_tripolar_grid
+
+
+# ---------------------------------------------------------------------------
+# Default grid sizes used across tests
+# ---------------------------------------------------------------------------
+
+YH_SIZE = 4
+XH_SIZE = 5
 
 
 # ---------------------------------------------------------------------------
 # helpers
 # ---------------------------------------------------------------------------
 
+def _bronx_paths(base: Path):
+    """
+    Return ``(data_nc, statics_nc)`` Path objects for a minimal FRE-bronx-style
+    layout rooted at *base*.  The directory tree is created but the files are not.
+
+    Layout::
+
+        <base>/
+        └── pp/
+            └── ocean_monthly/
+                ├── ocean_monthly.static.nc       <- statics_nc
+                └── ts/monthly/5yr/
+                    └── ocean_monthly.000101-000102.sos.nc   <- data_nc
+    """
+    pp_component = base / 'pp' / 'ocean_monthly'
+    ts_dir = pp_component / 'ts' / 'monthly' / '5yr'
+    ts_dir.mkdir(parents=True, exist_ok=True)
+    data_nc = ts_dir / 'ocean_monthly.000101-000102.sos.nc'
+    statics_nc = pp_component / 'ocean_monthly.static.nc'
+    return data_nc, statics_nc
+
+
 def _make_mock_statics_nc(path: Path,
-                          yh_size: int = 4,
-                          xh_size: int = 5) -> None:
+                          yh_size: int = YH_SIZE,
+                          xh_size: int = XH_SIZE) -> None:
     """
     Write a minimal ocean-statics-like NetCDF file at *path* that contains
     the variables load_tripolar_grid expects:
@@ -62,7 +89,7 @@ def _make_mock_statics_nc(path: Path,
     ds.close()
 
 
-def _make_mock_data_nc(path: Path, yh_size: int = 4, xh_size: int = 5) -> None:
+def _make_mock_data_nc(path: Path, yh_size: int = YH_SIZE, xh_size: int = XH_SIZE) -> None:
     """
     Write a minimal data NetCDF file that has yh/xh dimensions but
     no lat/lon yet (simulating a tripolar ocean file before statics injection).
@@ -71,7 +98,7 @@ def _make_mock_data_nc(path: Path, yh_size: int = 4, xh_size: int = 5) -> None:
     ds.createDimension('yh', yh_size)
     ds.createDimension('xh', xh_size)
     ds.createDimension('nv', 2)
-    # deliberately do NOT add lat/lon — that's the job of load_tripolar_grid
+    # deliberately do NOT add lat/lon -- that's the job of load_tripolar_grid
     sos = ds.createVariable('sos', 'f4', ('yh', 'xh'))
     sos[:] = np.ones((yh_size, xh_size))
     yh_v = ds.createVariable('yh', 'f4', ('yh',))
@@ -88,146 +115,82 @@ def _make_mock_data_nc(path: Path, yh_size: int = 4, xh_size: int = 5) -> None:
 class TestLoadTripolarGrid:
     """Tests for load_tripolar_grid using mock statics and data files."""
 
-    def test_return_keys(self, tmp_path):
+    def test_return_keys(self, tmp_path, monkeypatch):
         """
         The returned dict must contain exactly the eight expected coordinate keys.
         """
-        statics = tmp_path / 'ocean_monthly.static.nc'
-        data_nc = tmp_path / 'ocean_monthly.199301-199302.sos.nc'
-        _make_mock_statics_nc(statics)
+        # determine file locations first, then create them
+        data_nc, statics_nc = _bronx_paths(tmp_path)
+        _make_mock_statics_nc(statics_nc)
         _make_mock_data_nc(data_nc)
 
-        fake_archive = tmp_path / 'fake_archive'
-        fake_archive_file = fake_archive / _const.CMIP7_GOLD_OCEAN_FILE_STUB
-        fake_archive_file.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(str(statics), str(fake_archive_file))
+        # prevent the gold-statics lookup from touching /net2
+        monkeypatch.setattr('fremor.cmor_helpers.find_gold_ocean_statics_file', lambda **kw: None)
 
-        orig_archive = _const.ARCHIVE_GOLD_DATA_DIR
-        orig_helpers = _helpers.ARCHIVE_GOLD_DATA_DIR
-        try:
-            _const.ARCHIVE_GOLD_DATA_DIR = str(fake_archive)
-            _helpers.ARCHIVE_GOLD_DATA_DIR = str(fake_archive)
-
-            ds = netCDF4.Dataset(str(data_nc), 'r+')
-            result = load_tripolar_grid(ds=ds, netcdf_file=str(data_nc), prev_path=None)
-            ds.close()
-        finally:
-            _const.ARCHIVE_GOLD_DATA_DIR = orig_archive
-            _helpers.ARCHIVE_GOLD_DATA_DIR = orig_helpers
+        ds = netCDF4.Dataset(str(data_nc), 'r+')
+        result = load_tripolar_grid(ds=ds, netcdf_file=str(data_nc), prev_path=str(data_nc))
+        ds.close()
 
         expected_keys = {'lat', 'lon', 'lat_bnds', 'lon_bnds', 'yh', 'xh', 'yh_bnds', 'xh_bnds'}
         assert set(result.keys()) == expected_keys
 
-    def test_coordinates_written_into_ds(self, tmp_path):
+    def test_coordinates_written_into_ds(self, tmp_path, monkeypatch):
         """
         After calling load_tripolar_grid, ds should contain lat/lon and their bounds.
         """
-        statics = tmp_path / 'ocean_monthly.static.nc'
-        data_nc = tmp_path / 'ocean_monthly.199301-199302.sos.nc'
-        yh_size, xh_size = 4, 5
-        _make_mock_statics_nc(statics, yh_size=yh_size, xh_size=xh_size)
-        _make_mock_data_nc(data_nc, yh_size=yh_size, xh_size=xh_size)
+        # determine file locations first, then create them
+        data_nc, statics_nc = _bronx_paths(tmp_path)
+        _make_mock_statics_nc(statics_nc, yh_size=YH_SIZE, xh_size=XH_SIZE)
+        _make_mock_data_nc(data_nc, yh_size=YH_SIZE, xh_size=XH_SIZE)
 
-        fake_archive = tmp_path / 'fake_archive2'
-        fake_archive_file = fake_archive / _const.CMIP7_GOLD_OCEAN_FILE_STUB
-        fake_archive_file.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(str(statics), str(fake_archive_file))
+        # prevent the gold-statics lookup from touching /net2
+        monkeypatch.setattr('fremor.cmor_helpers.find_gold_ocean_statics_file', lambda **kw: None)
 
-        orig_archive = _const.ARCHIVE_GOLD_DATA_DIR
-        orig_helpers = _helpers.ARCHIVE_GOLD_DATA_DIR
-        try:
-            _const.ARCHIVE_GOLD_DATA_DIR = str(fake_archive)
-            _helpers.ARCHIVE_GOLD_DATA_DIR = str(fake_archive)
+        ds = netCDF4.Dataset(str(data_nc), 'r+')
+        load_tripolar_grid(ds=ds, netcdf_file=str(data_nc), prev_path=str(data_nc))
 
-            ds = netCDF4.Dataset(str(data_nc), 'r+')
-            load_tripolar_grid(ds=ds, netcdf_file=str(data_nc), prev_path=None)
+        assert 'lat' in ds.variables
+        assert 'lon' in ds.variables
+        assert 'lat_bnds' in ds.variables
+        assert 'lon_bnds' in ds.variables
+        assert 'vertex' in ds.dimensions
+        assert ds.variables['lat'].shape == (YH_SIZE, XH_SIZE)
+        assert ds.variables['lat_bnds'].shape == (YH_SIZE, XH_SIZE, 4)
+        ds.close()
 
-            assert 'lat' in ds.variables
-            assert 'lon' in ds.variables
-            assert 'lat_bnds' in ds.variables
-            assert 'lon_bnds' in ds.variables
-            assert 'vertex' in ds.dimensions
-            assert ds.variables['lat'].shape == (yh_size, xh_size)
-            assert ds.variables['lat_bnds'].shape == (yh_size, xh_size, 4)
-            ds.close()
-        finally:
-            _const.ARCHIVE_GOLD_DATA_DIR = orig_archive
-            _helpers.ARCHIVE_GOLD_DATA_DIR = orig_helpers
-
-    def test_fallback_to_find_statics_file(self, tmp_path):
+    def test_raises_file_not_found_when_no_statics(self, tmp_path, monkeypatch):
         """
-        When the gold archive file is absent, load_tripolar_grid should fall back
-        to find_statics_file via prev_path and still succeed.
-        """
-        # build a FRE-bronx-style directory layout so find_statics_file can locate the statics
-        bronx_pp_dir = (tmp_path / 'USER' / 'CMIP7' / 'ESM4' / 'DEV' /
-                        'ESM4.5v01_om5b04_piC' /
-                        'gfdl.ncrc5-intel23-prod-openmp' / 'pp' / 'ocean_monthly')
-        ts_dir = bronx_pp_dir / 'ts' / 'monthly' / '5yr'
-        ts_dir.mkdir(parents=True, exist_ok=True)
-
-        data_nc = ts_dir / 'ocean_monthly.000101-000102.sos.nc'
-        statics = bronx_pp_dir / 'ocean_monthly.static.nc'
-
-        _make_mock_statics_nc(statics)
-        _make_mock_data_nc(data_nc)
-
-        # point ARCHIVE_GOLD_DATA_DIR at a non-existent path so gold statics is skipped
-        orig_archive = _const.ARCHIVE_GOLD_DATA_DIR
-        orig_helpers = _helpers.ARCHIVE_GOLD_DATA_DIR
-        try:
-            _const.ARCHIVE_GOLD_DATA_DIR = str(tmp_path / 'nonexistent')
-            _helpers.ARCHIVE_GOLD_DATA_DIR = str(tmp_path / 'nonexistent')
-
-            ds = netCDF4.Dataset(str(data_nc), 'r+')
-            result = load_tripolar_grid(ds=ds, netcdf_file=str(data_nc), prev_path=str(data_nc))
-            ds.close()
-        finally:
-            _const.ARCHIVE_GOLD_DATA_DIR = orig_archive
-            _helpers.ARCHIVE_GOLD_DATA_DIR = orig_helpers
-
-        assert 'lat' in result
-        assert 'lon' in result
-
-    def test_raises_file_not_found_when_no_statics(self, tmp_path):
-        """
-        When neither the gold archive nor the prev_path fallback can locate a
+        When neither the gold archive nor the FRE-bronx fallback can locate a
         statics file, load_tripolar_grid should raise FileNotFoundError.
         """
-        data_nc = tmp_path / 'ocean_monthly.000101-000102.sos.nc'
+        # determine file locations first, then create only the data file (no statics)
+        data_nc, _statics_nc = _bronx_paths(tmp_path)
         _make_mock_data_nc(data_nc)
+        # statics_nc is intentionally NOT created
 
-        orig_archive = _const.ARCHIVE_GOLD_DATA_DIR
-        orig_helpers = _helpers.ARCHIVE_GOLD_DATA_DIR
-        try:
-            _const.ARCHIVE_GOLD_DATA_DIR = str(tmp_path / 'nonexistent')
-            _helpers.ARCHIVE_GOLD_DATA_DIR = str(tmp_path / 'nonexistent')
+        # prevent the gold-statics lookup from touching /net2
+        monkeypatch.setattr('fremor.cmor_helpers.find_gold_ocean_statics_file', lambda **kw: None)
 
-            ds = netCDF4.Dataset(str(data_nc), 'r+')
-            with pytest.raises(FileNotFoundError, match='statics file not found'):
-                load_tripolar_grid(ds=ds, netcdf_file=str(data_nc), prev_path=None)
-            ds.close()
-        finally:
-            _const.ARCHIVE_GOLD_DATA_DIR = orig_archive
-            _helpers.ARCHIVE_GOLD_DATA_DIR = orig_helpers
+        ds = netCDF4.Dataset(str(data_nc), 'r+')
+        with pytest.raises(FileNotFoundError, match='statics file not found'):
+            load_tripolar_grid(ds=ds, netcdf_file=str(data_nc), prev_path=str(data_nc))
+        ds.close()
 
-    def test_raises_value_error_on_inconsistent_hq_dims(self, tmp_path):
+    def test_raises_value_error_on_inconsistent_hq_dims(self, tmp_path, monkeypatch):
         """
         If the statics file's q-point dimensions are not exactly hpoint+1,
         load_tripolar_grid should raise ValueError.
         """
         # data has yh=4, xh=5; correct q-point sizes would be yq=5, xq=6
         # deliberately build statics with wrong q-point sizes yq=3 and xq=4
-        statics = tmp_path / 'ocean_monthly.static.nc'
-        data_nc = tmp_path / 'ocean_monthly.000101-000102.sos.nc'
-        _make_mock_data_nc(data_nc, yh_size=4, xh_size=5)
+        data_nc, statics_nc = _bronx_paths(tmp_path)
+        _make_mock_data_nc(data_nc, yh_size=YH_SIZE, xh_size=XH_SIZE)
 
         # statics with mismatched q-point sizes: yq=3 (should be yq=5), xq=4 (should be xq=6)
-        ds_statics = netCDF4.Dataset(str(statics), 'w')
-        yh_size, xh_size = 4, 5
         bad_yq, bad_xq = 3, 4
-        ds_statics.createDimension('yh', yh_size)
-        ds_statics.createDimension('xh', xh_size)
+        ds_statics = netCDF4.Dataset(str(statics_nc), 'w')
+        ds_statics.createDimension('yh', YH_SIZE)
+        ds_statics.createDimension('xh', XH_SIZE)
         ds_statics.createDimension('yq', bad_yq)
         ds_statics.createDimension('xq', bad_xq)
         for name, dim in [('geolat', ('yh', 'xh')), ('geolon', ('yh', 'xh')),
@@ -240,21 +203,10 @@ class TestLoadTripolarGrid:
             v[:] = np.arange(ds_statics.dimensions[dim].size, dtype='f4')
         ds_statics.close()
 
-        fake_archive = tmp_path / 'fake_archive3'
-        fake_archive_file = fake_archive / _const.CMIP7_GOLD_OCEAN_FILE_STUB
-        fake_archive_file.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(str(statics), str(fake_archive_file))
+        # prevent the gold-statics lookup from touching /net2
+        monkeypatch.setattr('fremor.cmor_helpers.find_gold_ocean_statics_file', lambda **kw: None)
 
-        orig_archive = _const.ARCHIVE_GOLD_DATA_DIR
-        orig_helpers = _helpers.ARCHIVE_GOLD_DATA_DIR
-        try:
-            _const.ARCHIVE_GOLD_DATA_DIR = str(fake_archive)
-            _helpers.ARCHIVE_GOLD_DATA_DIR = str(fake_archive)
-
-            ds = netCDF4.Dataset(str(data_nc), 'r+')
-            with pytest.raises(ValueError, match='hpoint_dim != qpoint_dim-1'):
-                load_tripolar_grid(ds=ds, netcdf_file=str(data_nc), prev_path=None)
-            ds.close()
-        finally:
-            _const.ARCHIVE_GOLD_DATA_DIR = orig_archive
-            _helpers.ARCHIVE_GOLD_DATA_DIR = orig_helpers
+        ds = netCDF4.Dataset(str(data_nc), 'r+')
+        with pytest.raises(ValueError, match='hpoint_dim != qpoint_dim-1'):
+            load_tripolar_grid(ds=ds, netcdf_file=str(data_nc), prev_path=str(data_nc))
+        ds.close()

@@ -70,22 +70,22 @@ def load_tripolar_grid( ds: nc.Dataset,
     fre_logger.info('netcdf_file is %s', netcdf_file)
 
     # first, try the gold-standard archived ocean statics file
+    statics_file_path = None
     try:
         statics_file_path = find_gold_ocean_statics_file(
             put_copy_here=f'/net2/{getpass.getuser()}')
-
-        # fall back to the legacy FRE-bronx directory convention
-        if statics_file_path is None:
-            fre_logger.info('gold statics not available, falling back to find_statics_file')
-            statics_file_path = find_statics_file(prev_path)
-
-        fre_logger.info('statics_file_path is %s', statics_file_path)
     except (OSError, FileNotFoundError) as exc:
-        fre_logger.warning( '%s',
-                            f'exc = {exc}\n' + \
-                             'an ocean statics file is needed, but it could not be found.\n' + \
-                             '   raising FileNotFoundError' )
-        raise FileNotFoundError('statics file not found.') from exc
+        fre_logger.warning('gold statics lookup raised %s, trying FRE-bronx fallback', exc)
+
+    # fall back to the legacy FRE-bronx directory convention if gold statics was unavailable
+    if statics_file_path is None and prev_path is not None:
+        fre_logger.info('gold statics not available, falling back to find_statics_file')
+        statics_file_path = find_statics_file(prev_path)
+
+    fre_logger.info('statics_file_path is %s', statics_file_path)
+
+    if statics_file_path is None:
+        raise FileNotFoundError('statics file not found.')
 
     fre_logger.info('statics file found.')
 
