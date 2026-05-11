@@ -148,16 +148,16 @@ jobs:
               echo "Checking: ${basename}"
               echo "=========================================="
 
-              # Run wcrp_cmip6 checker - text report for logs
+              # Run cmip6 checker - text report for logs
               compliance-checker \
-                --test=wcrp_cmip6 \
+                --test=cmip6 \
                 --format=text \
                 --output=tmp/wcrp_compliance_reports/cmip6_${basename}_report.txt \
                 "$ncfile" || true
 
-              # Run wcrp_cmip6 checker - json report for artifact
+              # Run cmip6 checker - json report for artifact
               compliance-checker \
-                --test=wcrp_cmip6 \
+                --test=cmip6 \
                 --format=json \
                 --output=tmp/wcrp_compliance_reports/cmip6_${basename}_report.json \
                 "$ncfile" 2>&1 || true
@@ -186,16 +186,16 @@ jobs:
               echo "Checking: ${basename}"
               echo "=========================================="
 
-              # Run wcrp_cmip6 checker on CMIP7 files too
+              # Run cmip7 checker on CMIP7 files
               # (the plugin validates WCRP conventions applicable across versions)
               compliance-checker \
-                --test=wcrp_cmip6 \
+                --test=cmip7 \
                 --format=text \
                 --output=tmp/wcrp_compliance_reports/cmip7_${basename}_report.txt \
                 "$ncfile" || true
 
               compliance-checker \
-                --test=wcrp_cmip6 \
+                --test=cmip7 \
                 --format=json \
                 --output=tmp/wcrp_compliance_reports/cmip7_${basename}_report.json \
                 "$ncfile" 2>&1 || true
