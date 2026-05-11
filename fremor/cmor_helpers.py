@@ -157,7 +157,7 @@ def from_dis_gimme_dis( from_dis: Dataset,
     try:
         return from_dis[gimme_dis][:].copy()
     except Exception:
-        fre_logger.warning('I am sorry, I could not not give you this: %s\n returning None!\n', gimme_dis)
+        fre_logger.exception('I am sorry, I could not not give you this: %s\n returning None!\n', gimme_dis)
         return None
 
 
@@ -420,6 +420,8 @@ def get_vertical_dimension( ds: Dataset,
             if dim.lower() == 'landuse':
                 vert_dim = dim
                 break
+            if 'axis' not in ds[dim].ncattrs():
+                continue
             if not (ds[dim].axis and ds[dim].axis == 'Z'):
                 continue
             vert_dim = dim
