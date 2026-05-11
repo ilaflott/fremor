@@ -90,7 +90,6 @@ docstrings
 filenotfound
 fremake
 fremor
-fremorizer
 fullvar
 geolat
 geolon
