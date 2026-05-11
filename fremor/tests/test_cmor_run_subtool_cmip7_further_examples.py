@@ -176,7 +176,7 @@ def test_case_cmip7(  # pylint: disable=too-many-arguments,too-many-positional-a
         calendar_type=calendar,
     )
 
-    # Use recursive glob to find output regardless of branding suffix via ouput_path_template
+    # Use recursive glob to find output regardless of branding suffix via output_path_template
     cmor_output_glob = (
         f'{outdir}/{CMOR_CREATES_DIR_BASE_CMIP7}'
         f'/{opt_var_name}/**/*{opt_var_name}*{grid_label}*.nc'
