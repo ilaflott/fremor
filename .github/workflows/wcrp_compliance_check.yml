@@ -120,10 +120,9 @@ jobs:
       - name: Configure esgvoc controlled vocabularies
         if: steps.gather_outputs.outputs.file_count != '0'
         run: |
-          esgvoc config add cordex-cmip6
-          esgvoc config add cmip7
-          esgvoc config set project:branch=esgvoc
-          esgvoc install
+          esgvoc use universe@latest
+          esgvoc use cmip6@latest
+          esgvoc use cmip7@latest
 
       - name: Verify cc-plugin-wcrp installation
         if: steps.gather_outputs.outputs.file_count != '0'
