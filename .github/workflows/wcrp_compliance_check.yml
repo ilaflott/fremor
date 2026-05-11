@@ -120,6 +120,7 @@ jobs:
       - name: Configure esgvoc controlled vocabularies
         if: steps.gather_outputs.outputs.file_count != '0'
         run: |
+          esgvoc use universe@latest
           esgvoc use cordex-cmip6@latest
           esgvoc use cmip7@latest
 
