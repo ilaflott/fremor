@@ -83,7 +83,7 @@ module load fremor/X.Y.Z
 ```
 
 
-### via `conda`
+### via `conda` and/or `conda-forge`
 If you have a path to a `fremor` environment you can activate it like so:
 ```bash
 conda activate some/path/to/fremor_env
@@ -92,7 +92,7 @@ conda activate some/path/to/fremor_env
 If you want your own `fremor` environment:
 ```bash
 # the environment will be named fremor_en
-conda create -n fremor_env NOAA-GFDL::fremor
+conda create -n fremor_env conda-forge::fremor
 
 # see fremor_env in the list --> activate it by name
 conda env list
@@ -103,10 +103,10 @@ or, if you've already activated a `conda` environment
 ```bash
 conda create -n empty_env
 conda activate empty_env
-conda install -c NOAA-GFDL fremor
+conda install -c conda-forge fremor
 
 # equivalent syntax
-conda install NOAA-GFDL::fremor
+conda install conda-forge::fremor
 ```
 
 
@@ -215,6 +215,7 @@ taken from this guide!
 
 To publish new release, cease merging new PRs to `main`, and carefully follow the below procedure:
 
+
 ### first, create a new tag for release
 1. create a new branch off of `main`, which should be the previous tagged version + `.post`, *give it a name
    different than the exact tag you are creating*
@@ -225,6 +226,7 @@ To publish new release, cease merging new PRs to `main`, and carefully follow th
 7. at this point, light clean up style edits are OK, but functional edits are not. Do so until happy and keep the
    checks passing.
 9. now create the tag from the branch at this point locally in your terminal with `git tag X.Y.Z;`
+
 
 ### second, publish release to PyPI, then github, in that order
 WARNING: *any problems or mistakes after the next step are irreversible due to package immutability so make sure 
@@ -237,6 +239,7 @@ things are working before continuing*
    tag, and upload the built `X.Y.Z` package downloaded from `PyPI` *you cannot do this later due to immutability
    of releases*
 
+
 ### third, publish release to `conda-forge` via `fremor-feedstock` fork
 10. use (create if needed) a fork (e.g. https://github.com/ilaflott/fremor-feedstock) to create a new branch called
     `fremorX.Y.Z`, e.g. https://github.com/ilaflott/fremor-feedstock/tree/fremor0.9.3
@@ -244,6 +247,7 @@ things are working before continuing*
 12. open a PR to the `conda-forge/fremor-feedstock` e.g. https://github.com/conda-forge/fremor-feedstock/pull/3
 13. once checks pass, a reviewer with access to `conda-forge/fremor-feedstock` can approve and merge, kicking off the
     rest of the publishing pipeline to `conda-forge`
+
 
 ### wrap-up
 14. back to the `fremor` PR we opened intially.
