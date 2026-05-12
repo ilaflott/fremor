@@ -62,7 +62,7 @@ For an overview of required inputs and sample commands, see the [CMOR Quickstart
 
 - `python>=3.11`
 - `click>=8.2`
-- `cmor>=3.14.2`
+- `cmor>=3.15.0`
 - `netCDF4>=1.7`
 - `numpy>=2`
 - `pyyaml`
