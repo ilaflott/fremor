@@ -25,7 +25,7 @@ try:
 except ImportError:
     consolidate_yamls = None
 from .cmor_mixer import cmor_run_subtool
-from .cmor_helpers import ( check_path_existence, iso_to_bronx_chunk, #conv_mip_to_bronx_freq,
+from .cmor_helpers import ( check_path_existence, iso_to_bronx_chunk,
                             get_bronx_freq_from_mip_table )
 
 fre_logger = logging.getLogger(__name__)
@@ -218,7 +218,6 @@ def cmor_yaml_subtool( yamlfile: str = None,
             nom_res = gridding_dict['nom_res']
             if None in [grid_label, grid_desc, nom_res]:
                 raise ValueError('gridding dictionary, if present, must have all three fields be non-empty.')
-        # gridding info of data ---- revisit
 
         table_components_list = cmor_yaml_table_target['target_components']
         for targ_comp_config in table_components_list:

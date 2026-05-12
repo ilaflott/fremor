@@ -19,7 +19,6 @@ from fremor.cmor_yamler import cmor_yaml_subtool
 
 
 # ---- paths to the existing repo test fixtures ----
-#ROOTDIR = 'fre/tests/test_files'
 ROOTDIR = str( Path( fremor.__file__ ).parent ) + '/tests/test_files'
 CMIP6_TABLE_DIR = f'{ROOTDIR}/cmip6-cmor-tables/Tables'
 CMIP6_TABLE_CONFIG = f'{CMIP6_TABLE_DIR}/CMIP6_Omon.json'
@@ -41,7 +40,9 @@ def _build_cmor_dict(*, pp_dir, table_dir, outdir, exp_config,
                      chunk='P5Y', data_series_type='ts',
                      gridding=None, start='1993', stop='1993',
                      calendar_type='julian'):
-    """Build the dictionary that consolidate_yamls would return."""
+    """
+    Build the dictionary that consolidate_yamls would return.
+    """
     if gridding is None:
         gridding = {
             'grid_label': GRID_LABEL,
@@ -148,13 +149,9 @@ def test_cmor_yaml_subtool_dry_run_false(mock_consolidate, yamler_env): # pylint
         run_one_mode=True,
     )
 
-    #print( Path(yamler_env['outdir']) )
-    #print( Path(yamler_env['outdir']).rglob('*.nc') )
-    #print( list(Path(yamler_env['outdir']).rglob('*.nc'))[0] )
     output_nc_files = list(Path(yamler_env['outdir']).rglob('*.nc'))
     assert len(output_nc_files) > 0, \
         'cmor_yaml_subtool with dry_run=False produced no output'
-    #assert False
 
 
 # ================================================================
@@ -162,7 +159,9 @@ def test_cmor_yaml_subtool_dry_run_false(mock_consolidate, yamler_env): # pylint
 # ================================================================
 
 def test_yamlfile_does_not_exist():
-    """ FileNotFoundError when yamlfile path does not exist """
+    """
+    FileNotFoundError when yamlfile path does not exist
+    """
     with pytest.raises(FileNotFoundError):
         cmor_yaml_subtool(
             yamlfile='DOES_NOT_EXIST.yaml',
@@ -172,7 +171,9 @@ def test_yamlfile_does_not_exist():
 
 @patch('fremor.cmor_yamler.consolidate_yamls')
 def test_pp_dir_does_not_exist(mock_consolidate, tmp_path):
-    """ FileNotFoundError when pp_dir does not exist """
+    """
+    FileNotFoundError when pp_dir does not exist
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -197,7 +198,9 @@ def test_pp_dir_does_not_exist(mock_consolidate, tmp_path):
 
 @patch('fremor.cmor_yamler.consolidate_yamls')
 def test_table_dir_does_not_exist(mock_consolidate, tmp_path):
-    """ FileNotFoundError when cmip_cmor_table_dir does not exist """
+    """
+    FileNotFoundError when cmip_cmor_table_dir does not exist
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -224,7 +227,9 @@ def test_table_dir_does_not_exist(mock_consolidate, tmp_path):
 
 @patch('fremor.cmor_yamler.consolidate_yamls')
 def test_exp_json_does_not_exist(mock_consolidate, tmp_path):
-    """ FileNotFoundError when exp_json path does not exist """
+    """
+    FileNotFoundError when exp_json path does not exist
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     pp_dir = tmp_path / 'pp'
@@ -249,7 +254,9 @@ def test_exp_json_does_not_exist(mock_consolidate, tmp_path):
 
 @patch('fremor.cmor_yamler.consolidate_yamls')
 def test_mip_table_file_does_not_exist(mock_consolidate, tmp_path):
-    """ FileNotFoundError when the derived json_mip_table_config does not exist """
+    """
+    FileNotFoundError when the derived json_mip_table_config does not exist
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -278,7 +285,9 @@ def test_mip_table_file_does_not_exist(mock_consolidate, tmp_path):
 
 @patch('fremor.cmor_yamler.consolidate_yamls')
 def test_cmip7_freq_none_raises(mock_consolidate, tmp_path):
-    """ ValueError when mip_era=CMIP7 and freq is None """
+    """
+    ValueError when mip_era=CMIP7 and freq is None
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'
@@ -287,6 +296,7 @@ def test_cmip7_freq_none_raises(mock_consolidate, tmp_path):
     pp_dir.mkdir()
     outdir = tmp_path / 'out'
     outdir.mkdir()
+  
     # need a table_dir that has a CMIP7_Omon.json — use the cmip7 tables
     cmip7_table_dir = f'{ROOTDIR}/cmip7-cmor-tables/tables'
 
@@ -398,7 +408,9 @@ def test_cmip6_freq_none_derivation_exception_caught(mock_consolidate, tmp_path)
 
 @patch('fremor.cmor_yamler.consolidate_yamls')
 def test_gridding_dict_has_none_value_raises(mock_consolidate, tmp_path):
-    """ ValueError when a gridding field is None """
+    """
+    ValueError when a gridding field is None
+    """
     dummy_yaml = tmp_path / 'model.yaml'
     dummy_yaml.write_text('placeholder')
     local_exp = tmp_path / 'exp.json'

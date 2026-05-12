@@ -157,9 +157,7 @@ def cmor_config_subtool(
 
         for entry in ppcompdirs:
             component_name = Path(entry).name
-
             variable_list = f'{varlist_dir}/{era_upper}_{table_name}_{component_name}.list'
-            #variable_list = f'{varlist_dir}/{table_name}_{component_name}.list'
 
             # optionally regenerate
             if Path(variable_list).exists() and overwrite:

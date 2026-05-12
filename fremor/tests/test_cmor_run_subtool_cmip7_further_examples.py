@@ -150,24 +150,11 @@ def test_case_cmip7(  # pylint: disable=too-many-arguments,too-many-positional-a
     """
     # ── conditional skips for cases that cannot yet pass ────────────────────
     if opt_var_name == 'ch4global':
-        pytest.skip(
+        pytest.skip( # this could be solved with variable name mapping #TODO
             'ch4global does not exist in any CMIP7 table '
             '(CMIP7 uses ch4 variants instead); '
             'needs new mock data or a different variable mapping'
         )
-    #if opt_var_name == 'gppLut':
-    #    pytest.skip(
-    #        'gppLut_tavg-u-hxy-multi cmor.axis fails: '
-    #        'CMIP7 landuse coordinate definition is incompatible '
-    #        'with the mock archive landuse axis values'
-    #    )
-
-    ## native-grid ocean tests: prevent gold statics lookup from finding /archive files
-    #if opt_var_name == 'sos':
-    #    monkeypatch.setattr(
-    #        'fremor.cmor_mixer.find_gold_ocean_statics_file',
-    #        lambda **kw: None,
-    #    )
 
     _ncgen_for_case(testfile_dir, opt_var_name)
 
@@ -189,10 +176,7 @@ def test_case_cmip7(  # pylint: disable=too-many-arguments,too-many-positional-a
         calendar_type=calendar,
     )
 
-    # CMIP7 output_path_template:
-    #   <activity_id>/<source_id>/<experiment_id>/<member_id>/
-    #   <variable_id>/<branding_suffix>/<grid_label>
-    # Use recursive glob to find output regardless of branding suffix.
+    # Use recursive glob to find output regardless of branding suffix via output_path_template
     cmor_output_glob = (
         f'{outdir}/{CMOR_CREATES_DIR_BASE_CMIP7}'
         f'/{opt_var_name}/**/*{opt_var_name}*{grid_label}*.nc'

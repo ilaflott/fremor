@@ -2,14 +2,13 @@
 `fremor` CMORizes FRE output with `CMOR`. It is a `conda` package and it's documentation can be found on
 [`readthedocs`](https://fremor.readthedocs.io/en/latest/).
 
-[![Anaconda-Server Badge](https://anaconda.org/NOAA-GFDL/fremor/badges/version.svg)](https://anaconda.org/NOAA-GFDL/fremor)
-[![Anaconda-Server Badge](https://anaconda.org/NOAA-GFDL/fremor/badges/latest_release_date.svg)](https://anaconda.org/NOAA-GFDL/fremor)
-[![Anaconda-Server Badge](https://anaconda.org/NOAA-GFDL/fremor/badges/latest_release_relative_date.svg)](https://anaconda.org/NOAA-GFDL/fremor)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/fremor/badges/version.svg)](https://anaconda.org/conda-forge/fremor)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/fremor/badges/latest_release_date.svg)](https://anaconda.org/conda-forge/fremor)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/fremor/badges/latest_release_relative_date.svg)](https://anaconda.org/conda-forge/fremor)
 
 [![pylint](https://img.shields.io/badge/pylint-%E2%89%A59.7-brightgreen)](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml)
 [![codecov](https://codecov.io/gh/NOAA-GFDL/fremor/branch/main/graph/badge.svg)](https://codecov.io/gh/NOAA-GFDL/fremor)
 
-[![publish_conda](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_conda.yml/badge.svg?branch=main)](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_conda.yml)
 [![publish_pip](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_pip.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_pip.yml)
 [![readthedocs](https://app.readthedocs.org/projects/fremor/badge/?version=latest&style=flat)](https://fremor.readthedocs.io/en/latest/)
 [![pylint](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml)
@@ -22,23 +21,40 @@
 
 `python3.14`:[![3.14](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.14)
 
+#### License
+Apache License 2.0 — see [LICENSE.md](LICENSE.md)
 
 
 ## Background and Purpose
-`fremor` is a model output rewriter (CMORizer) for FRE/FMS based models and output. `fremor` (or `fremor` for short) is
-geared for standardizing NOAA-GFDL datasets for further quality control checks, assessments and data publishing pipelines in the
-context of CMIP7 using the [`CMOR`](https://cmor.llnl.gov/) library.
+`fremor` is a model output rewriter (CMORizer) for FRE/FMS based models and output. It is specifically geared for standardizing 
+NOAA-GFDL datasets for further quality control checks, assessments and data publishing pipelines in the context of CMIP7 
+using the [`CMOR`](https://cmor.llnl.gov/) library.
+
 
 ### Relationship to `fre-cli`
 `fremor` was originally the `fre.cmor` submodule of [`NOAA-GFDL/fre-cli`](https://github.com/NOAA-GFDL/fre-cli) and so stands
-on the shoulders of it's contributors, retaining it's general structure and lessons learned from it. Future re-integrations back 
-into `fre-cli`, as a formal package dependency, are being assessed.
+on the shoulders of it's contributors, retaining it's general structure and lessons learned from it. Future re-integrations 
+back into `fre-cli`, as a formal package dependency, are being assessed.
+
+
+
+
 
 ### Contributors
 [![Contributors](https://contrib.rocks/image?repo=NOAA-GFDL/fremor)](https://github.com/NOAA-GFDL/fremor/graphs/contributors)
 
 #### AI Disclaimer
-AI was heavily used in the creation of this repository, primarily `github`'s `copilot` with `Claude` (`opus4.6` `sonnet4.6`, and `haiku`), and `Gemini` and `Chat-GPT` models to a lesser extent, in agent mode. `Claude` and `Codex` agents have also contributed.
+AI was heavily used in the creation of this repository, primarily `github`'s `copilot` with `Claude` (`opus4.6`, `sonnet4.6`, 
+and `haiku`), and `Gemini` and `Chat-GPT` models to a lesser extent, in agent mode. `Claude` and `Codex` agents have also 
+contributed.
+
+
+
+
+## Quickstart
+For an overview of required inputs and sample commands, see the [CMOR Quickstart](docs/quickstart.rst).
+
+
 
 ## Installation / Access
 
@@ -46,12 +62,13 @@ AI was heavily used in the creation of this repository, primarily `github`'s `co
 
 - `python>=3.11`
 - `click>=8.2`
-- `cmor>=3.14.2`
+- `cmor>=3.15.0`
 - `netCDF4>=1.7`
 - `numpy>=2`
 - `pyyaml`
 
 For development and testing, `pylint`, `pytest`, and `pytest-cov` are all highly recommended as helpful additions.
+
 
 
 ### via PPAN / modules (COMING SOON/TODO)
@@ -156,10 +173,6 @@ is equivalently available via `import` in scripts as a proper `python` module
 
 
 
-## Getting started
-For an overview of required inputs and sample commands, see the [CMOR Quickstart](docs/quickstart.rst).
-
-
 
 ## CI/CD Workflows and QA
 
@@ -188,22 +201,32 @@ To view compliance results from a workflow/CI run:
 
 
 
-## License
-Apache License 2.0 — see [LICENSE.md](LICENSE.md)
 
 
 
-## Releases and Versioning
-`fremor` uses a post-release scheme to identify development beyond the latest tagged version and tie the current `main` branch to a
-`conda` package versioned as `develop`. To avoid confusion with `fre-workflows` and `fre-cli`, which often demand that the version tags 
-match, `fremor`'s version format is `X.Y.Z[.post]`. 
+
+## Tags, Releases and Versioning
+`fremor` uses a post-release scheme to identify development beyond the latest tagged version. To avoid confusion with 
+`fre-workflows` and `fre-cli`, which often demand that the version tags match, `fremor`'s version format is `X.Y.Z[.post]`. 
+
+This procedure is being actively tested and checked now, and may change in the future. Document any deviations taken from
+this guide!
 
 
-### new published release procedure 
-To publish new release carefully follow the below procedure:
-1. create a new branch off of `main`, which is already published to `conda` under `develop`/the previous tagged version + `.post`
-2. edit the version number in `fremor/_version.py` from the current one, to the desired version tag, remove `.post`, then open a PR. edit nothing else (usually).
+### New Release Procedure 
+To publish new release, cease merging new PRs to `main`, and carefully follow the below procedure:
+1. create a new branch off of `main`, which should be the previous tagged version + `.post`, give it a name different than the exact tag you are creating
+2. edit the version number in `fremor/_version.py` from the current one, to the desired version tag, remove `.post`, then open a PR.
 3. confirm the branch is functional by letting workflows finish, if you see green checks only, proceed. otherwise, stop and debug.
-4. draft a new release pointing to the PR branch, click release. the publishing workflow should trigger and finish, and you should see the `X.Y.Z` version in the conda channel.
-5. *releases in this repository are immutable*, **so even if the release workflow fails, breathe and move on to the next step.**
-6. edit the version number in `fremor/_version.py` to `X.Y.Z.post`, and merge the PR to main workflow steps passed. **`publish_conda`** will trigger again and upload what is in `main` under the `conda` version `develop` and `pip` version `X.Y.Z.post`
+4. at this point, light clean up style edits are OK, but functional edits are not. Do so until happy and keep the checks passing.
+
+*WCRP compliance checks may fail at this time, this pipeline is in development*
+
+*any problems or mistakes after the next step are irreversible due to package immutability so make sure things are working*
+
+5. now create the tag from the branch at this point, the tag have the format `X.Y.Z`. this triggers a workflow to publish the built package to `PyPI`. 
+6. if the `PyPI` publishing works, it should trigger an update of `fremor-feedstock` to create and publish the new package to `conda-forge` (testing this as of `0.9.3`)
+7. on github create an immutable release from your new tag and generate release notes automatically comparing to the previous tag, and associate the built `pip` package.
+8. edit the version number in `fremor/_version.py` to `X.Y.Z.post`, and merge the PR branch you used for creating the release to `main`.
+
+

@@ -37,7 +37,7 @@ import netCDF4 as nc
 
 from .cmor_helpers import ( print_data_minmax, from_dis_gimme_dis, create_lev_bnds,
                             get_iso_datetime_ranges, check_dataset_for_ocean_grid, get_vertical_dimension,
-                            create_tmp_dir, get_json_file_data, update_grid_and_label, #update_outpath,
+                            create_tmp_dir, get_json_file_data, update_grid_and_label,
                             update_calendar_type, filter_brands,
                             normalize_calendar, get_time_calendar_value, calendars_are_equivalent )
 from .cmor_tripolar import load_tripolar_grid
@@ -856,8 +856,6 @@ def cmor_run_subtool(indir: str = None,
         update_grid_and_label(json_exp_config,
                               grid_label, grid, nom_res,
                               output_file_path = None)
-
-    #update_outpath(json_exp_config, outpath = outdir, output_file_path = None)
 
     # CHECK optional grid/grid_label inputs, the function checks the potential error conditions RE CF compliance.
     if calendar_type is not None:
