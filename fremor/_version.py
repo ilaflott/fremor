@@ -3,5 +3,5 @@ version info for fremor, isolated to avoid importing heavy dependencies at build
 """
 
 import os
-version = os.getenv("GIT_DESCRIBE_TAG", "0.9.2")
+version = os.getenv("GIT_DESCRIBE_TAG", "0.9.3")
 __version__ = version
