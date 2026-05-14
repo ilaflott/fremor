@@ -1,18 +1,21 @@
 # `fremor`
-`fremor` CMORizes FRE output with `CMOR`. It is a `conda` package and it's documentation can be found on
-[`readthedocs`](https://fremor.readthedocs.io/en/latest/).
+`fremor` CMORizes FRE output with `CMOR`. It is both a `conda` and `pip` package.
 
-[![Build conda package](https://github.com/conda-forge/fremor-feedstock/actions/workflows/conda-build.yml/badge.svg?branch=main)](https://github.com/conda-forge/fremor-feedstock/actions/workflows/conda-build.yml)
+![zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20186257.svg)
+
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/fremor/badges/version.svg)](https://anaconda.org/conda-forge/fremor)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/fremor/badges/latest_release_date.svg)](https://anaconda.org/conda-forge/fremor)
 [![Anaconda-Server Badge](https://anaconda.org/conda-forge/fremor/badges/latest_release_relative_date.svg)](https://anaconda.org/conda-forge/fremor)
 
+[![pylint](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml)
 [![pylint](https://img.shields.io/badge/pylint-%E2%89%A59.7-brightgreen)](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml)
 [![codecov](https://codecov.io/gh/NOAA-GFDL/fremor/branch/main/graph/badge.svg)](https://codecov.io/gh/NOAA-GFDL/fremor)
 
-[![publish_pip](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_pip.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_pip.yml)
 [![readthedocs](https://app.readthedocs.org/projects/fremor/badge/?version=latest&style=flat)](https://fremor.readthedocs.io/en/latest/)
-[![pylint](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/NOAA-GFDL/fremor/actions/workflows/pylint.yml)
+
+[![publish_pip](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_pip.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/publish_pip.yml)
+
+[![Build conda package](https://github.com/conda-forge/fremor-feedstock/actions/workflows/conda-build.yml/badge.svg?branch=main)](https://github.com/conda-forge/fremor-feedstock/actions/workflows/conda-build.yml)
 
 `python3.11`:[![3.11](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.11)
 
@@ -21,6 +24,9 @@
 `python3.13`:[![3.13](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.13)
 
 `python3.14`:[![3.14](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml/badge.svg)](https://github.com/NOAA-GFDL/fremor/actions/workflows/create_test_conda_env.yml?query=branch%3Amain+python-version%3A3.14)
+
+#### Documentation
+See [`readthedocs`](https://fremor.readthedocs.io/en/latest/)
 
 #### License
 Apache License 2.0 — see [LICENSE.md](LICENSE.md)
@@ -110,7 +116,10 @@ conda install conda-forge::fremor
 ```
 
 
-### `pip` install source/checkout into a virtual environment (`conda`/`venv`)
+
+### `pip install` into a virtual environment (`conda`/`venv`)
+
+#### via `pip install [-e] .` with a checkout of the code
 If you're trying to develop `fremor` capabilities, or edit the code to your liking in either a big or small way,
 **this is for you**. This checks out the code, creates and activates an environment, installs into the environment,
 and runs all unit-tests and `pylint` checks:
@@ -131,6 +140,11 @@ pytest fremor/tests/
 pylint --rcfile pylintrc fremor/
 ```
 
+#### via `pip install fremor` without a checkout of the code
+not all of `fremor`'s dependencies are `pip` installable, so this method assumes you've grabbed the requirements, and made them
+available to `fremor` in a common context via another method (`conda` is still easiest). Assuming this was done correctly and
+all relevant python modules are installed to locations in `PYTHONPATH`, `pip install fremor` should install the package
+from PyPI.
 
 
 ## Usage
